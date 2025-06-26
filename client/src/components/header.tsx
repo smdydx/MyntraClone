@@ -554,20 +554,20 @@ export default function Header() {
                   )}
                 </div>
                 
-                <ThemeToggle />
+                {/* <ThemeToggle /> */}
               </div>
 
               {/* Cart */}
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2"
+                className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-hednor-gold"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag className="h-5 w-5" />
                 <span className="text-xs mt-1 font-medium hidden md:block">Bag</span>
                 {cartCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                  <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                     {cartCount}
                   </Badge>
                 )}
@@ -576,7 +576,7 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="lg:hidden text-gray-700 hover:text-pink-600 p-2">
+                  <Button variant="ghost" size="sm" className="lg:hidden text-white hover:text-hednor-gold p-2">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -641,19 +641,27 @@ export default function Header() {
                       </div>
 
                       {/* User Actions */}
-                      <div className="border-t border-gray-200 p-4 space-y-1">
+                      <div className="border-t border-gray-200 p-4 space-y-2">
                         <Button
-                          variant="ghost"
-                          className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium transition-colors py-3 px-3 w-full justify-start rounded-md"
+                          variant="outline"
+                          className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             setIsAuthModalOpen(true);
                           }}
                         >
-                          <User className="h-4 w-4" />
-                          <span>Login / Register</span>
+                          Login
                         </Button>
-                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md">
+                        <Button
+                          className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsAuthModalOpen(true);
+                          }}
+                        >
+                          Register
+                        </Button>
+                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4">
                           <Heart className="h-4 w-4" />
                           <span>Wishlist ({wishlistItems.length})</span>
                         </div>

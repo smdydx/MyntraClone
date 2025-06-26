@@ -120,6 +120,9 @@ The application defines several core entities:
 - June 26, 2025. Implemented Myntra-style navigation with responsive mega menus
 - June 26, 2025. Enhanced hero section with video support and improved styling
 - June 26, 2025. Increased footer logo size and improved responsive design
+- June 26, 2025. Fixed submenu positioning issues and implemented mobile submenus
+- June 26, 2025. Updated header background to light black with proper contrast
+- June 26, 2025. Changed color scheme from pink to yellow throughout application
 
 ## Recent Changes
 ✓ Migration from Replit Agent to Replit environment completed successfully
@@ -128,6 +131,12 @@ The application defines several core entities:
 ✓ Footer logo increased in size for better brand visibility
 ✓ Navigation mega menus now use centered positioning to prevent overlap issues
 ✓ Improved mobile responsiveness across all navigation components
+✓ Fixed submenu positioning to prevent screen cutoff on both sides
+✓ Added expandable mobile submenus matching desktop navigation structure
+✓ Updated header background to light black (gray-800) with white icons for mobile
+✓ Changed color scheme from pink to yellow (hednor-gold) throughout the application
+✓ Removed theme toggle option and implemented separate Login/Register buttons in mobile menu
+✓ Updated bag icon hover color to yellow in desktop view
 
 ## User Preferences
 
