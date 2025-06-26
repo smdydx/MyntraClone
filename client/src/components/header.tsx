@@ -1378,14 +1378,26 @@ export default function Header() {
         </div>
 
         {/* Main Navigation */}
-        <nav className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center mr-6">
+        <nav className="container mx-auto px-4 py-2 md:py-3">
+          <div className="flex items-center justify-between lg:justify-start">
+            {/* Mobile: Wishlist on left */}
+            <div className="flex items-center lg:hidden">
+              <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
+                <Heart className="h-4 w-4" />
+                {wishlistItems.length > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                    {wishlistItems.length}
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            {/* Logo - centered on mobile, left on desktop */}
+            <Link href="/" className="flex items-center lg:mr-6">
               <img
                 src={hednorLogoPath}
                 alt="Hednor"
-                className="w-20 h-20 object-contain"
+                className="w-16 h-16 md:w-20 md:h-20 object-contain"
               />
             </Link>
 
@@ -1472,25 +1484,15 @@ export default function Header() {
             </div>
 
             {/* User Actions */}
-            <div className="flex items-center space-x-4">
-              {/* Mobile Search Button */}
+            <div className="flex items-center space-x-2 lg:space-x-4">
+              {/* Mobile Search Button - moved to right of logo */}
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-white hover:text-hednor-gold p-2"
+                className="md:hidden text-white hover:text-hednor-gold p-1"
                 onClick={() => setMobileSearchOpen(true)}
               >
-                <Search className="h-5 w-5" />
-              </Button>
-
-              {/* Mobile Login Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden text-white hover:text-hednor-gold p-2"
-                onClick={() => setIsAuthModalOpen(true)}
-              >
-                <User className="h-5 w-5" />
+                <Search className="h-4 w-4" />
               </Button>
 
               {/* Desktop User Actions */}
@@ -1526,10 +1528,10 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative p-2 border border-transparent hover:bg-transparent"
+                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative border border-transparent hover:bg-transparent lg:p-2 p-1"
                 onClick={() => setCartOpen(true)}
               >
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingBag className="h-4 w-4 lg:h-5 lg:w-5" />
                 <span className="text-xs mt-1 font-medium hidden md:block">
                   Bag
                 </span>
@@ -1546,9 +1548,9 @@ export default function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="lg:hidden text-white hover:text-hednor-gold p-2"
+                    className="lg:hidden text-white hover:text-hednor-gold p-1"
                   >
-                    <Menu className="h-5 w-5" />
+                    <Menu className="h-4 w-4" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent
