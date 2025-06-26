@@ -85,7 +85,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <div className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+    <div className="relative h-[450px] md:h-[550px] lg:h-[650px] overflow-hidden">
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
@@ -105,8 +105,10 @@ export default function HeroSlider() {
               muted
               loop
               playsInline
+              poster="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center"
             >
               <source src={slide.backgroundVideo} type="video/mp4" />
+              <source src="https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : (
@@ -117,22 +119,22 @@ export default function HeroSlider() {
           )}
           
           {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/30" />
           
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="max-w-2xl text-white">
-              <h2 className="text-sm md:text-base font-medium mb-2 opacity-90">
+              <h2 className="text-sm md:text-base font-medium mb-2 opacity-90 text-hednor-gold">
                 {slide.subtitle}
               </h2>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
                 {slide.title}
               </h1>
-              <p className="text-lg md:text-xl mb-8 opacity-90 max-w-xl">
+              <p className="text-base md:text-lg mb-6 opacity-90 max-w-xl">
                 {slide.description}
               </p>
               <Button
                 size="lg"
-                className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
+                className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold px-6 py-3 text-base transition-all transform hover:scale-105"
                 onClick={() => {
                   window.location.href = slide.buttonLink;
                 }}
