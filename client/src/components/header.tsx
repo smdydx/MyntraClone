@@ -444,10 +444,13 @@ export default function Header() {
                   </Link>
                   
                   {/* Myntra-style Mega Menu */}
-                  <div className={`absolute top-full mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg ${
-                    index < 3 ? 'left-0' : 'right-0'
-                  }`}
-                       style={{ width: '75vw', maxWidth: '900px', minWidth: '700px' }}>
+                  <div className="absolute top-full left-0 mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
+                       style={{ 
+                         width: '70vw', 
+                         maxWidth: '800px', 
+                         minWidth: '600px',
+                         transform: index > 2 ? 'translateX(-70%)' : 'translateX(0)'
+                       }}>
                     <div className="p-6 lg:p-8">
                       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
                         {(() => {
