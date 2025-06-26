@@ -438,15 +438,16 @@ export default function Header() {
                 <div key={item.name} className="relative group">
                   <Link
                     href={item.href}
-                    className="text-gray-800 dark:text-gray-200 hover:text-pink-600 dark:hover:text-pink-400 font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-pink-600"
+                    className="text-gray-800 dark:text-gray-200 hover:text-hednor-gold dark:hover:text-hednor-gold font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-hednor-gold"
                   >
                     {item.name}
                   </Link>
                   
                   {/* Myntra-style Mega Menu */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-0 w-screen max-w-6xl bg-white dark:bg-gray-800 shadow-xl border-t-4 border-pink-500 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 mx-4">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
+                       style={{ width: '90vw', maxWidth: '1200px' }}>
                     <div className="p-6 lg:p-8">
-                      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8">
+                      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
                         {(() => {
                           const categoryGroups: { [key: string]: typeof item.submenu } = {};
                           let currentCategory = "General";
@@ -465,7 +466,7 @@ export default function Header() {
 
                           return Object.entries(categoryGroups).slice(0, 5).map(([categoryName, items]) => (
                             <div key={categoryName} className="space-y-4">
-                              <h3 className="font-bold text-pink-600 text-sm uppercase tracking-wide">
+                              <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide">
                                 {categoryName}
                               </h3>
                               <div className="space-y-2">
@@ -473,7 +474,7 @@ export default function Header() {
                                   <Link
                                     key={`${categoryName}-${subItem.name}`}
                                     href={subItem.href}
-                                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors hover:font-medium"
+                                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium"
                                   >
                                     {subItem.name}
                                   </Link>
@@ -497,7 +498,7 @@ export default function Header() {
                   placeholder="Search for products, brands and more"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:ring-1 focus:ring-pink-400 focus:border-pink-400 text-sm"
+                  className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:ring-1 focus:ring-hednor-gold focus:border-hednor-gold text-sm"
                 />
                 <Search className="absolute right-3 top-3 h-4 w-4 text-gray-500" />
               </form>
@@ -509,7 +510,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-pink-600 p-2"
+                className="md:hidden text-gray-700 hover:text-hednor-gold p-2"
                 onClick={() => setMobileSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
@@ -519,7 +520,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-pink-600 p-2"
+                className="md:hidden text-gray-700 hover:text-hednor-gold p-2"
                 onClick={() => setIsAuthModalOpen(true)}
               >
                 <User className="h-5 w-5" />
@@ -530,18 +531,18 @@ export default function Header() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors p-2 dark:text-gray-300 dark:hover:text-pink-400"
+                  className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors p-2 dark:text-gray-300 dark:hover:text-hednor-gold"
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Profile</span>
                 </Button>
                 
-                <div className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-pink-400">
+                <div className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-hednor-gold">
                   <Heart className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Wishlist</span>
                   {wishlistItems.length > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                       {wishlistItems.length}
                     </Badge>
                   )}
