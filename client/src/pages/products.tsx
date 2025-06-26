@@ -71,10 +71,10 @@ export default function Products() {
   };
 
   const FilterSidebar = () => (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h3 className="font-semibold mb-3">Categories</h3>
-        <div className="space-y-2">
+        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Categories</h3>
+        <div className="space-y-1 md:space-y-2">
           {categories.map((category) => (
             <div key={category.id} className="flex items-center space-x-2">
               <Checkbox
@@ -87,8 +87,9 @@ export default function Products() {
                     setSelectedCategories(selectedCategories.filter(c => c !== category.id.toString()));
                   }
                 }}
+                className="h-4 w-4"
               />
-              <Label htmlFor={`category-${category.id}`} className="text-sm">
+              <Label htmlFor={`category-${category.id}`} className="text-xs md:text-sm cursor-pointer">
                 {category.name}
               </Label>
             </div>
@@ -97,8 +98,8 @@ export default function Products() {
       </div>
 
       <div>
-        <h3 className="font-semibold mb-3">Price Range</h3>
-        <div className="px-2">
+        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Price Range</h3>
+        <div className="px-1 md:px-2">
           <Slider
             value={priceRange}
             onValueChange={setPriceRange}
@@ -106,7 +107,7 @@ export default function Products() {
             step={100}
             className="w-full"
           />
-          <div className="flex justify-between mt-2 text-sm text-gray-600">
+          <div className="flex justify-between mt-2 text-xs md:text-sm text-gray-600">
             <span>₹{priceRange[0]}</span>
             <span>₹{priceRange[1]}</span>
           </div>
@@ -114,16 +115,17 @@ export default function Products() {
       </div>
 
       <div>
-        <h3 className="font-semibold mb-3">Brands</h3>
-        <div className="space-y-2 max-h-40 overflow-y-auto">
+        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Brands</h3>
+        <div className="space-y-1 md:space-y-2 max-h-32 md:max-h-40 overflow-y-auto">
           {brands.map((brand) => (
             <div key={brand} className="flex items-center space-x-2">
               <Checkbox
                 id={`brand-${brand}`}
                 checked={selectedBrands.includes(brand)}
                 onCheckedChange={(checked) => handleBrandChange(brand, checked as boolean)}
+                className="h-4 w-4"
               />
-              <Label htmlFor={`brand-${brand}`} className="text-sm">
+              <Label htmlFor={`brand-${brand}`} className="text-xs md:text-sm cursor-pointer">
                 {brand}
               </Label>
             </div>
@@ -132,16 +134,17 @@ export default function Products() {
       </div>
 
       <div>
-        <h3 className="font-semibold mb-3">Sizes</h3>
-        <div className="grid grid-cols-3 gap-2">
+        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Sizes</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-2">
           {sizes.map((size) => (
             <div key={size} className="flex items-center space-x-1">
               <Checkbox
                 id={`size-${size}`}
                 checked={selectedSizes.includes(size)}
                 onCheckedChange={(checked) => handleSizeChange(size, checked as boolean)}
+                className="h-3 w-3 md:h-4 md:w-4"
               />
-              <Label htmlFor={`size-${size}`} className="text-xs">
+              <Label htmlFor={`size-${size}`} className="text-xs cursor-pointer">
                 {size}
               </Label>
             </div>
@@ -198,11 +201,11 @@ export default function Products() {
                   Filter
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px]">
+              <SheetContent side="right" className="w-[280px] sm:w-[320px] max-w-[90vw]">
                 <SheetHeader>
-                  <SheetTitle>Filters</SheetTitle>
+                  <SheetTitle className="text-left">Filters</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6">
+                <div className="mt-4 overflow-y-auto max-h-[calc(100vh-100px)] pr-2">
                   <FilterSidebar />
                 </div>
               </SheetContent>
@@ -212,8 +215,8 @@ export default function Products() {
 
         <div className="flex gap-8">
           {/* Desktop Sidebar */}
-          <div className="hidden md:block w-64 flex-shrink-0">
-            <div className="bg-white p-6 rounded-lg shadow-sm sticky top-24">
+          <div className="hidden md:block w-56 lg:w-64 flex-shrink-0">
+            <div className="bg-white p-4 lg:p-6 rounded-lg shadow-sm sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
               <FilterSidebar />
             </div>
           </div>
