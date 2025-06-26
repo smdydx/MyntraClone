@@ -216,9 +216,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <ReviewsSection />
-
       {/* Promo Banner */}
       <section className="bg-gradient-to-r from-hednor-gold to-yellow-400 py-12">
         <div className="container mx-auto px-4 text-center">
@@ -243,6 +240,9 @@ export default function Home() {
 
       {/* Trending Brands */}
       <TrendingBrands />
+
+      {/* Reviews Section */}
+      <ReviewsSection />
 
       {/* Newsletter */}
       <section className="bg-hednor-dark py-12">
