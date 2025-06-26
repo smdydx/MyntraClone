@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import heroVideoPath from "/src/assets/hero-video.mp4";
 
 const heroSlides = [
   {
@@ -12,7 +13,7 @@ const heroSlides = [
     buttonText: "Shop Now",
     buttonLink: "/products",
     isVideo: true,
-    backgroundVideo: "https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4",
+    backgroundVideo: heroVideoPath,
   },
   {
     id: 2,
