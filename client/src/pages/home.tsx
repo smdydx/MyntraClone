@@ -51,15 +51,15 @@ export default function Home() {
         )}
       </section>
 
-      {/* Featured Products */}
+      {/* Trending Now */}
       <section className="bg-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
               Trending Now
             </h2>
-            <Link href="/products" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
-              View All
+            <Link href="/products?featured=true" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
+              See More
             </Link>
           </div>
 
@@ -76,7 +76,139 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-              {featuredProducts.map((product) => (
+              {featuredProducts.slice(0, 5).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Deals for You */}
+      <section className="bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
+              Deals for You
+            </h2>
+            <Link href="/products?onSale=true" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
+              See More
+            </Link>
+          </div>
+
+          {productsLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-48 md:h-64 rounded" />
+                  <Skeleton className="h-3 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {featuredProducts.slice(5, 10).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Related Top Picks for You */}
+      <section className="bg-white py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
+              Related Top Picks for You
+            </h2>
+            <Link href="/products" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
+              See More
+            </Link>
+          </div>
+
+          {productsLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-48 md:h-64 rounded" />
+                  <Skeleton className="h-3 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {featuredProducts.slice(10, 15).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Deals for You in Clothing and Accessories */}
+      <section className="bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
+              Deals for You in Clothing & Accessories
+            </h2>
+            <Link href="/products?category=fashion&onSale=true" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
+              See More
+            </Link>
+          </div>
+
+          {productsLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-48 md:h-64 rounded" />
+                  <Skeleton className="h-3 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {featuredProducts.slice(15, 20).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Must-Have Items */}
+      <section className="bg-white py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
+              Must-Have Items
+            </h2>
+            <Link href="/products?category=trending" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
+              See More
+            </Link>
+          </div>
+
+          {productsLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-48 md:h-64 rounded" />
+                  <Skeleton className="h-3 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+              {featuredProducts.slice(20, 25).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
