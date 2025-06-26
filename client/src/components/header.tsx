@@ -101,7 +101,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white shadow-sm sticky top-0 z-40">
+      <header className="bg-gradient-to-r from-gray-50 via-yellow-50 to-gray-50 shadow-sm sticky top-0 z-40">
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -115,7 +115,7 @@ export default function Header() {
               <img 
                 src={hednorLogoPath} 
                 alt="Hednor" 
-                className="w-12 h-12 object-contain filter brightness-110 contrast-110"
+                className="w-20 h-20 object-contain filter brightness-110 contrast-110"
               />
             </Link>
 

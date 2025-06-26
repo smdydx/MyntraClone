@@ -11,7 +11,7 @@ const heroSlides = [
     description: "Discover the latest trends in fashion with our premium collection",
     buttonText: "Shop Now",
     buttonLink: "/products",
-    backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const heroSlides = [
     description: "Experience luxury with our handpicked selection of premium garments",
     buttonText: "Explore Premium",
     buttonLink: "/products?category=premium",
-    backgroundImage: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    backgroundImage: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&h=800&fit=crop&crop=center",
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const heroSlides = [
     description: "Don't miss out on our biggest sale of the year",
     buttonText: "Shop Sale",
     buttonLink: "/products?sale=true",
-    backgroundImage: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=800&fit=crop&crop=center",
   },
   {
     id: 4,
@@ -38,7 +38,17 @@ const heroSlides = [
     description: "Unique pieces designed exclusively for fashion-forward individuals",
     buttonText: "View Collection",
     buttonLink: "/products?category=studio",
-    backgroundImage: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+    backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
+  },
+  {
+    id: 5,
+    title: "Fashion Video",
+    subtitle: "Experience Fashion in Motion",
+    description: "Watch our latest fashion showcase video",
+    buttonText: "Explore More",
+    buttonLink: "/products",
+    isVideo: true,
+    backgroundVideo: "https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4",
   },
 ];
 
@@ -87,9 +97,29 @@ export default function HeroSlider() {
               ? "opacity-0 transform -translate-x-full"
               : "opacity-0 transform translate-x-full"
           )}
-          style={{ background: slide.backgroundImage }}
         >
-          <div className="container mx-auto px-4 h-full flex items-center">
+          {slide.isVideo ? (
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src={slide.backgroundVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${slide.backgroundImage})` }}
+            />
+          )}
+          
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40" />
+          
+          <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="max-w-2xl text-white">
               <h2 className="text-sm md:text-base font-medium mb-2 opacity-90">
                 {slide.subtitle}
