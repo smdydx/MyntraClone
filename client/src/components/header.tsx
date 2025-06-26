@@ -1371,7 +1371,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700" style={{ backgroundColor: 'rgb(140, 142, 60)' }}>
+      <header className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700" style={{ backgroundColor: 'rgb(112 113 35 / 50%)' }}>
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
