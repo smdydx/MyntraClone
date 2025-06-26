@@ -1392,8 +1392,8 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Logo - centered on mobile, left on desktop */}
-            <Link href="/" className="flex items-center lg:mr-6">
+            {/* Logo - positioned more to the right */}
+            <Link href="/" className="flex items-center lg:mr-6 ml-12 lg:ml-0">
               <img
                 src={hednorLogoPath}
                 alt="Hednor"
