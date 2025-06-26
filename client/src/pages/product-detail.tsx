@@ -7,8 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useStore } from "@/lib/store";
+import { useToast } from "@/hooks/use-toast";
 import SizeGuide from "@/components/size-guide";
+import ReviewForm from "@/components/review-form";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 import type { Product } from "@shared/schema";
 
 export default function ProductDetail() {
