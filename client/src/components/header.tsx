@@ -414,7 +414,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-gray-200 dark:bg-gray-900 shadow-sm sticky top-0 z-40 border-b border-gray-300 dark:border-gray-700">
+      <header className="bg-gray-800 dark:bg-gray-900 shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700">
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -438,7 +438,7 @@ export default function Header() {
                 <div key={item.name} className="relative group">
                   <Link
                     href={item.href}
-                    className="text-gray-800 dark:text-gray-200 hover:text-hednor-gold dark:hover:text-hednor-gold font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-hednor-gold"
+                    className="text-gray-200 dark:text-gray-200 hover:text-hednor-gold dark:hover:text-hednor-gold font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-hednor-gold"
                   >
                     {item.name}
                   </Link>
