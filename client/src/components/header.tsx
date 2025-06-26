@@ -537,14 +537,14 @@ export default function Header() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors p-2 dark:text-gray-300 dark:hover:text-hednor-gold"
+                  className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2"
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Profile</span>
                 </Button>
                 
-                <div className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-hednor-gold">
+                <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
                   <Heart className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Wishlist</span>
                   {wishlistItems.length > 0 && (
@@ -561,7 +561,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-hednor-gold"
+                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative p-2 border border-transparent"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag className="h-5 w-5" />
