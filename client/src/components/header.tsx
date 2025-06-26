@@ -445,9 +445,7 @@ export default function Header() {
                   </Link>
                   
                   {/* Myntra-style Mega Menu */}
-                  <div className={`absolute top-full mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg ${
-                    index > 2 ? 'right-0' : 'left-0'
-                  }`}
+                  <div className="absolute top-full left-0 mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
                        style={{ 
                          width: '70vw', 
                          maxWidth: '800px', 
