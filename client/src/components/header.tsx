@@ -1290,16 +1290,55 @@ const navigation = [
     href: "/products?category=studio",
     submenu: [
       {
+        name: "Collections",
+        href: "/products?category=studio&subcategory=collections",
+        isCategory: true,
+      },
+      {
         name: "New Arrivals",
         href: "/products?category=studio&subcategory=new",
       },
       {
-        name: "Premium",
+        name: "Premium Collection",
         href: "/products?category=studio&subcategory=premium",
       },
       {
         name: "Limited Edition",
         href: "/products?category=studio&subcategory=limited",
+      },
+      {
+        name: "Designer Wear",
+        href: "/products?category=studio&subcategory=designer",
+        isCategory: true,
+      },
+      {
+        name: "Couture",
+        href: "/products?category=studio&subcategory=couture",
+      },
+      {
+        name: "Ready to Wear",
+        href: "/products?category=studio&subcategory=ready-to-wear",
+      },
+      {
+        name: "Bridal Collection",
+        href: "/products?category=studio&subcategory=bridal",
+      },
+      {
+        name: "Accessories",
+        href: "/products?category=studio&subcategory=accessories",
+        isCategory: true,
+      },
+      {
+        name: "Handbags",
+        href: "/products?category=studio&subcategory=handbags",
+      },
+      {
+        name: "Jewelry",
+        href: "/products?category=studio&subcategory=jewelry",
+      },
+      {
+        name: "Scarves & Stoles",
+        href: "/products?category=studio&subcategory=scarves",
       },
     ],
   },
