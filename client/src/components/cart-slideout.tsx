@@ -1,7 +1,7 @@
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useStore } from "@/lib/store";
 
 export default function CartSlideout() {
@@ -32,6 +32,9 @@ export default function CartSlideout() {
             Shopping Bag
             <Badge variant="secondary">{cartCount} items</Badge>
           </SheetTitle>
+          <SheetDescription>
+            View and manage items in your shopping bag
+          </SheetDescription>
         </SheetHeader>
 
         {cartItems.length === 0 ? (

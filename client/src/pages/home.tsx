@@ -7,6 +7,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import CategoryCard from "@/components/category-card";
+import HeroSlider from "@/components/hero-slider";
 import type { Product, Category } from "@shared/schema";
 
 const brands = ["H&M", "Zara", "Nike", "Adidas", "Puma", "Levi's"];
@@ -24,56 +25,8 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative">
-        {/* Desktop Hero */}
-        <div className="hidden md:block">
-          <div className="relative h-96 lg:h-[500px] bg-gradient-to-r from-gray-900 to-gray-700">
-            <img
-              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=500"
-              alt="Fashion store interior with clothing displays"
-              className="w-full h-full object-cover opacity-80"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-center text-white">
-              <div>
-                <h1 className="font-poppins font-bold text-4xl lg:text-6xl mb-4">Fashion That Speaks</h1>
-                <p className="text-lg lg:text-xl mb-8 max-w-2xl">
-                  Discover the latest trends in fashion with Hednor's exclusive collection
-                </p>
-                <Link href="/products">
-                  <Button className="bg-hednor-gold text-hednor-dark px-8 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
-                    Shop Now
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Hero */}
-        <div className="md:hidden">
-          <div className="relative h-64 bg-gradient-to-r from-gray-900 to-gray-700">
-            <img
-              src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
-              alt="Stylish fashion models in trendy outfits"
-              className="w-full h-full object-cover opacity-80"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-center text-white px-4">
-              <div>
-                <h1 className="font-poppins font-bold text-2xl mb-2">Fashion That Speaks</h1>
-                <p className="text-sm mb-4">Discover latest trends</p>
-                <Link href="/products">
-                  <Button className="bg-hednor-gold text-hednor-dark px-6 py-2 rounded-lg font-semibold">
-                    Shop Now
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Category Grid */}
       <section className="container mx-auto px-4 py-12">
