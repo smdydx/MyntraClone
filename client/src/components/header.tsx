@@ -10,6 +10,7 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 import CartSlideout from "./cart-slideout";
 import MobileSearch from "./mobile-search";
 import AuthModal from "./auth-modal";
+import { ThemeToggle } from "./theme-toggle";
 
 const navigation = [
   { 
@@ -413,7 +414,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-gray-100 shadow-sm sticky top-0 z-40 border-b border-gray-300">
+      <header className="bg-gray-100 dark:bg-gray-900 shadow-sm sticky top-0 z-40 border-b border-gray-300 dark:border-gray-700">
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -437,27 +438,49 @@ export default function Header() {
                 <div key={item.name} className="relative group">
                   <Link
                     href={item.href}
-                    className="text-gray-800 hover:text-pink-600 font-semibold text-sm uppercase tracking-wide transition-colors px-2 py-1"
+                    className="text-gray-800 dark:text-gray-200 hover:text-pink-600 dark:hover:text-pink-400 font-semibold text-sm uppercase tracking-wide transition-colors px-2 py-1"
                   >
                     {item.name}
                   </Link>
                   
-                  {/* Dropdown Menu */}
-                  <div className="absolute top-full left-0 mt-1 w-80 bg-white shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 max-h-96 overflow-y-auto">
-                    <div className="py-3">
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className={`block px-4 py-2 text-sm transition-colors ${
-                            subItem.isCategory 
-                              ? "font-semibold text-gray-800 bg-gray-50 border-b border-gray-200 hover:bg-gray-100" 
-                              : "text-gray-600 hover:bg-pink-50 hover:text-pink-600 pl-6"
-                          }`}
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
+                  {/* Mega Menu */}
+                  <div className="absolute top-full left-0 mt-1 w-screen max-w-5xl bg-white dark:bg-gray-800 shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="grid grid-cols-4 gap-8 p-8">
+                      {(() => {
+                        const categoryGroups: { [key: string]: typeof item.submenu } = {};
+                        let currentCategory = "General";
+                        
+                        item.submenu.forEach((subItem) => {
+                          if (subItem.isCategory) {
+                            currentCategory = subItem.name;
+                            categoryGroups[currentCategory] = [];
+                          } else {
+                            if (!categoryGroups[currentCategory]) {
+                              categoryGroups[currentCategory] = [];
+                            }
+                            categoryGroups[currentCategory].push(subItem);
+                          }
+                        });
+
+                        return Object.entries(categoryGroups).map(([categoryName, items]) => (
+                          <div key={categoryName} className="space-y-3">
+                            <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm uppercase tracking-wide border-b border-gray-200 dark:border-gray-600 pb-2">
+                              {categoryName}
+                            </h3>
+                            <div className="space-y-2">
+                              {items.slice(0, 8).map((subItem) => (
+                                <Link
+                                  key={`${categoryName}-${subItem.name}`}
+                                  href={subItem.href}
+                                  className="block text-sm text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        ));
+                      })()}
                     </div>
                   </div>
                 </div>
@@ -505,14 +528,14 @@ export default function Header() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors p-2"
+                  className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors p-2 dark:text-gray-300 dark:hover:text-pink-400"
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Profile</span>
                 </Button>
                 
-                <div className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2">
+                <div className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2 dark:text-gray-300 dark:hover:text-pink-400">
                   <Heart className="h-5 w-5" />
                   <span className="text-xs mt-1 font-medium hidden md:block">Wishlist</span>
                   {wishlistItems.length > 0 && (
@@ -521,6 +544,8 @@ export default function Header() {
                     </Badge>
                   )}
                 </div>
+                
+                <ThemeToggle />
               </div>
 
               {/* Cart */}
