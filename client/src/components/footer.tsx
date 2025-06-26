@@ -13,7 +13,7 @@ export default function Footer() {
               <img 
                 src={hednorLogoPath} 
                 alt="Hednor Logo" 
-                className="w-12 h-12 object-contain"
+                className="w-24 h-24 object-contain"
               />
             </div>
             <p className="text-gray-600 text-sm mb-4">

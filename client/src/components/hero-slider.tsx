@@ -6,6 +6,16 @@ import { cn } from "@/lib/utils";
 const heroSlides = [
   {
     id: 1,
+    title: "Fashion Video",
+    subtitle: "Experience Fashion in Motion",
+    description: "Watch our latest fashion showcase featuring the newest trends",
+    buttonText: "Shop Now",
+    buttonLink: "/products",
+    isVideo: true,
+    backgroundVideo: "https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4",
+  },
+  {
+    id: 2,
     title: "New Collection",
     subtitle: "Spring Summer 2025",
     description: "Discover the latest trends in fashion with our premium collection",
@@ -14,7 +24,7 @@ const heroSlides = [
     backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center",
   },
   {
-    id: 2,
+    id: 3,
     title: "Premium Quality",
     subtitle: "Crafted with Care",
     description: "Experience luxury with our handpicked selection of premium garments",
@@ -23,7 +33,7 @@ const heroSlides = [
     backgroundImage: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&h=800&fit=crop&crop=center",
   },
   {
-    id: 3,
+    id: 4,
     title: "Sale Up to 70% Off",
     subtitle: "Limited Time Offer",
     description: "Don't miss out on our biggest sale of the year",
@@ -32,23 +42,13 @@ const heroSlides = [
     backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=800&fit=crop&crop=center",
   },
   {
-    id: 4,
+    id: 5,
     title: "Exclusive Designs",
     subtitle: "Hednor Studio Collection",
     description: "Unique pieces designed exclusively for fashion-forward individuals",
     buttonText: "View Collection",
     buttonLink: "/products?category=studio",
     backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
-  },
-  {
-    id: 5,
-    title: "Fashion Video",
-    subtitle: "Experience Fashion in Motion",
-    description: "Watch our latest fashion showcase video",
-    buttonText: "Explore More",
-    buttonLink: "/products",
-    isVideo: true,
-    backgroundVideo: "https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4",
   },
 ];
 

@@ -444,8 +444,8 @@ export default function Header() {
                   </Link>
                   
                   {/* Mega Menu */}
-                  <div className="absolute top-full left-0 mt-1 w-screen max-w-5xl bg-white dark:bg-gray-800 shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="grid grid-cols-4 gap-8 p-8">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 w-screen max-w-7xl bg-white dark:bg-gray-800 shadow-2xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded-lg overflow-hidden mx-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 p-6 max-h-96 overflow-y-auto">
                       {(() => {
                         const categoryGroups: { [key: string]: typeof item.submenu } = {};
                         let currentCategory = "General";
@@ -464,15 +464,15 @@ export default function Header() {
 
                         return Object.entries(categoryGroups).map(([categoryName, items]) => (
                           <div key={categoryName} className="space-y-3">
-                            <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm uppercase tracking-wide border-b border-gray-200 dark:border-gray-600 pb-2">
+                            <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide border-b border-gray-200 dark:border-gray-600 pb-2">
                               {categoryName}
                             </h3>
-                            <div className="space-y-2">
-                              {items.slice(0, 8).map((subItem) => (
+                            <div className="space-y-1">
+                              {items.slice(0, 6).map((subItem) => (
                                 <Link
                                   key={`${categoryName}-${subItem.name}`}
                                   href={subItem.href}
-                                  className="block text-sm text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                                  className="block text-xs text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors py-1 hover:bg-gray-50 dark:hover:bg-gray-700 px-2 rounded"
                                 >
                                   {subItem.name}
                                 </Link>
