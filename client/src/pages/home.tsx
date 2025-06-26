@@ -9,9 +9,10 @@ import ProductCard from "@/components/product-card";
 import CategoryCard from "@/components/category-card";
 import HeroSlider from "@/components/hero-slider";
 import ReviewsSection from "@/components/reviews-section";
+import TrendingBrands from "@/components/trending-brands";
 import type { Product, Category } from "@shared/schema";
 
-const brands = ["H&M", "Zara", "Nike", "Adidas", "Puma", "Levi's"];
+
 
 export default function Home() {
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
@@ -109,24 +110,7 @@ export default function Home() {
       </section>
 
       {/* Trending Brands */}
-      <section className="bg-white py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="font-poppins font-bold text-2xl md:text-3xl text-center mb-8 text-hednor-dark">
-            Trending Brands
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {brands.map((brand) => (
-              <div
-                key={brand}
-                className="flex items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-              >
-                <span className="font-bold text-lg text-gray-700">{brand}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TrendingBrands />
 
       {/* Newsletter */}
       <section className="bg-hednor-dark py-12">
