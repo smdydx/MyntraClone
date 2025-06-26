@@ -112,7 +112,7 @@ export default function TrendingBrands() {
                 </p>
                 
                 {/* Price Banner */}
-                <div className="mt-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-2 rounded-lg text-sm font-medium">
+                <div className="mt-4 bg-gradient-to-r from-hednor-gold to-yellow-400 text-hednor-dark px-3 py-2 rounded-lg text-sm font-medium">
                   Shop Now
                 </div>
               </CardContent>
@@ -121,13 +121,13 @@ export default function TrendingBrands() {
         </div>
 
         {/* Special Offer Banner */}
-        <div className="mt-12 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-xl p-8 text-center text-white">
+        <div className="mt-12 bg-gradient-to-r from-hednor-gold via-yellow-400 to-yellow-500 rounded-xl p-8 text-center text-hednor-dark">
           <h3 className="text-2xl font-bold mb-2">Mega Brand Sale</h3>
           <p className="text-lg mb-4">Get up to 70% OFF on top brands + Extra 10% on prepaid orders</p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <span className="bg-white/20 px-3 py-1 rounded-full">Free Shipping</span>
-            <span className="bg-white/20 px-3 py-1 rounded-full">Easy Returns</span>
-            <span className="bg-white/20 px-3 py-1 rounded-full">Authentic Products</span>
+            <span className="bg-black/20 px-3 py-1 rounded-full">Free Shipping</span>
+            <span className="bg-black/20 px-3 py-1 rounded-full">Easy Returns</span>
+            <span className="bg-black/20 px-3 py-1 rounded-full">Authentic Products</span>
           </div>
         </div>
       </div>
