@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import ReviewForm from "@/components/review-form";
 import { useStore } from "@/lib/store";
 import type { Product } from "@shared/schema";
 
@@ -399,18 +400,70 @@ export default function ProductDetail() {
           </TabsContent>
           
           <TabsContent value="reviews" className="mt-6">
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="font-semibold mb-4">Customer Reviews</h3>
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="flex">
-                  {renderStars(product.rating || "0")}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Existing Reviews */}
+              <div className="bg-white p-6 rounded-lg">
+                <h3 className="font-semibold mb-4">Customer Reviews</h3>
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="flex">
+                    {renderStars(product.rating || "0")}
+                  </div>
+                  <span className="text-lg font-semibold">{product.rating || "0"} out of 5</span>
+                  <span className="text-gray-600">({product.reviewCount?.toLocaleString() || 0} reviews)</span>
                 </div>
-                <span className="text-lg font-semibold">{product.rating || "0"} out of 5</span>
-                <span className="text-gray-600">({product.reviewCount?.toLocaleString() || 0} reviews)</span>
+                
+                {/* Sample Reviews */}
+                <div className="space-y-4">
+                  <div className="border-b border-gray-200 pb-4">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="flex">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < 5 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-medium">Priya S.</span>
+                      <span className="text-sm text-gray-500">Verified Purchase</span>
+                    </div>
+                    <p className="text-gray-600 text-sm">
+                      "Excellent quality and perfect fit! Highly recommend this product."
+                    </p>
+                  </div>
+                  
+                  <div className="border-b border-gray-200 pb-4">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="flex">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-medium">Rahul K.</span>
+                      <span className="text-sm text-gray-500">Verified Purchase</span>
+                    </div>
+                    <p className="text-gray-600 text-sm">
+                      "Good value for money. Fast delivery and nice packaging."
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-gray-600">
-                Reviews functionality would be implemented here with actual customer feedback and ratings.
-              </p>
+              
+              {/* Review Form */}
+              <ReviewForm 
+                productId={product.id} 
+                productName={product.name}
+                onReviewSubmitted={() => {
+                  // Could refresh reviews here
+                }}
+              />
             </div>
           </TabsContent>
         </Tabs>
