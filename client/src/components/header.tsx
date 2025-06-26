@@ -1371,7 +1371,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700 bg-transparent">
+      <header className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700" style={{ backgroundColor: 'rgb(112 113 35 / 50%)' }}>
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -1392,8 +1392,8 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Logo - positioned more to the right */}
-            <Link href="/" className="flex items-center lg:mr-6 ml-8 lg:ml-0">
+            {/* Logo - centered on mobile, left on desktop */}
+            <Link href="/" className="flex items-center lg:mr-6">
               <img
                 src={hednorLogoPath}
                 alt="Hednor"
