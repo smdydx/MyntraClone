@@ -434,7 +434,7 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8 flex-1">
-              {navigation.map((item) => (
+              {navigation.map((item, index) => (
                 <div key={item.name} className="relative group">
                   <Link
                     href={item.href}
@@ -444,8 +444,10 @@ export default function Header() {
                   </Link>
                   
                   {/* Myntra-style Mega Menu */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
-                       style={{ width: '90vw', maxWidth: '1200px' }}>
+                  <div className={`absolute top-full mt-0 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg ${
+                    index < 3 ? 'left-0' : 'right-0'
+                  }`}
+                       style={{ width: '75vw', maxWidth: '900px', minWidth: '700px' }}>
                     <div className="p-6 lg:p-8">
                       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
                         {(() => {
