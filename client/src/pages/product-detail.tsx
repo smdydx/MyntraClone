@@ -4,13 +4,11 @@ import { useParams, Link } from "wouter";
 import { Star, Heart, ShoppingBag, Plus, Minus, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import ReviewForm from "@/components/review-form";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useStore } from "@/lib/store";
+import SizeGuide from "@/components/size-guide";
 import type { Product } from "@shared/schema";
 
 export default function ProductDetail() {
@@ -247,19 +245,22 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Size Selection */}
+            {/* Sizes */}
             {product.sizes && product.sizes.length > 0 && (
               <div>
-                <h3 className="font-semibold mb-3">Size</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-medium text-gray-900">Size</h3>
+                  <SizeGuide />
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
+                      className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors ${
                         selectedSize === size
                           ? 'border-hednor-gold bg-hednor-gold text-hednor-dark'
-                          : 'border-gray-300 hover:border-hednor-gold'
+                          : 'border-gray-300 text-gray-700 hover:border-hednor-gold'
                       }`}
                     >
                       {size}

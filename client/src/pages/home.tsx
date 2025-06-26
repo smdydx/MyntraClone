@@ -11,8 +11,10 @@ import HeroSlider from "@/components/hero-slider";
 import ReviewsSection from "@/components/reviews-section";
 import TrendingBrands from "@/components/trending-brands";
 import type { Product, Category } from "@shared/schema";
-
-
+import NewsletterPopup from "@/components/newsletter-popup";
+import RecentlyViewed from "@/components/recently-viewed";
+import FloatingCartIcon from "@/components/floating-cart-icon";
+import BackToTop from "@/components/back-to-top";
 
 export default function Home() {
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
@@ -824,6 +826,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Recently Viewed */}
+      <RecentlyViewed />
+      
+      {/* Floating Cart Icon */}
+      <FloatingCartIcon />
+      
+      {/* Back to Top */}
+      <BackToTop />
+      
+      {/* Newsletter Popup */}
+      <NewsletterPopup />
 
       <Footer />
     </div>
