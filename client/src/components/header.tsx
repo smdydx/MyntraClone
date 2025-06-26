@@ -516,7 +516,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-hednor-gold p-2"
+                className="md:hidden text-white hover:text-hednor-gold p-2"
                 onClick={() => setMobileSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
@@ -526,7 +526,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-hednor-gold p-2"
+                className="md:hidden text-white hover:text-hednor-gold p-2"
                 onClick={() => setIsAuthModalOpen(true)}
               >
                 <User className="h-5 w-5" />
@@ -537,7 +537,7 @@ export default function Header() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2"
+                  className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent"
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
@@ -561,7 +561,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative p-2 border border-transparent"
+                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative p-2 border border-transparent hover:bg-transparent"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag className="h-5 w-5" />
