@@ -22,26 +22,26 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Header />
 
       {/* Hero Slider */}
       <HeroSlider />
 
       {/* Category Grid */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="font-poppins font-bold text-2xl md:text-3xl text-center mb-8 text-hednor-dark">
+      <section className="container mx-auto px-4 py-8 bg-gray-50">
+        <h2 className="font-bold text-xl md:text-2xl text-center mb-6 text-gray-800 uppercase tracking-wide">
           Shop by Category
         </h2>
 
         {categoriesLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-32 md:h-48 rounded-xl" />
+              <Skeleton key={i} className="h-24 md:h-32 rounded-lg" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {categories.map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
@@ -50,30 +50,30 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="bg-white py-12">
+      <section className="bg-white py-8">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="font-poppins font-bold text-2xl md:text-3xl text-hednor-dark">
-              Featured Products
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide">
+              Trending Now
             </h2>
-            <Link href="/products" className="text-hednor-gold hover:text-yellow-600 font-medium">
+            <Link href="/products" className="text-pink-600 hover:text-pink-700 font-medium text-sm uppercase">
               View All
             </Link>
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="h-48 md:h-64 rounded-t-lg" />
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                  <Skeleton className="h-4 w-1/4" />
+                  <Skeleton className="h-48 md:h-64 rounded" />
+                  <Skeleton className="h-3 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

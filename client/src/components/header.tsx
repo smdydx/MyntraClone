@@ -101,46 +101,43 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-gradient-to-r from-yellow-50/80 via-amber-50/90 to-yellow-50/80 backdrop-blur-sm shadow-sm sticky top-0 z-40 border-b border-amber-200/50">
+      <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
         </div>
 
         {/* Main Navigation */}
-        <nav className="container mx-auto px-4 py-4">
+        <nav className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center mr-6">
               <img 
                 src={hednorLogoPath} 
                 alt="Hednor" 
-                className="w-20 h-20 object-contain filter brightness-110 contrast-110"
+                className="w-14 h-14 object-contain"
               />
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-6 flex-1">
               {navigation.map((item) => (
                 <div key={item.name} className="relative group">
                   <Link
                     href={item.href}
-                    className="text-gray-700 hover:text-hednor-gold font-medium transition-colors flex items-center space-x-1"
+                    className="text-gray-800 hover:text-pink-600 font-semibold text-sm uppercase tracking-wide transition-colors px-2 py-1"
                   >
-                    <span>{item.name}</span>
-                    <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    {item.name}
                   </Link>
                   
                   {/* Dropdown Menu */}
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="py-2">
+                  <div className="absolute top-full left-0 mt-1 w-52 bg-white shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="py-3">
                       {item.submenu.map((subItem) => (
                         <Link
                           key={subItem.name}
                           href={subItem.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-hednor-gold hover:text-hednor-dark transition-colors"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                         >
                           {subItem.name}
                         </Link>
@@ -152,26 +149,26 @@ export default function Header() {
             </div>
 
             {/* Desktop Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-md mx-8">
+            <div className="hidden md:flex flex-1 max-w-sm mx-4">
               <form onSubmit={handleSearch} className="relative w-full">
                 <Input
                   type="text"
                   placeholder="Search for products, brands and more"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-hednor-gold focus:border-transparent"
+                  className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:ring-1 focus:ring-pink-400 focus:border-pink-400 text-sm"
                 />
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Search className="absolute right-3 top-3 h-4 w-4 text-gray-500" />
               </form>
             </div>
 
             {/* User Actions */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
               {/* Mobile Search Button */}
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-hednor-gold"
+                className="md:hidden text-gray-700 hover:text-pink-600 p-2"
                 onClick={() => setMobileSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
@@ -181,29 +178,29 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden text-gray-700 hover:text-hednor-gold"
+                className="md:hidden text-gray-700 hover:text-pink-600 p-2"
                 onClick={() => setIsAuthModalOpen(true)}
               >
                 <User className="h-5 w-5" />
               </Button>
 
               {/* Desktop User Actions */}
-              <div className="hidden md:flex items-center space-x-6">
+              <div className="hidden md:flex items-center space-x-5">
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors"
+                  className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors p-2"
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
-                  <span className="text-xs mt-1">Login</span>
+                  <span className="text-xs mt-1 font-medium">Profile</span>
                 </Button>
                 
-                <div className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative">
+                <div className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2">
                   <Heart className="h-5 w-5" />
-                  <span className="text-xs mt-1">Wishlist</span>
+                  <span className="text-xs mt-1 font-medium">Wishlist</span>
                   {wishlistItems.length > 0 && (
-                    <Badge className="absolute -top-2 -right-2 bg-sale-red text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0">
+                    <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                       {wishlistItems.length}
                     </Badge>
                   )}
@@ -214,13 +211,13 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-col items-center text-gray-700 hover:text-hednor-gold cursor-pointer transition-colors relative"
+                className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag className="h-5 w-5" />
-                <span className="text-xs mt-1">Bag</span>
+                <span className="text-xs mt-1 font-medium">Bag</span>
                 {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-sale-red text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0">
+                  <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                     {cartCount}
                   </Badge>
                 )}
@@ -229,7 +226,7 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="lg:hidden text-gray-700 hover:text-hednor-gold">
+                  <Button variant="ghost" size="sm" className="lg:hidden text-gray-700 hover:text-pink-600 p-2">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -239,17 +236,17 @@ export default function Header() {
                       <div key={item.name} className="space-y-2">
                         <Link
                           href={item.href}
-                          className="text-gray-700 hover:text-hednor-gold font-medium transition-colors py-2 flex items-center justify-between"
+                          className="text-gray-800 hover:text-pink-600 font-semibold text-sm uppercase tracking-wide transition-colors py-3 flex items-center justify-between border-b border-gray-100"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <span>{item.name}</span>
                         </Link>
-                        <div className="pl-4 space-y-1">
+                        <div className="pl-4 space-y-2">
                           {item.submenu.slice(0, 4).map((subItem) => (
                             <Link
                               key={subItem.name}
                               href={subItem.href}
-                              className="block text-sm text-gray-600 hover:text-hednor-gold transition-colors py-1"
+                              className="block text-sm text-gray-600 hover:text-pink-600 transition-colors py-2"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               {subItem.name}
@@ -258,10 +255,10 @@ export default function Header() {
                         </div>
                       </div>
                     ))}
-                    <div className="border-t pt-4 mt-8">
+                    <div className="border-t pt-6 mt-8">
                       <Button
                         variant="ghost"
-                        className="flex items-center space-x-2 text-gray-700 hover:text-hednor-gold font-medium transition-colors py-2 w-full justify-start"
+                        className="flex items-center space-x-3 text-gray-800 hover:text-pink-600 font-medium transition-colors py-3 w-full justify-start"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
                           setIsAuthModalOpen(true);
@@ -270,7 +267,7 @@ export default function Header() {
                         <User className="h-5 w-5" />
                         <span>Login / Register</span>
                       </Button>
-                      <div className="flex items-center space-x-2 text-gray-700 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-2">
+                      <div className="flex items-center space-x-3 text-gray-800 hover:text-pink-600 font-medium cursor-pointer transition-colors py-3">
                         <Heart className="h-5 w-5" />
                         <span>Wishlist ({wishlistItems.length})</span>
                       </div>
