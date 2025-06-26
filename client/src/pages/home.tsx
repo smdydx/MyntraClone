@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import CategoryCard from "@/components/category-card";
 import HeroSlider from "@/components/hero-slider";
+import ReviewsSection from "@/components/reviews-section";
 import type { Product, Category } from "@shared/schema";
 
 const brands = ["H&M", "Zara", "Nike", "Adidas", "Puma", "Levi's"];
@@ -81,6 +82,9 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection />
 
       {/* Promo Banner */}
       <section className="bg-gradient-to-r from-hednor-gold to-yellow-400 py-12">

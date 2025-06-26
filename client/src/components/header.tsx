@@ -193,12 +193,12 @@ export default function Header() {
                   onClick={() => setIsAuthModalOpen(true)}
                 >
                   <User className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium">Profile</span>
+                  <span className="text-xs mt-1 font-medium hidden md:block">Profile</span>
                 </Button>
                 
                 <div className="flex flex-col items-center text-gray-700 hover:text-pink-600 cursor-pointer transition-colors relative p-2">
                   <Heart className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium">Wishlist</span>
+                  <span className="text-xs mt-1 font-medium hidden md:block">Wishlist</span>
                   {wishlistItems.length > 0 && (
                     <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                       {wishlistItems.length}
@@ -215,7 +215,7 @@ export default function Header() {
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag className="h-5 w-5" />
-                <span className="text-xs mt-1 font-medium">Bag</span>
+                <span className="text-xs mt-1 font-medium hidden md:block">Bag</span>
                 {cartCount > 0 && (
                   <Badge className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
                     {cartCount}
@@ -230,47 +230,53 @@ export default function Header() {
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                  <div className="flex flex-col space-y-4 mt-8">
-                    {navigation.map((item) => (
-                      <div key={item.name} className="space-y-2">
-                        <Link
-                          href={item.href}
-                          className="text-gray-800 hover:text-pink-600 font-semibold text-sm uppercase tracking-wide transition-colors py-3 flex items-center justify-between border-b border-gray-100"
-                          onClick={() => setIsMobileMenuOpen(false)}
+                <SheetContent side="right" className="w-[280px] sm:w-[320px] p-0">
+                  <div className="flex flex-col h-full">
+                    {/* Header */}
+                    <div className="p-4 border-b border-gray-200">
+                      <h2 className="font-semibold text-lg text-gray-800">Menu</h2>
+                    </div>
+
+                    {/* Navigation Items */}
+                    <div className="flex-1 overflow-y-auto">
+                      <div className="p-4 space-y-1">
+                        {navigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className="block text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium text-sm py-3 px-3 rounded-md transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {item.name.toUpperCase()}
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* User Actions */}
+                      <div className="border-t border-gray-200 p-4 space-y-1">
+                        <Button
+                          variant="ghost"
+                          className="flex items-center space-x-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium transition-colors py-3 px-3 w-full justify-start rounded-md"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsAuthModalOpen(true);
+                          }}
                         >
-                          <span>{item.name}</span>
-                        </Link>
-                        <div className="pl-4 space-y-2">
-                          {item.submenu.slice(0, 4).map((subItem) => (
-                            <Link
-                              key={subItem.name}
-                              href={subItem.href}
-                              className="block text-sm text-gray-600 hover:text-pink-600 transition-colors py-2"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
+                          <User className="h-4 w-4" />
+                          <span>Login / Register</span>
+                        </Button>
+                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium cursor-pointer transition-colors py-3 px-3 rounded-md">
+                          <Heart className="h-4 w-4" />
+                          <span>Wishlist ({wishlistItems.length})</span>
                         </div>
                       </div>
-                    ))}
-                    <div className="border-t pt-6 mt-8">
-                      <Button
-                        variant="ghost"
-                        className="flex items-center space-x-3 text-gray-800 hover:text-pink-600 font-medium transition-colors py-3 w-full justify-start"
-                        onClick={() => {
-                          setIsMobileMenuOpen(false);
-                          setIsAuthModalOpen(true);
-                        }}
-                      >
-                        <User className="h-5 w-5" />
-                        <span>Login / Register</span>
-                      </Button>
-                      <div className="flex items-center space-x-3 text-gray-800 hover:text-pink-600 font-medium cursor-pointer transition-colors py-3">
-                        <Heart className="h-5 w-5" />
-                        <span>Wishlist ({wishlistItems.length})</span>
-                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="p-4 border-t border-gray-200 bg-gray-50">
+                      <p className="text-xs text-gray-500 text-center">
+                        © 2025 Hednor. All rights reserved.
+                      </p>
                     </div>
                   </div>
                 </SheetContent>

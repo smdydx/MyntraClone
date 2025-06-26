@@ -68,7 +68,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 pt-6 flex flex-col md:flex-row items-center justify-between">
           <p className="text-gray-600 text-sm mb-4 md:mb-0">
-            © 2024 Hednor. All rights reserved.
+            © 2025 Hednor. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm">
             <Link href="/privacy" className="text-gray-600 hover:text-hednor-gold transition-colors">Privacy Policy</Link>
