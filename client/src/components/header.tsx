@@ -101,7 +101,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-gradient-to-r from-gray-50 via-yellow-50 to-gray-50 shadow-sm sticky top-0 z-40">
+      <header className="bg-gradient-to-r from-yellow-50/80 via-amber-50/90 to-yellow-50/80 backdrop-blur-sm shadow-sm sticky top-0 z-40 border-b border-amber-200/50">
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -175,6 +175,16 @@ export default function Header() {
                 onClick={() => setMobileSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
+              </Button>
+
+              {/* Mobile Login Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden text-gray-700 hover:text-hednor-gold"
+                onClick={() => setIsAuthModalOpen(true)}
+              >
+                <User className="h-5 w-5" />
               </Button>
 
               {/* Desktop User Actions */}
