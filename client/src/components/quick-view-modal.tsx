@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, Heart, ShoppingBag, Star, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -21,6 +20,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const formatPrice = (price: string) => {
     return `₹${parseFloat(price).toLocaleString('en-IN')}`;
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isOpen]);
 
   const handleAddToCart = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {

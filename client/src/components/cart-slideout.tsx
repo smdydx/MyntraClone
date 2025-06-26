@@ -1,3 +1,23 @@
+import { useEffect } from "react";
+import { X, Plus, Minus, ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useStore } from "@/lib/store";
+import { useToast } from "@/hooks/use-toast";
+
+interface CartSlideoutProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function CartSlideout({ isOpen, onClose }: CartSlideoutProps) {
+  // Scroll to top when cart slideout opens
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isOpen]);
+
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

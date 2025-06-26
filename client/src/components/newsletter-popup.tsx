@@ -1,14 +1,21 @@
-
 import { useState, useEffect } from "react";
-import { X, Mail, Gift } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { X, Mail, Gift } from "lucide-react";
 
 export default function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
 
+  // Scroll to top when popup opens
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isOpen]);
+
+  // Show popup after 10 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       const hasSeenPopup = localStorage.getItem('newsletter-popup-seen');
@@ -47,7 +54,7 @@ export default function NewsletterPopup() {
           >
             <X className="h-4 w-4" />
           </Button>
-          
+
           <div className="mb-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4">
               <Gift className="h-8 w-8 text-hednor-gold" />

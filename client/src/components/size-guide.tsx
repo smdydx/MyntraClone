@@ -1,12 +1,18 @@
-
-import { useState } from "react";
-import { Ruler, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Ruler, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function SizeGuide() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Scroll to top when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isOpen]);
 
   const mensSizes = [
     { size: "S", chest: "36-38", waist: "30-32", hip: "36-38" },
@@ -36,19 +42,19 @@ export default function SizeGuide() {
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-bold">Size Guide</DialogTitle>
         </DialogHeader>
-        
+
         <Tabs defaultValue="men" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="men">Men</TabsTrigger>
             <TabsTrigger value="women">Women</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="men" className="space-y-4">
             <div className="text-center mb-4">
               <h3 className="font-semibold text-lg mb-2">Men's Clothing Size Chart</h3>
               <p className="text-sm text-gray-600">All measurements are in inches</p>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
@@ -72,13 +78,13 @@ export default function SizeGuide() {
               </table>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="women" className="space-y-4">
             <div className="text-center mb-4">
               <h3 className="font-semibold text-lg mb-2">Women's Clothing Size Chart</h3>
               <p className="text-sm text-gray-600">All measurements are in inches</p>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
@@ -103,7 +109,7 @@ export default function SizeGuide() {
             </div>
           </TabsContent>
         </Tabs>
-        
+
         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
           <h4 className="font-semibold mb-2">How to Measure:</h4>
           <ul className="text-sm space-y-1 text-gray-600">

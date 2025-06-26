@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,12 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
+  // Scroll to top when modal opens
+  useEffect(() => {
+    if (open) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [open]);
   const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
