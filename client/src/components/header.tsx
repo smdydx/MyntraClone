@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, User, Heart, ShoppingBag, Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -395,6 +395,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   
   const {
     cartCount,
@@ -590,14 +591,52 @@ export default function Header() {
                     <div className="flex-1 overflow-y-auto">
                       <div className="p-4 space-y-1">
                         {navigation.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            className="block text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium text-sm py-3 px-3 rounded-md transition-colors"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {item.name.toUpperCase()}
-                          </Link>
+                          <div key={item.name} className="space-y-1">
+                            {/* Main Category */}
+                            <div className="flex items-center justify-between">
+                              <Link
+                                href={item.href}
+                                className="flex-1 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium text-sm py-3 px-3 rounded-md transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {item.name.toUpperCase()}
+                              </Link>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="p-2"
+                                onClick={() => setExpandedMobileMenu(
+                                  expandedMobileMenu === item.name ? null : item.name
+                                )}
+                              >
+                                {expandedMobileMenu === item.name ? (
+                                  <ChevronDown className="h-4 w-4" />
+                                ) : (
+                                  <ChevronRight className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </div>
+                            
+                            {/* Submenu */}
+                            {expandedMobileMenu === item.name && item.submenu && (
+                              <div className="ml-4 space-y-1 border-l border-gray-200 pl-3">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.name}
+                                    href={subItem.href}
+                                    className={`block text-sm py-2 px-3 rounded-md transition-colors ${
+                                      subItem.isCategory 
+                                        ? 'font-semibold text-hednor-gold hover:bg-hednor-gold/10' 
+                                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                                    }`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    {subItem.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </div>
 
@@ -605,7 +644,7 @@ export default function Header() {
                       <div className="border-t border-gray-200 p-4 space-y-1">
                         <Button
                           variant="ghost"
-                          className="flex items-center space-x-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium transition-colors py-3 px-3 w-full justify-start rounded-md"
+                          className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium transition-colors py-3 px-3 w-full justify-start rounded-md"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             setIsAuthModalOpen(true);
@@ -614,7 +653,7 @@ export default function Header() {
                           <User className="h-4 w-4" />
                           <span>Login / Register</span>
                         </Button>
-                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 font-medium cursor-pointer transition-colors py-3 px-3 rounded-md">
+                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md">
                           <Heart className="h-4 w-4" />
                           <span>Wishlist ({wishlistItems.length})</span>
                         </div>
