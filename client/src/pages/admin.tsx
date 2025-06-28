@@ -189,6 +189,8 @@ export default function AdminDashboard() {
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: '1',
@@ -218,14 +220,39 @@ export default function AdminDashboard() {
 
   const queryClient = useQueryClient();
 
+  // Check if admin is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Verify token is valid by making a test request
+      fetch('/api/admin/analytics/overview', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(response => {
+        if (response.ok) {
+          setIsLoggedIn(true);
+        } else {
+          localStorage.removeItem('token');
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+      });
+    }
+  }, []);
+
   // Real-time data simulation
   useEffect(() => {
-    const interval = setInterval(() => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "analytics"] });
-    }, 30000); // Refresh every 30 seconds
+    if (isLoggedIn) {
+      const interval = setInterval(() => {
+        queryClient.invalidateQueries({ queryKey: ["admin", "analytics"] });
+      }, 30000); // Refresh every 30 seconds
 
-    return () => clearInterval(interval);
-  }, [queryClient]);
+      return () => clearInterval(interval);
+    }
+  }, [queryClient, isLoggedIn]);
 
   // Fetch dashboard data
   const { data: dashboardStats, isLoading: statsLoading, error: statsError } = useQuery<DashboardStats>({
@@ -634,6 +661,43 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/auth/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        setIsLoggedIn(true);
+        toast({ title: "Admin login successful" });
+      } else {
+        const error = await response.json();
+        toast({ 
+          title: "Login failed", 
+          description: error.message,
+          variant: "destructive" 
+        });
+      }
+    } catch (error) {
+      toast({ 
+        title: "Login failed", 
+        description: "Connection error",
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    toast({ title: "Logged out successfully" });
+  };
+
   const handleSeedData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -647,8 +711,7 @@ export default function AdminDashboard() {
 
       if (response.ok) {
         alert('Sample data seeded successfully! Refresh the page to see the changes.');
-        // Refresh analytics data
-        fetchAnalytics();
+        queryClient.invalidateQueries();
       } else {
         const error = await response.json();
         alert(`Failed to seed data: ${error.message}`);
@@ -670,6 +733,51 @@ export default function AdminDashboard() {
     isFeatured: false,
     isOnSale: false,
   });
+
+  // Show login form if not logged in
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <Card className="w-full max-w-md mx-4">
+          <CardHeader>
+            <CardTitle className="text-center">Admin Login</CardTitle>
+            <CardDescription className="text-center">
+              Enter your admin credentials to access the dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleAdminLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={credentials.email}
+                  onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="admin@example.com"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={credentials.password}
+                  onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Login to Admin Dashboard
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -846,6 +954,16 @@ export default function AdminDashboard() {
                   onClick={() => queryClient.invalidateQueries()}
                 >
                   <RefreshCw className="h-4 w-4" />
+                </Button>
+
+                {/* Logout */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  Logout
                 </Button>
               </div>
             </div>

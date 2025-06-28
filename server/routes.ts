@@ -282,6 +282,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin login endpoint
+  app.post("/api/auth/admin-login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      // Simple admin check - in production, use proper authentication
+      if (email === "admin@example.com" && password === "admin123") {
+        const token = generateToken({ userId: "admin", email: "admin@example.com" });
+        res.json({ token, message: "Admin login successful" });
+      } else {
+        res.status(401).json({ message: "Invalid admin credentials" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
   // Admin routes for categories
   app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
