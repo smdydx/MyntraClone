@@ -1071,85 +1071,332 @@ export default function AdminDashboard() {
             {activeTab === "categories" && (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <h2 className="text-2xl font-bold">Categories</h2>
-                  <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
-                    <DialogTrigger asChild>
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Category
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Add New Category</DialogTitle>
-                      </DialogHeader>
-                      <form onSubmit={handleCategorySubmit} className="space-y-4">
-                        <div>
-                          <Label htmlFor="name">Category Name</Label>
-                          <Input id="name" name="name" required />
-                        </div>
-                        <div>
-                          <Label htmlFor="slug">Slug</Label>
-                          <Input id="slug" name="slug" required />
-                        </div>
-                        <div>
-                          <Label htmlFor="description">Description</Label>
-                          <Textarea id="description" name="description" />
-                        </div>
-                        <div>
-                          <Label htmlFor="image">Image URL</Label>
-                          <Input id="image" name="image" />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Switch id="isActive" name="isActive" defaultChecked />
-                          <Label htmlFor="isActive">Active</Label>
-                        </div>
-                        <Button type="submit" disabled={addCategoryMutation.isPending} className="w-full">
+                  <div>
+                    <h2 className="text-2xl font-bold">Categories</h2>
+                    <p className="text-gray-600 dark:text-gray-300">Manage product categories and subcategories</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const response = await fetch('/api/admin/seed-categories', {
+                            method: 'POST',
+                            headers: {
+                              'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            }
+                          });
+                          if (response.ok) {
+                            queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
+                            toast({ title: "Categories seeded successfully" });
+                          }
+                        } catch (error) {
+                          toast({ title: "Failed to seed categories", variant: "destructive" });
+                        }
+                      }}
+                    >
+                      <Database className="h-4 w-4 mr-2" />
+                      Seed Categories
+                    </Button>
+                    <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
+                      <DialogTrigger asChild>
+                        <Button>
+                          <Plus className="h-4 w-4 mr-2" />
                           Add Category
                         </Button>
-                      </form>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Add New Category</DialogTitle>
+                        </DialogHeader>
+                        <form onSubmit={handleCategorySubmit} className="space-y-4">
+                          <div>
+                            <Label htmlFor="name">Category Name</Label>
+                            <Input id="name" name="name" placeholder="e.g., Electronics" required />
+                          </div>
+                          <div>
+                            <Label htmlFor="slug">Slug</Label>
+                            <Input id="slug" name="slug" placeholder="e.g., electronics" required />
+                          </div>
+                          <div>
+                            <Label htmlFor="description">Description</Label>
+                            <Textarea id="description" name="description" placeholder="Brief description of the category" />
+                          </div>
+                          <div>
+                            <Label htmlFor="image">Image URL</Label>
+                            <Input id="image" name="image" placeholder="https://example.com/category-image.jpg" />
+                          </div>
+                          <div>
+                            <Label htmlFor="parentId">Parent Category (Optional)</Label>
+                            <Select name="parentId">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select parent category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="">No Parent (Main Category)</SelectItem>
+                                {categories.filter(cat => !cat.parentId).map((category) => (
+                                  <SelectItem key={category._id} value={category._id}>
+                                    {category.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch id="isActive" name="isActive" defaultChecked />
+                            <Label htmlFor="isActive">Active</Label>
+                          </div>
+                          <Button type="submit" disabled={addCategoryMutation.isPending} className="w-full">
+                            {addCategoryMutation.isPending ? "Adding..." : "Add Category"}
+                          </Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {categories.map((category) => (
-                    <Card key={category._id}>
-                      <CardContent className="p-4">
-                        {category.image && (
-                          <img 
-                            src={category.image} 
-                            alt={category.name}
-                            className="w-full h-32 rounded object-cover mb-3"
-                          />
-                        )}
-                        <h3 className="font-medium text-lg mb-2">{category.name}</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{category.description}</p>
-                        <div className="flex items-center justify-between">
-                          <Badge variant={category.isActive ? "default" : "secondary"}>
-                            {category.isActive ? "Active" : "Inactive"}
-                          </Badge>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => setEditingCategory(category)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => deleteCategoryMutation.mutate(category._id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
+                {/* Category Stats */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-blue-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Total Categories</p>
+                          <p className="text-2xl font-bold">{categories.length}</p>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Active</p>
+                          <p className="text-2xl font-bold">{categories.filter(cat => cat.isActive).length}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <Package className="h-5 w-5 text-purple-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Main Categories</p>
+                          <p className="text-2xl font-bold">{categories.filter(cat => !cat.parentId).length}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <Globe className="h-5 w-5 text-orange-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Subcategories</p>
+                          <p className="text-2xl font-bold">{categories.filter(cat => cat.parentId).length}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
+
+                {/* Search and Filter */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search categories..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Select defaultValue="all">
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Filter by status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      <SelectItem value="active">Active Only</SelectItem>
+                      <SelectItem value="inactive">Inactive Only</SelectItem>
+                      <SelectItem value="main">Main Categories</SelectItem>
+                      <SelectItem value="sub">Subcategories</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Categories Table */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Category Management</CardTitle>
+                    <CardDescription>
+                      Manage all your product categories. Click on a category to view its subcategories.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[100px]">Image</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead className="hidden md:table-cell">Description</TableHead>
+                            <TableHead className="hidden sm:table-cell">Type</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="hidden lg:table-cell">Products</TableHead>
+                            <TableHead className="hidden xl:table-cell">Created</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {categories
+                            .filter(category => 
+                              category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              category.description?.toLowerCase().includes(searchTerm.toLowerCase())
+                            )
+                            .map((category) => (
+                            <TableRow key={category._id}>
+                              <TableCell>
+                                {category.image ? (
+                                  <img 
+                                    src={category.image} 
+                                    alt={category.name}
+                                    className="w-12 h-12 rounded object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-12 h-12 rounded bg-gray-200 flex items-center justify-center">
+                                    <FileText className="h-6 w-6 text-gray-400" />
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">{category.name}</div>
+                                  <div className="text-sm text-gray-500">/{category.slug}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                <div className="max-w-[200px] truncate">
+                                  {category.description || "No description"}
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                <Badge variant={category.parentId ? "outline" : "default"}>
+                                  {category.parentId ? "Subcategory" : "Main Category"}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={category.isActive ? "default" : "secondary"}>
+                                  {category.isActive ? "Active" : "Inactive"}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="hidden lg:table-cell">
+                                <div className="text-sm text-gray-600">
+                                  {products.filter(p => p.categoryId === category._id).length} products
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden xl:table-cell">
+                                <div className="text-sm text-gray-600">
+                                  {new Date(category.createdAt).toLocaleDateString()}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex gap-2 justify-end">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setEditingCategory(category)}
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      if (window.confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                                        deleteCategoryMutation.mutate(category._id);
+                                      }
+                                    }}
+                                    className="text-red-600 hover:text-red-700"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Category Tree View */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Category Hierarchy
+                    </CardTitle>
+                    <CardDescription>
+                      Hierarchical view of all categories and their subcategories
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {categories
+                        .filter(cat => !cat.parentId)
+                        .map((mainCategory) => (
+                        <div key={mainCategory._id} className="border rounded-lg p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              {mainCategory.image && (
+                                <img 
+                                  src={mainCategory.image} 
+                                  alt={mainCategory.name}
+                                  className="w-8 h-8 rounded object-cover"
+                                />
+                              )}
+                              <div>
+                                <h4 className="font-medium">{mainCategory.name}</h4>
+                                <p className="text-sm text-gray-500">{mainCategory.description}</p>
+                              </div>
+                            </div>
+                            <Badge variant={mainCategory.isActive ? "default" : "secondary"}>
+                              {mainCategory.isActive ? "Active" : "Inactive"}
+                            </Badge>
+                          </div>
+                          
+                          {/* Subcategories */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ml-4">
+                            {categories
+                              .filter(cat => cat.parentId === mainCategory._id)
+                              .map((subCategory) => (
+                              <div key={subCategory._id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
+                                <span>{subCategory.name}</span>
+                                <Badge 
+                                  variant={subCategory.isActive ? "default" : "secondary"}
+                                  className="text-xs"
+                                >
+                                  {products.filter(p => p.categoryId === subCategory._id).length}
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {categories.filter(cat => cat.parentId === mainCategory._id).length === 0 && (
+                            <div className="ml-4 text-sm text-gray-500 italic">
+                              No subcategories yet
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             )}
 
@@ -2127,7 +2374,7 @@ export default function AdminDashboard() {
 
       {/* Edit Category Dialog */}
       <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Category</DialogTitle>
           </DialogHeader>
@@ -2149,12 +2396,28 @@ export default function AdminDashboard() {
                 <Label htmlFor="image">Image URL</Label>
                 <Input id="image" name="image" defaultValue={editingCategory.image} />
               </div>
+              <div>
+                <Label htmlFor="parentId">Parent Category</Label>
+                <Select name="parentId" defaultValue={editingCategory.parentId || ""}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select parent category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">No Parent (Main Category)</SelectItem>
+                    {categories.filter(cat => !cat.parentId && cat._id !== editingCategory._id).map((category) => (
+                      <SelectItem key={category._id} value={category._id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="flex items-center space-x-2">
                 <Switch id="isActive" name="isActive" defaultChecked={editingCategory.isActive} />
                 <Label htmlFor="isActive">Active</Label>
               </div>
               <Button type="submit" disabled={updateCategoryMutation.isPending} className="w-full">
-                Update Category
+                {updateCategoryMutation.isPending ? "Updating..." : "Update Category"}
               </Button>
             </form>
           )}

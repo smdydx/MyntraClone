@@ -353,6 +353,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Category seeding endpoint
+  app.post("/api/admin/seed-categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { seedCategories } = await import('./seed-data');
+      await seedCategories();
+      res.json({ message: "Categories seeded successfully" });
+    } catch (error) {
+      console.error('Seeding error:', error);
+      res.status(500).json({ message: "Failed to seed categories" });
+    }
+  });
+
+  // Product seeding endpoint
+  app.post("/api/admin/seed-products", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { seedProducts } = await import('./seed-data');
+      await seedProducts();
+      res.json({ message: "Products seeded successfully" });
+    } catch (error) {
+      console.error('Seeding error:', error);
+      res.status(500).json({ message: "Failed to seed products" });
+    }
+  });
+
   // Site settings management (admin only)
   app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {

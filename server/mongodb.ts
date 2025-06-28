@@ -239,7 +239,25 @@ export class CategoryService {
   }
 
   async getCategories(): Promise<Category[]> {
-    return await this.categories.find({ isActive: true }).toArray();
+    return await this.categories.find({}).sort({ name: 1 }).toArray();
+  }
+
+  async getActiveCategories(): Promise<Category[]> {
+    return await this.categories.find({ isActive: true }).sort({ name: 1 }).toArray();
+  }
+
+  async getMainCategories(): Promise<Category[]> {
+    return await this.categories.find({ 
+      isActive: true, 
+      $or: [{ parentId: { $exists: false } }, { parentId: null }] 
+    }).sort({ name: 1 }).toArray();
+  }
+
+  async getSubCategories(parentId: string): Promise<Category[]> {
+    return await this.categories.find({ 
+      isActive: true, 
+      parentId: new ObjectId(parentId) 
+    }).sort({ name: 1 }).toArray();
   }
 
   async getCategoryById(id: string): Promise<Category | null> {
