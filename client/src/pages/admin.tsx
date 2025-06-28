@@ -22,7 +22,7 @@ import {
   Settings, FileText, Image, Bell, Download, Upload, Filter,
   Search, Calendar, Menu, X, MoreVertical, RefreshCw, Activity,
   Globe, Smartphone, Laptop, Tablet, Monitor, Mail, Phone,
-  MapPin, CreditCard, Truck, Box, Heart, MessageSquare
+  MapPin, CreditCard, Truck, Box, Heart, MessageSquare, Database
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -1480,137 +1480,547 @@ export default function AdminDashboard() {
 
             {activeTab === "settings" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Site Settings</h2>
+                <h2 className="text-2xl font-bold">Website Management</h2>
                 
                 {siteSettings && (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>General Settings</CardTitle>
-                        <CardDescription>Manage your site configuration</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <form onSubmit={handleSettingsSubmit} className="space-y-4">
-                          <div>
-                            <Label htmlFor="siteName">Site Name</Label>
-                            <Input 
-                              id="siteName" 
-                              name="siteName" 
-                              defaultValue={siteSettings.siteName}
-                              required 
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="logoUrl">Logo URL</Label>
-                            <Input 
-                              id="logoUrl" 
-                              name="logoUrl" 
-                              defaultValue={siteSettings.logoUrl}
-                              required 
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="heroVideo">Hero Video URL</Label>
-                            <Input 
-                              id="heroVideo" 
-                              name="heroVideo" 
-                              defaultValue={siteSettings.heroVideo}
-                              required 
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor="primaryColor">Primary Color</Label>
-                              <Input 
-                                id="primaryColor" 
-                                name="primaryColor" 
-                                type="color"
-                                defaultValue={siteSettings.primaryColor}
-                                required 
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="secondaryColor">Secondary Color</Label>
-                              <Input 
-                                id="secondaryColor" 
-                                name="secondaryColor" 
-                                type="color"
-                                defaultValue={siteSettings.secondaryColor}
-                                required 
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <Label htmlFor="footerText">Footer Text</Label>
-                            <Textarea 
-                              id="footerText" 
-                              name="footerText" 
-                              defaultValue={siteSettings.footerText}
-                              required 
-                            />
-                          </div>
-                          <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
-                            Update Settings
-                          </Button>
-                        </form>
-                      </CardContent>
-                    </Card>
+                  <Tabs defaultValue="general" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="general">General</TabsTrigger>
+                      <TabsTrigger value="appearance">Appearance</TabsTrigger>
+                      <TabsTrigger value="content">Content</TabsTrigger>
+                      <TabsTrigger value="advanced">Advanced</TabsTrigger>
+                    </TabsList>
 
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>System Information</CardTitle>
-                        <CardDescription>Current system status</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="flex justify-between">
-                            <span className="text-sm">Server Status</span>
-                            <Badge variant="default" className="bg-green-500">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Online
-                            </Badge>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm">Database</span>
-                            <Badge variant="default" className="bg-green-500">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Connected
-                            </Badge>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm">Last Backup</span>
-                            <span className="text-sm text-gray-600">2 hours ago</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm">Version</span>
-                            <span className="text-sm text-gray-600">v2.1.0</span>
-                          </div>
-                          <Separator />
-                          <div className="space-y-2">
-                            <h4 className="font-medium">Quick Actions</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              <Button variant="outline" size="sm">
-                                <Download className="w-4 h-4 mr-2" />
-                                Export Data
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Upload className="w-4 h-4 mr-2" />
-                                Import Data
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <RefreshCw className="w-4 h-4 mr-2" />
-                                Clear Cache
-                              </Button>
-                              <Button variant="outline" size="sm">
+                    <TabsContent value="general" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Globe className="h-5 w-5" />
+                              Site Information
+                            </CardTitle>
+                            <CardDescription>Basic website information and branding</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="siteName">Site Name</Label>
+                                <Input 
+                                  id="siteName" 
+                                  name="siteName" 
+                                  defaultValue={siteSettings.siteName}
+                                  placeholder="Enter your site name"
+                                  required 
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="siteDescription">Site Description</Label>
+                                <Textarea 
+                                  id="siteDescription" 
+                                  name="siteDescription" 
+                                  defaultValue={siteSettings.siteDescription || ""}
+                                  placeholder="Brief description of your website"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="logoUrl">Logo URL</Label>
+                                <Input 
+                                  id="logoUrl" 
+                                  name="logoUrl" 
+                                  defaultValue={siteSettings.logoUrl}
+                                  placeholder="https://example.com/logo.png"
+                                  required 
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Recommended size: 200x60px</p>
+                              </div>
+                              <div>
+                                <Label htmlFor="faviconUrl">Favicon URL</Label>
+                                <Input 
+                                  id="faviconUrl" 
+                                  name="faviconUrl" 
+                                  defaultValue={siteSettings.faviconUrl || ""}
+                                  placeholder="https://example.com/favicon.ico"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Recommended size: 32x32px</p>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
                                 <Settings className="w-4 h-4 mr-2" />
-                                Advanced
+                                Update Site Info
                               </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Mail className="h-5 w-5" />
+                              Contact Information
+                            </CardTitle>
+                            <CardDescription>Business contact details</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="contactEmail">Contact Email</Label>
+                                <Input 
+                                  id="contactEmail" 
+                                  name="contactEmail" 
+                                  type="email"
+                                  defaultValue={siteSettings.contactEmail || ""}
+                                  placeholder="info@yourstore.com"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="contactPhone">Contact Phone</Label>
+                                <Input 
+                                  id="contactPhone" 
+                                  name="contactPhone" 
+                                  defaultValue={siteSettings.contactPhone || ""}
+                                  placeholder="+91 9876543210"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="businessAddress">Business Address</Label>
+                                <Textarea 
+                                  id="businessAddress" 
+                                  name="businessAddress" 
+                                  defaultValue={siteSettings.businessAddress || ""}
+                                  placeholder="Enter your business address"
+                                />
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="businessHours">Business Hours</Label>
+                                  <Input 
+                                    id="businessHours" 
+                                    name="businessHours" 
+                                    defaultValue={siteSettings.businessHours || ""}
+                                    placeholder="Mon-Fri 9AM-6PM"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="supportEmail">Support Email</Label>
+                                  <Input 
+                                    id="supportEmail" 
+                                    name="supportEmail" 
+                                    type="email"
+                                    defaultValue={siteSettings.supportEmail || ""}
+                                    placeholder="support@yourstore.com"
+                                  />
+                                </div>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <Phone className="w-4 h-4 mr-2" />
+                                Update Contact Info
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="appearance" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Image className="h-5 w-5" />
+                              Visual Settings
+                            </CardTitle>
+                            <CardDescription>Customize your website's appearance</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="primaryColor">Primary Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input 
+                                      id="primaryColor" 
+                                      name="primaryColor" 
+                                      type="color"
+                                      defaultValue={siteSettings.primaryColor}
+                                      className="w-16 h-10"
+                                      required 
+                                    />
+                                    <Input 
+                                      defaultValue={siteSettings.primaryColor}
+                                      className="flex-1"
+                                      placeholder="#F59E0B"
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <Label htmlFor="secondaryColor">Secondary Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input 
+                                      id="secondaryColor" 
+                                      name="secondaryColor" 
+                                      type="color"
+                                      defaultValue={siteSettings.secondaryColor}
+                                      className="w-16 h-10"
+                                      required 
+                                    />
+                                    <Input 
+                                      defaultValue={siteSettings.secondaryColor}
+                                      className="flex-1"
+                                      placeholder="#1F2937"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div>
+                                <Label htmlFor="accentColor">Accent Color</Label>
+                                <div className="flex gap-2">
+                                  <Input 
+                                    id="accentColor" 
+                                    name="accentColor" 
+                                    type="color"
+                                    defaultValue={siteSettings.accentColor || "#10B981"}
+                                    className="w-16 h-10"
+                                  />
+                                  <Input 
+                                    defaultValue={siteSettings.accentColor || "#10B981"}
+                                    className="flex-1"
+                                    placeholder="#10B981"
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <Label htmlFor="fontFamily">Font Family</Label>
+                                <Select name="fontFamily" defaultValue={siteSettings.fontFamily || "inter"}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select font" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="inter">Inter</SelectItem>
+                                    <SelectItem value="roboto">Roboto</SelectItem>
+                                    <SelectItem value="poppins">Poppins</SelectItem>
+                                    <SelectItem value="opensans">Open Sans</SelectItem>
+                                    <SelectItem value="lato">Lato</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <Image className="w-4 h-4 mr-2" />
+                                Update Appearance
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Monitor className="h-5 w-5" />
+                              Layout Settings
+                            </CardTitle>
+                            <CardDescription>Configure website layout and structure</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="headerStyle">Header Style</Label>
+                                <Select name="headerStyle" defaultValue={siteSettings.headerStyle || "default"}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select header style" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="default">Default</SelectItem>
+                                    <SelectItem value="transparent">Transparent</SelectItem>
+                                    <SelectItem value="sticky">Sticky</SelectItem>
+                                    <SelectItem value="minimal">Minimal</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label htmlFor="footerStyle">Footer Style</Label>
+                                <Select name="footerStyle" defaultValue={siteSettings.footerStyle || "default"}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select footer style" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="default">Default</SelectItem>
+                                    <SelectItem value="minimal">Minimal</SelectItem>
+                                    <SelectItem value="extended">Extended</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="showBreadcrumbs" 
+                                  name="showBreadcrumbs" 
+                                  defaultChecked={siteSettings.showBreadcrumbs !== false} 
+                                />
+                                <Label htmlFor="showBreadcrumbs">Show Breadcrumbs</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="showRecentlyViewed" 
+                                  name="showRecentlyViewed" 
+                                  defaultChecked={siteSettings.showRecentlyViewed !== false} 
+                                />
+                                <Label htmlFor="showRecentlyViewed">Show Recently Viewed</Label>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <Monitor className="w-4 h-4 mr-2" />
+                                Update Layout
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="content" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <FileText className="h-5 w-5" />
+                              Homepage Content
+                            </CardTitle>
+                            <CardDescription>Manage homepage sections and content</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="heroVideo">Hero Video URL</Label>
+                                <Input 
+                                  id="heroVideo" 
+                                  name="heroVideo" 
+                                  defaultValue={siteSettings.heroVideo}
+                                  placeholder="https://example.com/hero-video.mp4"
+                                  required 
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Recommended: MP4 format, max 20MB</p>
+                              </div>
+                              <div>
+                                <Label htmlFor="heroTitle">Hero Title</Label>
+                                <Input 
+                                  id="heroTitle" 
+                                  name="heroTitle" 
+                                  defaultValue={siteSettings.heroTitle || "Welcome to Our Store"}
+                                  placeholder="Main headline for homepage"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="heroSubtitle">Hero Subtitle</Label>
+                                <Textarea 
+                                  id="heroSubtitle" 
+                                  name="heroSubtitle" 
+                                  defaultValue={siteSettings.heroSubtitle || ""}
+                                  placeholder="Supporting text for homepage hero section"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="heroCTA">Hero Call-to-Action Text</Label>
+                                <Input 
+                                  id="heroCTA" 
+                                  name="heroCTA" 
+                                  defaultValue={siteSettings.heroCTA || "Shop Now"}
+                                  placeholder="Button text for hero section"
+                                />
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="showHeroVideo" 
+                                  name="showHeroVideo" 
+                                  defaultChecked={siteSettings.showHeroVideo !== false} 
+                                />
+                                <Label htmlFor="showHeroVideo">Show Hero Video</Label>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <FileText className="w-4 h-4 mr-2" />
+                                Update Homepage
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <MessageSquare className="h-5 w-5" />
+                              Footer & Legal
+                            </CardTitle>
+                            <CardDescription>Footer content and legal information</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="footerText">Footer Copyright Text</Label>
+                                <Textarea 
+                                  id="footerText" 
+                                  name="footerText" 
+                                  defaultValue={siteSettings.footerText}
+                                  placeholder="© 2025 Your Store. All rights reserved."
+                                  required 
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="aboutText">About Us Text</Label>
+                                <Textarea 
+                                  id="aboutText" 
+                                  name="aboutText" 
+                                  defaultValue={siteSettings.aboutText || ""}
+                                  placeholder="Brief description about your company"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="privacyPolicyUrl">Privacy Policy URL</Label>
+                                <Input 
+                                  id="privacyPolicyUrl" 
+                                  name="privacyPolicyUrl" 
+                                  defaultValue={siteSettings.privacyPolicyUrl || ""}
+                                  placeholder="/privacy-policy"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="termsOfServiceUrl">Terms of Service URL</Label>
+                                <Input 
+                                  id="termsOfServiceUrl" 
+                                  name="termsOfServiceUrl" 
+                                  defaultValue={siteSettings.termsOfServiceUrl || ""}
+                                  placeholder="/terms-of-service"
+                                />
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <MessageSquare className="w-4 h-4 mr-2" />
+                                Update Footer
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="advanced" className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Settings className="h-5 w-5" />
+                              System Settings
+                            </CardTitle>
+                            <CardDescription>Advanced configuration options</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-4">
+                              <div className="flex justify-between">
+                                <span className="text-sm">Server Status</span>
+                                <Badge variant="default" className="bg-green-500">
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Online
+                                </Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Database</span>
+                                <Badge variant="default" className="bg-green-500">
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Connected
+                                </Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Last Backup</span>
+                                <span className="text-sm text-gray-600">2 hours ago</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Version</span>
+                                <span className="text-sm text-gray-600">v2.1.0</span>
+                              </div>
+                              <Separator />
+                              <div className="space-y-3">
+                                <h4 className="font-medium">Quick Actions</h4>
+                                <div className="grid grid-cols-1 gap-2">
+                                  <Button variant="outline" size="sm">
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Export All Data
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <Upload className="w-4 h-4 mr-2" />
+                                    Import Products
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <RefreshCw className="w-4 h-4 mr-2" />
+                                    Clear All Cache
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <Database className="w-4 h-4 mr-2" />
+                                    Backup Database
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Globe className="h-5 w-5" />
+                              SEO & Social
+                            </CardTitle>
+                            <CardDescription>Search engine and social media settings</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div>
+                                <Label htmlFor="metaDescription">Meta Description</Label>
+                                <Textarea 
+                                  id="metaDescription" 
+                                  name="metaDescription" 
+                                  defaultValue={siteSettings.metaDescription || ""}
+                                  placeholder="Description for search engines (max 160 characters)"
+                                  maxLength={160}
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                                <Input 
+                                  id="metaKeywords" 
+                                  name="metaKeywords" 
+                                  defaultValue={siteSettings.metaKeywords || ""}
+                                  placeholder="keyword1, keyword2, keyword3"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="googleAnalyticsId">Google Analytics ID</Label>
+                                <Input 
+                                  id="googleAnalyticsId" 
+                                  name="googleAnalyticsId" 
+                                  defaultValue={siteSettings.googleAnalyticsId || ""}
+                                  placeholder="GA-XXXXXXXXX-X"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="facebookPixelId">Facebook Pixel ID</Label>
+                                <Input 
+                                  id="facebookPixelId" 
+                                  name="facebookPixelId" 
+                                  defaultValue={siteSettings.facebookPixelId || ""}
+                                  placeholder="123456789012345"
+                                />
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Switch 
+                                  id="enableSEO" 
+                                  name="enableSEO" 
+                                  defaultChecked={siteSettings.enableSEO !== false} 
+                                />
+                                <Label htmlFor="enableSEO">Enable SEO Optimization</Label>
+                              </div>
+                              <Button type="submit" disabled={updateSettingsMutation.isPending} className="w-full">
+                                <Globe className="w-4 h-4 mr-2" />
+                                Update SEO Settings
+                              </Button>
+                            </form>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
                 )}
               </div>
             )}

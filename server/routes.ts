@@ -317,7 +317,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Site settings management
+  // Public site settings (for frontend)
+  app.get("/api/site-settings", async (req, res) => {
+    try {
+      const settings = await siteSettingsService.getSettings();
+      // Only return public settings, not sensitive ones
+      const publicSettings = {
+        siteName: settings.siteName,
+        siteDescription: settings.siteDescription,
+        logoUrl: settings.logoUrl,
+        faviconUrl: settings.faviconUrl,
+        heroVideo: settings.heroVideo,
+        heroTitle: settings.heroTitle,
+        heroSubtitle: settings.heroSubtitle,
+        heroCTA: settings.heroCTA,
+        showHeroVideo: settings.showHeroVideo,
+        primaryColor: settings.primaryColor,
+        secondaryColor: settings.secondaryColor,
+        accentColor: settings.accentColor,
+        fontFamily: settings.fontFamily,
+        headerStyle: settings.headerStyle,
+        footerStyle: settings.footerStyle,
+        showBreadcrumbs: settings.showBreadcrumbs,
+        showRecentlyViewed: settings.showRecentlyViewed,
+        footerText: settings.footerText,
+        aboutText: settings.aboutText,
+        contactEmail: settings.contactEmail,
+        contactPhone: settings.contactPhone,
+        businessAddress: settings.businessAddress,
+        businessHours: settings.businessHours
+      };
+      res.json(publicSettings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch site settings" });
+    }
+  });
+
+  // Site settings management (admin only)
   app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const settings = await siteSettingsService.getSettings();

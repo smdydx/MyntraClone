@@ -1,4 +1,3 @@
-
 import { MongoClient, Db, Collection, ObjectId } from 'mongodb';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -15,7 +14,7 @@ export async function connectToMongoDB() {
     await client.connect();
     db = client.db('hednor-ecommerce');
     console.log('Connected to MongoDB');
-    
+
     // Create indexes for better performance
     await createIndexes();
   } catch (error) {
@@ -111,13 +110,37 @@ export interface Order {
 }
 
 export interface SiteSettings {
-  _id?: ObjectId;
   logoUrl: string;
   siteName: string;
+  siteDescription?: string;
+  faviconUrl?: string;
   heroVideo: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroCTA?: string;
+  showHeroVideo?: boolean;
   primaryColor: string;
   secondaryColor: string;
+  accentColor?: string;
+  fontFamily?: string;
+  headerStyle?: string;
+  footerStyle?: string;
+  showBreadcrumbs?: boolean;
+  showRecentlyViewed?: boolean;
   footerText: string;
+  aboutText?: string;
+  privacyPolicyUrl?: string;
+  termsOfServiceUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  businessAddress?: string;
+  businessHours?: string;
+  supportEmail?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  googleAnalyticsId?: string;
+  facebookPixelId?: string;
+  enableSEO?: boolean;
   updatedAt: Date;
 }
 
@@ -413,7 +436,7 @@ export class SiteSettingsService {
 
   async getSettings(): Promise<SiteSettings> {
     let settings = await this.settings.findOne({});
-    
+
     if (!settings) {
       // Create default settings
       const defaultSettings: SiteSettings = {
@@ -425,11 +448,11 @@ export class SiteSettingsService {
         footerText: "© 2025 Hednor. All rights reserved.",
         updatedAt: new Date()
       };
-      
+
       await this.settings.insertOne(defaultSettings);
       settings = defaultSettings;
     }
-    
+
     return settings;
   }
 
