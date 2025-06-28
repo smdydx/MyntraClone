@@ -607,39 +607,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/razorpay/create-order", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-        return res.status(500).json({ message: "Razorpay credentials not configured" });
+        return res.status(500).json({ 
+          message: "Razorpay credentials not configured",
+          error: "RAZORPAY_CREDENTIALS_MISSING" 
+        });
       }
 
-      const Razorpay = require('razorpay');
-      const razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID,
-        key_secret: process.env.RAZORPAY_KEY_SECRET
-      });
+      try {
+        const Razorpay = require('razorpay');
+        const razorpay = new Razorpay({
+          key_id: process.env.RAZORPAY_KEY_ID,
+          key_secret: process.env.RAZORPAY_KEY_SECRET
+        });
 
-      const { amount, currency = 'INR' } = req.body;
+        const { amount, currency = 'INR' } = req.body;
 
-      if (!amount || amount <= 0) {
-        return res.status(400).json({ message: "Invalid amount" });
+        if (!amount || amount <= 0) {
+          return res.status(400).json({ message: "Invalid amount" });
+        }
+
+        const options = {
+          amount: Math.round(amount * 100), // Razorpay expects amount in paise
+          currency,
+          receipt: `receipt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          payment_capture: 1
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        res.json({
+          orderId: order.id,
+          amount: order.amount,
+          currency: order.currency,
+          key: process.env.RAZORPAY_KEY_ID,
+          success: true
+        });
+      } catch (razorpayError: any) {
+        console.error('Razorpay API error:', razorpayError);
+        res.status(500).json({ 
+          message: "Failed to create Razorpay order",
+          error: razorpayError.message || "RAZORPAY_API_ERROR"
+        });
       }
-
-      const options = {
-        amount: amount * 100, // Razorpay expects amount in paise
-        currency,
-        receipt: `receipt_${Date.now()}`,
-        payment_capture: 1
-      };
-
-      const order = await razorpay.orders.create(options);
-
-      res.json({
-        orderId: order.id,
-        amount: order.amount,
-        currency: order.currency,
-        key: process.env.RAZORPAY_KEY_ID
-      });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Razorpay order creation error:', error);
-      res.status(500).json({ message: "Failed to create Razorpay order" });
+      res.status(500).json({ 
+        message: "Failed to create Razorpay order",
+        error: error.message || "UNKNOWN_ERROR"
+      });
     }
   });
 
@@ -695,31 +710,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/stripe/create-intent", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       if (!process.env.STRIPE_SECRET_KEY) {
-        return res.status(500).json({ message: "Stripe credentials not configured" });
+        return res.status(500).json({ 
+          message: "Stripe credentials not configured",
+          error: "STRIPE_CREDENTIALS_MISSING"
+        });
       }
 
-      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      const { amount, currency = 'inr' } = req.body;
+      try {
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+        const { amount, currency = 'inr' } = req.body;
 
-      if (!amount || amount <= 0) {
-        return res.status(400).json({ message: "Invalid amount" });
-      }
-
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount * 100, // Stripe expects amount in smallest currency unit
-        currency,
-        metadata: {
-          userId: req.user!.userId
+        if (!amount || amount <= 0) {
+          return res.status(400).json({ message: "Invalid amount" });
         }
-      });
 
-      res.json({
-        clientSecret: paymentIntent.client_secret,
-        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
-      });
-    } catch (error) {
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: Math.round(amount * 100), // Stripe expects amount in smallest currency unit
+          currency,
+          metadata: {
+            userId: req.user!.userId
+          },
+          automatic_payment_methods: {
+            enabled: true,
+          },
+        });
+
+        res.json({
+          clientSecret: paymentIntent.client_secret,
+          publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+          success: true
+        });
+      } catch (stripeError: any) {
+        console.error('Stripe API error:', stripeError);
+        res.status(500).json({ 
+          message: "Failed to create payment intent",
+          error: stripeError.message || "STRIPE_API_ERROR"
+        });
+      }
+    } catch (error: any) {
       console.error('Stripe payment intent error:', error);
-      res.status(500).json({ message: "Failed to create payment intent" });
+      res.status(500).json({ 
+        message: "Failed to create payment intent",
+        error: error.message || "UNKNOWN_ERROR"
+      });
     }
   });
 

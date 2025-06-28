@@ -377,6 +377,12 @@ export class ProductService {
 }
 
 export class SiteSettingsService {
+  private collection: Collection<SiteSettings>;
+
+  constructor() {
+    this.collection = db.collection<SiteSettings>('siteSettings');
+  }
+
   async getSettings(): Promise<SiteSettings> {
     let settings = await this.collection.findOne({});
 
@@ -475,12 +481,18 @@ export class PaymentService {
 
   async verifyRazorpayPayment(razorpayOrderId: string, razorpayPaymentId: string, razorpaySignature: string): Promise<boolean> {
     try {
-      const crypto = require('crypto');
+      if (!process.env.RAZORPAY_KEY_SECRET) {
+        console.error('RAZORPAY_KEY_SECRET not found');
+        return false;
+      }
+
+      const crypto = await import('crypto');
       const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
       hmac.update(`${razorpayOrderId}|${razorpayPaymentId}`);
       const generatedSignature = hmac.digest('hex');
       return generatedSignature === razorpaySignature;
     } catch (error) {
+      console.error('Razorpay verification error:', error);
       return false;
     }
   }

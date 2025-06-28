@@ -95,7 +95,8 @@ export default function Checkout() {
 
   const shippingCost = cartTotal > 1000 ? 0 : 99;
   const tax = Math.round(cartTotal * 0.18);
-  const finalAmount = cartTotal + shippingCost + tax;
+  const codFee = paymentMethod === "cod" ? 40 : 0;
+  const finalAmount = cartTotal + shippingCost + tax + codFee;
 
   const orderData = {
     items: cartItems,
@@ -111,6 +112,16 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
 
+      // Check if Razorpay script is loaded
+      if (!window.Razorpay) {
+        toast({
+          title: "Payment Gateway Error",
+          description: "Payment gateway is not available. Please refresh and try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // Create Razorpay order
       const response = await fetch("/api/payment/razorpay/create-order", {
         method: "POST",
@@ -121,9 +132,15 @@ export default function Checkout() {
         body: JSON.stringify({ amount: finalAmount })
       });
 
-      if (!response.ok) throw new Error("Failed to create order");
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create order");
+      }
+
+      if (!data.success) {
+        throw new Error(data.message || "Failed to create order");
+      }
 
       const options = {
         key: data.key,
@@ -132,6 +149,7 @@ export default function Checkout() {
         name: "Hednor",
         description: "Purchase from Hednor Fashion Store",
         order_id: data.orderId,
+        timeout: 300, // 5 minutes timeout
         handler: async (response: any) => {
           try {
             // Verify payment
@@ -544,7 +562,7 @@ export default function Checkout() {
 
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>{formatPrice(finalAmount + (paymentMethod === "cod" ? 40 : 0))}</span>
+                  <span>{formatPrice(finalAmount)}</span>
                 </div>
 
                 {shippingCost === 0 && (
