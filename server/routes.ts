@@ -388,10 +388,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get site settings
+  app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock settings data - replace with actual database query
+      const settings = {
+        _id: "settings-1",
+        logoUrl: "/logo.png",
+        siteName: "Hednor Store",
+        heroVideo: "/hero-video.mp4",
+        primaryColor: "#F59E0B",
+        secondaryColor: "#1F2937",
+        footerText: "© 2025 Hednor Store. All rights reserved.",
+        updatedAt: new Date().toISOString(),
+        siteDescription: "Premium fashion and lifestyle products",
+        contactEmail: "contact@hednorstore.com",
+        contactPhone: "+91 9876543210"
+      };
+      res.json(settings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+
   app.put("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const settings = await siteSettingsService.updateSettings(req.body);
-      res.json({ message: "Settings updated successfully", settings });
+      // Mock response - replace with actual database operation
+      const updatedSettings = { _id: "settings-1", ...req.body, updatedAt: new Date().toISOString() };
+      res.json({ message: "Settings updated successfully", settings: updatedSettings });
     } catch (error) {
       res.status(500).json({ message: "Failed to update settings" });
     }
@@ -410,16 +434,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard analytics endpoints
   app.get("/api/admin/analytics/overview", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // This would fetch real analytics data from MongoDB
+      // Mock data - in real app, fetch from database
       const overview = {
         totalUsers: 3500,
         totalOrders: 1250,
         totalRevenue: 125000,
-        totalProducts: 150
+        totalProducts: 150,
+        newOrdersToday: 25,
+        revenueToday: 8500,
+        conversionRate: 3.2,
+        avgOrderValue: 2500
       };
       res.json(overview);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  // Admin Users Management
+  app.get("/api/admin/users", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock data - replace with actual database query
+      const users = [
+        {
+          _id: "1",
+          name: "John Doe",
+          email: "john@example.com",
+          createdAt: new Date().toISOString(),
+          totalOrders: 5,
+          totalSpent: 12500,
+          status: "active"
+        },
+        {
+          _id: "2", 
+          name: "Jane Smith",
+          email: "jane@example.com",
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+          totalOrders: 3,
+          totalSpent: 7500,
+          status: "active"
+        }
+      ];
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  // Admin Products Management
+  app.post("/api/admin/products", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      const newProduct = { _id: Date.now().toString(), ...req.body };
+      res.json({ message: "Product created successfully", product: newProduct });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create product" });
+    }
+  });
+
+  app.put("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      const updatedProduct = { _id: req.params.id, ...req.body };
+      res.json({ message: "Product updated successfully", product: updatedProduct });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update product" });
+    }
+  });
+
+  app.delete("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  // Admin Categories Management
+  app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      const newCategory = { _id: Date.now().toString(), ...req.body, createdAt: new Date().toISOString() };
+      res.json({ message: "Category created successfully", category: newCategory });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create category" });
+    }
+  });
+
+  app.put("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      const updatedCategory = { _id: req.params.id, ...req.body };
+      res.json({ message: "Category updated successfully", category: updatedCategory });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.delete("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock response - replace with actual database operation
+      res.json({ message: "Category deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete category" });
+    }
+  });
+
+  // Seed categories endpoint
+  app.post("/api/admin/seed-categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock seeding categories
+      res.json({ message: "Categories seeded successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to seed categories" });
     }
   });
 

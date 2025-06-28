@@ -55,6 +55,7 @@ interface Category {
   description: string;
   image?: string;
   isActive: boolean;
+  parentId?: string;
   createdAt: string;
 }
 
@@ -67,6 +68,31 @@ interface SiteSettings {
   secondaryColor: string;
   footerText: string;
   updatedAt: string;
+  siteDescription?: string;
+  faviconUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  businessAddress?: string;
+  businessHours?: string;
+  supportEmail?: string;
+  accentColor?: string;
+  fontFamily?: string;
+  headerStyle?: string;
+  footerStyle?: string;
+  showBreadcrumbs?: boolean;
+  showRecentlyViewed?: boolean;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroCTA?: string;
+  showHeroVideo?: boolean;
+  aboutText?: string;
+  privacyPolicyUrl?: string;
+  termsOfServiceUrl?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  googleAnalyticsId?: string;
+  facebookPixelId?: string;
+  enableSEO?: boolean;
 }
 
 interface DashboardStats {
@@ -141,6 +167,7 @@ interface User {
   name: string;
   email: string;
   joinedAt: string;
+  createdAt: string;
   totalOrders: number;
   totalSpent: number;
   status: string;
@@ -202,7 +229,7 @@ export default function AdminDashboard() {
   }, [queryClient]);
 
   // Fetch dashboard data
-  const { data: dashboardStats, isLoading: statsLoading } = useQuery<DashboardStats>({
+  const { data: dashboardStats, isLoading: statsLoading, error: statsError } = useQuery<DashboardStats>({
     queryKey: ["admin", "analytics"],
     queryFn: async () => {
       const response = await fetch("/api/admin/analytics/overview", {
@@ -212,31 +239,35 @@ export default function AdminDashboard() {
       });
       if (!response.ok) throw new Error("Failed to fetch analytics");
       return response.json();
-    }
+    },
+    retry: 3,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   // Fetch products
-  const { data: products = [] } = useQuery<Product[]>({
+  const { data: products = [], isLoading: productsLoading, error: productsError } = useQuery<Product[]>({
     queryKey: ["admin", "products"],
     queryFn: async () => {
       const response = await fetch("/api/products");
       if (!response.ok) throw new Error("Failed to fetch products");
       return response.json();
-    }
+    },
+    retry: 2,
   });
 
   // Fetch categories
-  const { data: categories = [] } = useQuery<Category[]>({
+  const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useQuery<Category[]>({
     queryKey: ["admin", "categories"],
     queryFn: async () => {
       const response = await fetch("/api/categories");
       if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
-    }
+    },
+    retry: 2,
   });
 
   // Fetch site settings
-  const { data: siteSettings } = useQuery<SiteSettings>({
+  const { data: siteSettings, isLoading: settingsLoading, error: settingsError } = useQuery<SiteSettings>({
     queryKey: ["admin", "settings"],
     queryFn: async () => {
       const response = await fetch("/api/admin/settings", {
@@ -246,11 +277,12 @@ export default function AdminDashboard() {
       });
       if (!response.ok) throw new Error("Failed to fetch settings");
       return response.json();
-    }
+    },
+    retry: 2,
   });
 
   // Fetch orders
-  const { data: orders = [] } = useQuery<Order[]>({
+  const { data: orders = [], isLoading: ordersLoading, error: ordersError } = useQuery<Order[]>({
     queryKey: ["admin", "orders"],
     queryFn: async () => {
       const response = await fetch("/api/admin/orders", {
@@ -260,11 +292,12 @@ export default function AdminDashboard() {
       });
       if (!response.ok) throw new Error("Failed to fetch orders");
       return response.json();
-    }
+    },
+    retry: 2,
   });
 
   // Fetch users
-  const { data: users = [] } = useQuery<User[]>({
+  const { data: users = [], isLoading: usersLoading, error: usersError } = useQuery<User[]>({
     queryKey: ["admin", "users"],
     queryFn: async () => {
       const response = await fetch("/api/admin/users", {
@@ -274,7 +307,8 @@ export default function AdminDashboard() {
       });
       if (!response.ok) throw new Error("Failed to fetch users");
       return response.json();
-    }
+    },
+    retry: 2,
   });
 
   // Mock data for demonstration
@@ -316,13 +350,23 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(productData)
       });
-      if (!response.ok) throw new Error("Failed to add product");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add product");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
       setIsAddingProduct(false);
       toast({ title: "Product added successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to add product", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -336,13 +380,23 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(data)
       });
-      if (!response.ok) throw new Error("Failed to update product");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update product");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
       setEditingProduct(null);
       toast({ title: "Product updated successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to update product", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -354,12 +408,22 @@ export default function AdminDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if (!response.ok) throw new Error("Failed to delete product");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to delete product");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
       toast({ title: "Product deleted successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to delete product", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -374,13 +438,23 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(categoryData)
       });
-      if (!response.ok) throw new Error("Failed to add category");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add category");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       setIsAddingCategory(false);
       toast({ title: "Category added successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to add category", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -394,13 +468,23 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(data)
       });
-      if (!response.ok) throw new Error("Failed to update category");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update category");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       setEditingCategory(null);
       toast({ title: "Category updated successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to update category", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -412,12 +496,22 @@ export default function AdminDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if (!response.ok) throw new Error("Failed to delete category");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to delete category");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       toast({ title: "Category deleted successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to delete category", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
@@ -432,12 +526,22 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(settingsData)
       });
-      if (!response.ok) throw new Error("Failed to update settings");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update settings");
+      }
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
       toast({ title: "Settings updated successfully" });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Failed to update settings", 
+        description: error.message,
+        variant: "destructive" 
+      });
     }
   });
 
