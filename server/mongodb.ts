@@ -35,7 +35,7 @@ export async function connectToMongoDB() {
         w: 'majority'
       });
     }
-    
+
     await client.connect();
     db = client.db('hednor-ecommerce');
     console.log('Connected to MongoDB');
@@ -377,15 +377,9 @@ export class ProductService {
 }
 
 export class SiteSettingsService {
-  private collection: Collection<SiteSettings>;
-
-  constructor() {
-    this.collection = db.collection<SiteSettings>('siteSettings');
-  }
-
   async getSettings(): Promise<SiteSettings> {
     let settings = await this.collection.findOne({});
-    
+
     if (!settings) {
       // Create default settings if none exist
       const defaultSettings: SiteSettings = {
