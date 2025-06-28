@@ -8,6 +8,7 @@ import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import Profile from "@/pages/profile";
 import NotFound from "@/pages/not-found";
+import AdminDashboard from "@/pages/admin"; // Assuming you have an AdminDashboard component
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/products/:slug" component={ProductDetail} />
       <Route path="/profile" component={Profile} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );

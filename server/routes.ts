@@ -245,6 +245,114 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin routes
+  app.post("/api/admin/products", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const productData = req.body;
+      const product = await storage.addProduct(productData);
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to add product" });
+    }
+  });
+
+  app.put("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const productData = req.body;
+      const product = await storage.updateProduct(id, productData);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update product" });
+    }
+  });
+
+  app.delete("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteProduct(id);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const categoryData = req.body;
+      const category = await storage.addCategory(categoryData);
+      res.status(201).json(category);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to add category" });
+    }
+  });
+
+  app.put("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const categoryData = req.body;
+      const category = await storage.updateCategory(id, categoryData);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json(category);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update category" });
+    }
+  });
+
+  app.delete("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteCategory(id);
+      if (!success) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json({ message: "Category deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete category" });
+    }
+  });
+
+  // Site settings management
+  const siteSettings = {
+    logoUrl: "/attached_assets/Hednor Logo 22 updated-5721x3627_1750949407940.png",
+    siteName: "Hednor",
+    heroVideo: "/client/src/assets/hero-video.mp4",
+    primaryColor: "#F59E0B",
+    secondaryColor: "#1F2937",
+    footerText: "© 2025 Hednor. All rights reserved."
+  };
+
+  app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    res.json(siteSettings);
+  });
+
+  app.put("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      Object.assign(siteSettings, req.body);
+      res.json({ message: "Settings updated successfully", settings: siteSettings });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update settings" });
+    }
+  });
+
+  // File upload endpoint
+  app.post("/api/admin/upload", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // This would handle file uploads to your storage
+      res.json({ message: "File uploaded successfully", url: "/path/to/uploaded/file" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload file" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

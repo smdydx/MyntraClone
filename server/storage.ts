@@ -36,6 +36,16 @@ export interface IStorage {
   // Orders
   createOrder(order: InsertOrder): Promise<Order>;
   getUserOrders(userId: number): Promise<Order[]>;
+
+  // Admin methods for managing products
+  addProduct(productData: any): Promise<any>;
+  updateProduct(id: number, productData: any): Promise<any>;
+  deleteProduct(id: number): Promise<boolean>;
+
+  // Admin methods for managing categories
+  addCategory(categoryData: any): Promise<any>;
+  updateCategory(id: number, categoryData: any): Promise<any>;
+  deleteCategory(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -338,6 +348,57 @@ export class MemStorage implements IStorage {
 
   async getUserOrders(userId: number): Promise<Order[]> {
     return Array.from(this.orders.values()).filter(order => order.userId === userId);
+  }
+
+  // Admin methods for managing products
+  async addProduct(productData: any): Promise<any> {
+    const id = this.currentProductId++;
+    const newProduct: Product = {
+      ...productData,
+      id,
+      createdAt: new Date()
+    };
+    this.products.set(id, newProduct);
+    return newProduct;
+  }
+
+  async updateProduct(id: number, productData: any): Promise<any> {
+    const product = this.products.get(id);
+    if (product) {
+      const updatedProduct = { ...product, ...productData };
+      this.products.set(id, updatedProduct);
+      return updatedProduct;
+    }
+    return undefined;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    return this.products.delete(id);
+  }
+
+  // Admin methods for managing categories
+  async addCategory(categoryData: any): Promise<any> {
+     const id = this.currentCategoryId++;
+    const newCategory: Category = {
+      ...categoryData,
+      id
+    };
+    this.categories.set(id, newCategory);
+    return newCategory;
+  }
+
+  async updateCategory(id: number, categoryData: any): Promise<any> {
+    const category = this.categories.get(id);
+    if (category) {
+      const updatedCategory = { ...category, ...categoryData };
+      this.categories.set(id, updatedCategory);
+      return updatedCategory
+    }
+    return undefined;
+  }
+
+  async deleteCategory(id: number): Promise<boolean> {
+    return this.categories.delete(id);
   }
 }
 
