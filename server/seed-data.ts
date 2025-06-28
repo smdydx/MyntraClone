@@ -1,6 +1,25 @@
 
 import { CategoryService, ProductService } from './mongodb';
 
+export async function seedDatabase() {
+  try {
+    console.log('Starting database seeding...');
+    
+    // Seed categories first
+    await seedCategories();
+    console.log('Categories seeded successfully!');
+    
+    // Then seed products
+    await seedProducts();
+    console.log('Products seeded successfully!');
+    
+    console.log('Database seeding completed successfully!');
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    throw error;
+  }
+}
+
 export async function seedCategories() {
   const categoryService = new CategoryService();
   const productService = new ProductService();
@@ -386,85 +405,269 @@ export async function seedProducts() {
     const womenCategory = categories.find(cat => cat.slug === 'women');
     const kidsCategory = categories.find(cat => cat.slug === 'kids');
     const homeCategory = categories.find(cat => cat.slug === 'home');
+    const beautyCategory = categories.find(cat => cat.slug === 'beauty');
+    const genzCategory = categories.find(cat => cat.slug === 'genz');
 
     if (!menCategory || !womenCategory || !kidsCategory || !homeCategory) {
       throw new Error('Required categories not found. Please seed categories first.');
     }
 
-    // Sample products
+    // Comprehensive product data for website and admin dashboard
     const sampleProducts = [
+      // Men's Collection
       {
-        name: "Men's Cotton T-Shirt",
-        slug: "mens-cotton-tshirt",
-        description: "Comfortable cotton t-shirt for casual wear",
-        brand: "H&M",
+        name: "Premium Cotton T-Shirt",
+        slug: "premium-cotton-tshirt",
+        description: "Ultra-soft premium cotton t-shirt with modern fit. Perfect for everyday wear with superior comfort and style.",
+        brand: "Hednor Premium",
         categoryId: menCategory._id,
-        price: 999,
-        salePrice: 499,
-        images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"],
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["Blue", "Black", "White"],
+        price: 1299,
+        salePrice: 899,
+        images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", "https://images.unsplash.com/photo-1583743814966-8936f37f236f?w=400"],
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        colors: ["Navy Blue", "Black", "White", "Grey"],
         inStock: true,
-        stockQuantity: 50,
-        rating: 4.2,
-        reviewCount: 1234,
-        tags: ["casual", "comfortable"],
+        stockQuantity: 150,
+        rating: 4.7,
+        reviewCount: 2341,
+        tags: ["premium", "casual", "comfortable", "bestseller"],
         isFeatured: true,
         isOnSale: true
       },
       {
-        name: "Women's Summer Dress",
-        slug: "womens-summer-dress",
-        description: "Elegant summer dress perfect for any occasion",
-        brand: "Zara",
-        categoryId: womenCategory._id,
-        price: 1299,
-        images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"],
-        sizes: ["XS", "S", "M", "L"],
-        colors: ["Floral", "Solid Blue", "Black"],
+        name: "Formal Dress Shirt",
+        slug: "formal-dress-shirt",
+        description: "Crisp formal shirt made from high-quality cotton blend. Perfect for office and formal occasions.",
+        brand: "Hednor Formals",
+        categoryId: menCategory._id,
+        price: 1899,
+        images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"],
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["White", "Light Blue", "Pink"],
         inStock: true,
-        stockQuantity: 25,
-        rating: 4.8,
-        reviewCount: 856,
-        tags: ["elegant", "summer"],
+        stockQuantity: 85,
+        rating: 4.5,
+        reviewCount: 1567,
+        tags: ["formal", "office", "premium"],
         isFeatured: true,
         isOnSale: false
       },
       {
-        name: "Kids Cotton T-Shirt",
-        slug: "kids-cotton-tshirt",
-        description: "Soft cotton t-shirt for kids",
-        brand: "Mothercare",
-        categoryId: kidsCategory._id,
-        price: 599,
-        salePrice: 399,
-        images: ["https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=400"],
-        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
-        colors: ["Red", "Blue", "Yellow"],
+        name: "Denim Jeans Classic Fit",
+        slug: "denim-jeans-classic-fit",
+        description: "Classic fit denim jeans with premium stretch fabric. Comfortable all-day wear with timeless style.",
+        brand: "Hednor Denim",
+        categoryId: menCategory._id,
+        price: 2499,
+        salePrice: 1999,
+        images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=400"],
+        sizes: ["30", "32", "34", "36", "38"],
+        colors: ["Dark Blue", "Light Blue", "Black"],
         inStock: true,
-        stockQuantity: 30,
-        rating: 4.5,
-        reviewCount: 245,
-        tags: ["kids", "comfortable"],
-        isFeatured: false,
+        stockQuantity: 120,
+        rating: 4.6,
+        reviewCount: 1890,
+        tags: ["denim", "casual", "premium"],
+        isFeatured: true,
         isOnSale: true
       },
       {
-        name: "Cotton Bedsheet Set",
-        slug: "cotton-bedsheet-set",
-        description: "Premium cotton bedsheet set with pillow covers",
-        brand: "Home Centre",
+        name: "Athletic Sports Shoes",
+        slug: "athletic-sports-shoes",
+        description: "High-performance athletic shoes with advanced cushioning technology. Perfect for running and gym workouts.",
+        brand: "Hednor Sports",
+        categoryId: menCategory._id,
+        price: 3999,
+        salePrice: 2999,
+        images: ["https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400"],
+        sizes: ["7", "8", "9", "10", "11", "12"],
+        colors: ["Black/White", "Navy/Orange", "Grey/Blue"],
+        inStock: true,
+        stockQuantity: 75,
+        rating: 4.8,
+        reviewCount: 2156,
+        tags: ["sports", "athletic", "comfortable", "trending"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // Women's Collection
+      {
+        name: "Elegant Summer Dress",
+        slug: "elegant-summer-dress",
+        description: "Flowing summer dress with beautiful floral patterns. Perfect for casual outings and summer parties.",
+        brand: "Hednor Femme",
+        categoryId: womenCategory._id,
+        price: 2299,
+        salePrice: 1799,
+        images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400"],
+        sizes: ["XS", "S", "M", "L", "XL"],
+        colors: ["Floral Blue", "Floral Pink", "Solid Black", "Solid Navy"],
+        inStock: true,
+        stockQuantity: 95,
+        rating: 4.9,
+        reviewCount: 1456,
+        tags: ["elegant", "summer", "floral", "trending"],
+        isFeatured: true,
+        isOnSale: true
+      },
+      {
+        name: "Designer Handbag",
+        slug: "designer-handbag",
+        description: "Luxurious designer handbag crafted from premium leather. Spacious and stylish for everyday use.",
+        brand: "Hednor Luxury",
+        categoryId: womenCategory._id,
+        price: 5999,
+        salePrice: 4499,
+        images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400"],
+        sizes: ["One Size"],
+        colors: ["Black", "Brown", "Tan", "Red"],
+        inStock: true,
+        stockQuantity: 45,
+        rating: 4.7,
+        reviewCount: 2234,
+        tags: ["luxury", "designer", "leather", "premium"],
+        isFeatured: true,
+        isOnSale: true
+      },
+      {
+        name: "Ethnic Kurta Set",
+        slug: "ethnic-kurta-set",
+        description: "Beautiful ethnic kurta set with intricate embroidery. Perfect for festivals and special occasions.",
+        brand: "Hednor Ethnic",
+        categoryId: womenCategory._id,
+        price: 3299,
+        salePrice: 2499,
+        images: ["https://images.unsplash.com/photo-1583391733956-6c78276477e1?w=400"],
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["Royal Blue", "Maroon", "Golden", "Pink"],
+        inStock: true,
+        stockQuantity: 65,
+        rating: 4.6,
+        reviewCount: 987,
+        tags: ["ethnic", "traditional", "festive", "embroidered"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // Kids Collection
+      {
+        name: "Kids Cotton Shirt Set",
+        slug: "kids-cotton-shirt-set",
+        description: "Comfortable cotton shirt and shorts set for kids. Soft fabric and vibrant colors kids love.",
+        brand: "Hednor Kids",
+        categoryId: kidsCategory._id,
+        price: 899,
+        salePrice: 699,
+        images: ["https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400"],
+        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y", "10-11Y"],
+        colors: ["Blue Stripes", "Red Checks", "Green Solid", "Yellow Prints"],
+        inStock: true,
+        stockQuantity: 110,
+        rating: 4.5,
+        reviewCount: 678,
+        tags: ["kids", "comfortable", "cotton", "colorful"],
+        isFeatured: true,
+        isOnSale: true
+      },
+      {
+        name: "Kids Party Dress",
+        slug: "kids-party-dress",
+        description: "Adorable party dress for little princesses. Sparkly design perfect for birthdays and special events.",
+        brand: "Hednor Kids",
+        categoryId: kidsCategory._id,
+        price: 1599,
+        salePrice: 1199,
+        images: ["https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400"],
+        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
+        colors: ["Pink Sparkle", "Purple Glitter", "Blue Shimmer"],
+        inStock: true,
+        stockQuantity: 55,
+        rating: 4.8,
+        reviewCount: 456,
+        tags: ["kids", "party", "dress", "sparkly"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // Home & Living
+      {
+        name: "Premium Bedsheet Set",
+        slug: "premium-bedsheet-set",
+        description: "Luxurious cotton bedsheet set with matching pillowcases. Ultra-soft and durable for perfect sleep.",
+        brand: "Hednor Home",
+        categoryId: homeCategory._id,
+        price: 2999,
+        salePrice: 2299,
+        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400"],
+        sizes: ["Single", "Double", "Queen", "King"],
+        colors: ["Pure White", "Sky Blue", "Mint Green", "Rose Gold"],
+        inStock: true,
+        stockQuantity: 80,
+        rating: 4.4,
+        reviewCount: 1234,
+        tags: ["home", "bedding", "premium", "comfortable"],
+        isFeatured: true,
+        isOnSale: true
+      },
+      {
+        name: "Decorative Cushion Set",
+        slug: "decorative-cushion-set",
+        description: "Set of 4 decorative cushions with beautiful patterns. Perfect for adding style to your living room.",
+        brand: "Hednor Home",
         categoryId: homeCategory._id,
         price: 1999,
         salePrice: 1499,
-        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400"],
-        sizes: ["Single", "Double", "King"],
-        colors: ["White", "Blue", "Grey"],
+        images: ["https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400"],
+        sizes: ["16x16 inches"],
+        colors: ["Geometric Blue", "Floral Pink", "Abstract Gold", "Solid Grey"],
         inStock: true,
-        stockQuantity: 20,
+        stockQuantity: 90,
         rating: 4.3,
         reviewCount: 567,
-        tags: ["home", "bedding"],
+        tags: ["home", "decor", "cushions", "stylish"],
+        isFeatured: false,
+        isOnSale: true
+      },
+
+      // Beauty Products
+      {
+        name: "Skincare Gift Set",
+        slug: "skincare-gift-set",
+        description: "Complete skincare routine set with cleanser, toner, serum, and moisturizer. Perfect for all skin types.",
+        brand: "Hednor Beauty",
+        categoryId: beautyCategory?._id || homeCategory._id,
+        price: 2499,
+        salePrice: 1999,
+        images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400"],
+        sizes: ["Full Size Set"],
+        colors: ["Natural"],
+        inStock: true,
+        stockQuantity: 70,
+        rating: 4.6,
+        reviewCount: 890,
+        tags: ["beauty", "skincare", "gift", "premium"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // GenZ Collection
+      {
+        name: "Trendy Oversized Hoodie",
+        slug: "trendy-oversized-hoodie",
+        description: "Super comfy oversized hoodie with cool graphics. Perfect for the trendy GenZ vibe.",
+        brand: "Hednor GenZ",
+        categoryId: genzCategory?._id || menCategory._id,
+        price: 1799,
+        salePrice: 1399,
+        images: ["https://images.unsplash.com/photo-1556821840-3a9fbc86b9b3?w=400"],
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["Black", "Grey", "Navy", "Burgundy"],
+        inStock: true,
+        stockQuantity: 125,
+        rating: 4.8,
+        reviewCount: 1567,
+        tags: ["genz", "trendy", "oversized", "hoodie", "comfortable"],
         isFeatured: true,
         isOnSale: true
       }
