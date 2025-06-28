@@ -1,25 +1,16 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
-import {
-  Search,
-  User,
-  Heart,
-  ShoppingBag,
-  Menu,
-  X,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link, useLocation } from "wouter";
 import { useStore } from "@/lib/store";
-import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_1750949407940.png";
+import { useAuthStore } from "@/lib/auth-store";
+import AuthModal from "./auth-modal";
 import CartSlideout from "./cart-slideout";
 import MobileSearch from "./mobile-search";
-import AuthModal from "./auth-modal";
-import { ThemeToggle } from "./theme-toggle";
+import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_1750949407940.png";
 
 const navigation = [
   {
@@ -1345,7 +1336,7 @@ const navigation = [
 ];
 
 export default function Header() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -1361,6 +1352,8 @@ export default function Header() {
     setMobileSearchOpen,
     wishlistItems,
   } = useStore();
+
+  const { user, isAuthenticated } = useAuthStore();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1497,17 +1490,28 @@ export default function Header() {
 
               {/* Desktop User Actions */}
               <div className="hidden md:flex items-center space-x-5">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent"
-                  onClick={() => setIsAuthModalOpen(true)}
-                >
-                  <User className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium hidden md:block">
-                    Profile
-                  </span>
-                </Button>
+                {isAuthenticated && user ? (
+                  <Link href="/profile">
+                    <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
+                      <User className="h-5 w-5" />
+                      <span className="text-xs mt-1 font-medium hidden md:block">
+                        {user.firstName}
+                      </span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent"
+                    onClick={() => setIsAuthModalOpen(true)}
+                  >
+                    <User className="h-5 w-5" />
+                    <span className="text-xs mt-1 font-medium hidden md:block">
+                      Profile
+                    </span>
+                  </Button>
+                )}
 
                 <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
                   <Heart className="h-5 w-5" />
@@ -1625,25 +1629,39 @@ export default function Header() {
 
                       {/* User Actions */}
                       <div className="border-t border-gray-200 p-4 space-y-2">
-                        <Button
-                          variant="outline"
-                          className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsAuthModalOpen(true);
-                          }}
-                        >
-                          Login
-                        </Button>
-                        <Button
-                          className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsAuthModalOpen(true);
-                          }}
-                        >
-                          Register
-                        </Button>
+                        {isAuthenticated && user ? (
+                          <Link href="/profile">
+                            <Button
+                              variant="outline"
+                              className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {user.firstName}
+                            </Button>
+                          </Link>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outline"
+                              className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setIsAuthModalOpen(true);
+                              }}
+                            >
+                              Login
+                            </Button>
+                            <Button
+                              className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setIsAuthModalOpen(true);
+                              }}
+                            >
+                              Register
+                            </Button>
+                          </>
+                        )}
                         <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4">
                           <Heart className="h-4 w-4" />
                           <span>Wishlist ({wishlistItems.length})</span>

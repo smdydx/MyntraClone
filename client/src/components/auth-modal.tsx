@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useAuthStore } from "@/lib/auth-store";
 import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_1750949407940.png";
 
 interface AuthModalProps {
@@ -36,18 +37,51 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
     phone: "",
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  const { login } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo login
-    toast({
-      title: "Login successful!",
-      description: "Welcome back to Hednor",
-    });
-    onOpenChange(false);
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      login(data.user, data.token);
+      toast({
+        title: "Login successful!",
+        description: `Welcome back, ${data.user.firstName}!`,
+      });
+      onOpenChange(false);
+      
+      // Reset form
+      setLoginData({ email: "", password: "" });
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (registerData.password !== registerData.confirmPassword) {
       toast({
         title: "Password mismatch",
@@ -56,12 +90,55 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
       });
       return;
     }
-    // Demo registration
-    toast({
-      title: "Registration successful!",
-      description: "Welcome to Hednor! You can now start shopping.",
-    });
-    onOpenChange(false);
+
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: registerData.firstName,
+          lastName: registerData.lastName,
+          email: registerData.email,
+          password: registerData.password,
+          phone: registerData.phone,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      login(data.user, data.token);
+      toast({
+        title: "Registration successful!",
+        description: `Welcome to Hednor, ${data.user.firstName}!`,
+      });
+      onOpenChange(false);
+      
+      // Reset form
+      setRegisterData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phone: "",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -126,8 +203,12 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   </Button>
                 </div>
               </div>
-              <Button type="submit" className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500">
-                Login
+              <Button 
+                type="submit" 
+                className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
             </form>
             <div className="text-center">
@@ -235,8 +316,12 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   </Button>
                 </div>
               </div>
-              <Button type="submit" className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500">
-                Create Account
+              <Button 
+                type="submit" 
+                className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
           </TabsContent>

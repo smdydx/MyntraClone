@@ -2,8 +2,96 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertCartItemSchema, insertWishlistItemSchema } from "@shared/schema";
+import { connectToMongoDB, UserService } from "./mongodb";
+import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize MongoDB connection
+  await connectToMongoDB();
+  const userService = new UserService();
+
+  // Authentication routes
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { firstName, lastName, email, password, phone } = req.body;
+
+      if (!firstName || !lastName || !email || !password) {
+        return res.status(400).json({ message: "All required fields must be provided" });
+      }
+
+      const result = await userService.registerUser({
+        firstName,
+        lastName,
+        email,
+        password,
+        phone
+      });
+
+      res.status(201).json({
+        message: "User registered successfully",
+        user: result.user,
+        token: result.token
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+
+      const result = await userService.loginUser({ email, password });
+
+      res.json({
+        message: "Login successful",
+        user: result.user,
+        token: result.token
+      });
+    } catch (error: any) {
+      res.status(401).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/auth/me", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const user = await userService.getUserById(req.user!.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ user });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user data" });
+    }
+  });
+
+  app.put("/api/auth/profile", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { firstName, lastName, phone } = req.body;
+      const updateData: any = {};
+
+      if (firstName) updateData.firstName = firstName;
+      if (lastName) updateData.lastName = lastName;
+      if (phone) updateData.phone = phone;
+
+      const updatedUser = await userService.updateUser(req.user!.userId, updateData);
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({
+        message: "Profile updated successfully",
+        user: updatedUser
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
@@ -58,22 +146,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Cart (using session for demo - in real app would use authentication)
-  app.get("/api/cart", async (req, res) => {
+  // Cart (using authenticated user)
+  app.get("/api/cart", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      // Using hardcoded userId=1 for demo
-      const cartItems = await storage.getCartItems(1);
+      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
+      const cartItems = await storage.getCartItems(userId);
       res.json(cartItems);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch cart items" });
     }
   });
 
-  app.post("/api/cart", async (req, res) => {
+  app.post("/api/cart", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
+      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
       const validatedData = insertCartItemSchema.parse({
         ...req.body,
-        userId: 1 // Hardcoded for demo
+        userId
       });
       
       const cartItem = await storage.addToCart(validatedData);
@@ -83,7 +172,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/cart/:id", async (req, res) => {
+  app.put("/api/cart/:id", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
       const id = parseInt(req.params.id);
       const { quantity } = req.body;
@@ -99,7 +188,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/cart/:id", async (req, res) => {
+  app.delete("/api/cart/:id", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
       const id = parseInt(req.params.id);
       const success = await storage.removeFromCart(id);
@@ -115,21 +204,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Wishlist
-  app.get("/api/wishlist", async (req, res) => {
+  app.get("/api/wishlist", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      // Using hardcoded userId=1 for demo
-      const wishlistItems = await storage.getWishlistItems(1);
+      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
+      const wishlistItems = await storage.getWishlistItems(userId);
       res.json(wishlistItems);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch wishlist items" });
     }
   });
 
-  app.post("/api/wishlist", async (req, res) => {
+  app.post("/api/wishlist", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
+      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
       const validatedData = insertWishlistItemSchema.parse({
         ...req.body,
-        userId: 1 // Hardcoded for demo
+        userId
       });
       
       const wishlistItem = await storage.addToWishlist(validatedData);
@@ -139,10 +229,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/wishlist/:productId", async (req, res) => {
+  app.delete("/api/wishlist/:productId", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
       const productId = parseInt(req.params.productId);
-      const success = await storage.removeFromWishlist(1, productId); // userId=1 for demo
+      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
+      const success = await storage.removeFromWishlist(userId, productId);
       
       if (!success) {
         return res.status(404).json({ message: "Wishlist item not found" });

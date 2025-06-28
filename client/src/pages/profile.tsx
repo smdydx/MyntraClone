@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Heart, Package, Settings, LogOut, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,18 +13,11 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import { useStore } from "@/lib/store";
+import { useAuthStore } from "@/lib/auth-store";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
-// Mock user data - in real app this would come from authentication
-const mockUser = {
-  id: 1,
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  phone: "+91 98765 43210",
-  avatar: "",
-  joinDate: "January 2024",
-};
+
 
 // Mock order data - in real app this would come from API
 const mockOrders = [
@@ -59,23 +52,86 @@ const mockOrders = [
 
 export default function Profile() {
   const { wishlistItems, removeFromWishlist } = useStore();
+  const { user, isAuthenticated, logout, updateUser } = useAuthStore();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: mockUser.firstName,
-    lastName: mockUser.lastName,
-    email: mockUser.email,
-    phone: mockUser.phone,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
   });
 
-  const handleSaveProfile = () => {
-    // In real app, this would make an API call to update user profile
-    toast({
-      title: "Profile updated",
-      description: "Your profile information has been updated successfully.",
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      setLocation('/');
+      return;
+    }
+
+    setFormData({
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      phone: user.phone || "",
     });
-    setIsEditing(false);
+  }, [user, isAuthenticated, setLocation]);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      const token = useAuthStore.getState().token;
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update profile');
+      }
+
+      updateUser(data.user);
+      toast({
+        title: "Profile updated",
+        description: "Your profile information has been updated successfully.",
+      });
+      setIsEditing(false);
+    } catch (error: any) {
+      toast({
+        title: "Update failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    setLocation('/');
+  };
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -103,17 +159,22 @@ export default function Profile() {
             <CardContent className="p-6">
               <div className="flex items-center space-x-6">
                 <Avatar className="w-20 h-20">
-                  <AvatarImage src={mockUser.avatar} alt="Profile" />
+                  <AvatarImage src="" alt="Profile" />
                   <AvatarFallback className="bg-hednor-gold text-hednor-dark text-xl font-semibold">
-                    {mockUser.firstName[0]}{mockUser.lastName[0]}
+                    {user.firstName[0]}{user.lastName[0]}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <h1 className="font-poppins font-bold text-2xl text-hednor-dark mb-1">
-                    {mockUser.firstName} {mockUser.lastName}
+                    {user.firstName} {user.lastName}
                   </h1>
-                  <p className="text-gray-600 mb-2">{mockUser.email}</p>
-                  <p className="text-sm text-gray-500">Member since {mockUser.joinDate}</p>
+                  <p className="text-gray-600 mb-2">{user.email}</p>
+                  <p className="text-sm text-gray-500">
+                    Member since {new Date(user.createdAt).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long' 
+                    })}
+                  </p>
                 </div>
                 <div className="flex space-x-2">
                   <Button
@@ -123,7 +184,11 @@ export default function Profile() {
                     <Edit2 className="w-4 h-4 mr-2" />
                     Edit Profile
                   </Button>
-                  <Button variant="outline" className="text-sale-red hover:text-sale-red hover:bg-red-50">
+                  <Button 
+                    variant="outline" 
+                    className="text-sale-red hover:text-sale-red hover:bg-red-50"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </Button>
@@ -343,8 +408,12 @@ export default function Profile() {
 
                   {isEditing && (
                     <div className="flex space-x-4">
-                      <Button onClick={handleSaveProfile} className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500">
-                        Save Changes
+                      <Button 
+                        onClick={handleSaveProfile} 
+                        className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Saving..." : "Save Changes"}
                       </Button>
                       <Button variant="outline" onClick={() => setIsEditing(false)}>
                         Cancel
