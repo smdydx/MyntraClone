@@ -8,6 +8,10 @@ const JWT_SECRET = "your-jwt-secret-key";
 let client: MongoClient;
 let db: Db;
 
+export function generateToken(payload: { userId: string; email: string }): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+}
+
 export function verifyToken(token: string): { userId: string; email: string } {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any;
