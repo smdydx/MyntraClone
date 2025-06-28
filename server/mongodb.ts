@@ -128,13 +128,9 @@ export interface Order {
   _id?: ObjectId;
   userId: ObjectId;
   totalAmount: number;
-  finalAmount?: number;
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
-  paymentStatus?: 'pending' | 'completed' | 'failed';
-  paymentMethod?: string;
   shippingAddress: any;
   items: any[];
-  trackingNumber?: string;
   createdAt: Date;
 }
 
@@ -179,15 +175,10 @@ export interface Payment {
   orderId: string;
   userId: string;
   amount: number;
-  currency?: string;
+  currency: string;
   status: "pending" | "completed" | "failed" | "refunded";
   paymentMethod: string;
   transactionId?: string;
-  razorpayOrderId?: string;
-  razorpayPaymentId?: string;
-  razorpaySignature?: string;
-  stripePaymentIntentId?: string;
-  upiTransactionId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

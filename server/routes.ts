@@ -4,7 +4,7 @@ import { connectToMongoDB, UserService, CategoryService, ProductService, CartSer
 import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
 // Define a middleware to authenticate admin users
-const authenticateAdmin = (req: AuthenticatedRequest, res: any, next: any) => {
+const authenticateAdmin = (req: AuthenticatedRequest, res: Express.Response, next: Express.NextFunction) => {
   // Check if user exists and has admin role
   if (req.user && req.user.email === "adminhednor@gmail.com") {
     next(); // Proceed to the next middleware or route handler
