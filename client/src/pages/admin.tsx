@@ -893,7 +893,6 @@ export default function AdminDashboard() {
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-```python
                       <div className="text-2xl font-bold">{dashboardStats?.totalUsers || 0}</div>
                       <p className="text-xs text-muted-foreground">
                         <TrendingUp className="h-3 w-3 inline mr-1" />
@@ -1329,7 +1328,7 @@ export default function AdminDashboard() {
                     </DialogContent>
                   </Dialog>
                 </div>
-                </div>
+              </div>
 
                 <Card>
                   <CardContent>
@@ -1712,3 +1711,119 @@ export default function AdminDashboard() {
                             </div>
                             <Badge variant={mainCategory.isActive ? "default" : "secondary"}>
                               {mainCategory.isActive ? "Active" : "Inactive"}
+                            </Badge>
+                          </div>
+                          {categories
+                            .filter(subCategory => subCategory.parentId === mainCategory._id)
+                            .map((subCategory) => (
+                            <div key={subCategory._id} className="pl-8 border-l border-gray-300">
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  {subCategory.image && (
+                                    <img 
+                                      src={subCategory.image} 
+                                      alt={subCategory.name}
+                                      className="w-8 h-8 rounded object-cover"
+                                    />
+                                  )}
+                                  <div>
+                                    <h4 className="font-medium">{subCategory.name}</h4>
+                                    <p className="text-sm text-gray-500">{subCategory.description}</p>
+                                  </div>
+                                </div>
+                                <Badge variant={subCategory.isActive ? "default" : "secondary"}>
+                                  {subCategory.isActive ? "Active" : "Inactive"}
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === "orders" && (
+              <div>
+                <h2 className="text-2xl font-bold">Orders</h2>
+                {/* Display Orders Table */}
+              </div>
+            )}
+
+            {activeTab === "customers" && (
+              <div>
+                <h2 className="text-2xl font-bold">Customers</h2>
+                {/* Display Customers Table */}
+              </div>
+            )}
+
+            {activeTab === "analytics" && (
+              <div>
+                <h2 className="text-2xl font-bold">Analytics</h2>
+                {/* Display Analytics Charts and Data */}
+              </div>
+            )}
+
+            {activeTab === "settings" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Settings</h2>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Site Settings</CardTitle>
+                    <CardDescription>
+                      Update your site's general settings.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="logoUrl">Logo URL</Label>
+                        <Input id="logoUrl" name="logoUrl" placeholder="https://example.com/logo.png" />
+                      </div>
+                      <div>
+                        <Label htmlFor="siteName">Site Name</Label>
+                        <Input id="siteName" name="siteName" placeholder="My E-Commerce Store" />
+                      </div>
+                      <div>
+                        <Label htmlFor="heroVideo">Hero Video URL</Label>
+                        <Input id="heroVideo" name="heroVideo" placeholder="https://example.com/hero-video.mp4" />
+                      </div>
+                      <div>
+                        <Label htmlFor="primaryColor">Primary Color</Label>
+                        <Input id="primaryColor" name="primaryColor" placeholder="#007BFF" />
+                      </div>
+                      <div>
+                        <Label htmlFor="secondaryColor">Secondary Color</Label>
+                        <Input id="secondaryColor" name="secondaryColor" placeholder="#6C757D" />
+                      </div>
+                      <div>
+                        <Label htmlFor="footerText">Footer Text</Label>
+                        <Input id="footerText" name="footerText" placeholder="© 2023 My E-Commerce Store" />
+                      </div>
+                      <Button type="submit" disabled={updateSettingsMutation.isPending}>
+                        {updateSettingsMutation.isPending ? "Updating..." : "Update Settings"}
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Seed Data</CardTitle>
+                    <CardDescription>
+                      Seed the database with sample data for testing and development.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button onClick={handleSeedData}>Seed Sample Data</Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
