@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
 import { useLocation } from "wouter";
@@ -29,72 +30,85 @@ export default function CartSlideout() {
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setCartOpen}>
-      <SheetContent side="right" className="w-[400px] sm:w-[540px] flex flex-col">
-        <SheetHeader>
-          <SheetTitle className="flex items-center justify-between">
-            Shopping Bag
-            <Badge variant="secondary">{cartCount} items</Badge>
+      <SheetContent 
+        side="right" 
+        className="w-full sm:w-[400px] md:w-[450px] max-w-[100vw] flex flex-col p-0 h-full"
+      >
+        {/* Fixed Header */}
+        <SheetHeader className="px-4 py-4 border-b border-gray-200 bg-white">
+          <SheetTitle className="flex items-center justify-between text-lg font-semibold">
+            <span>Shopping Bag</span>
+            <Badge variant="secondary" className="bg-hednor-gold text-hednor-dark">{cartCount} items</Badge>
           </SheetTitle>
-          <SheetDescription>
+          <SheetDescription className="text-sm text-gray-600">
             View and manage items in your shopping bag
           </SheetDescription>
         </SheetHeader>
 
         {cartItems.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center">
+          /* Empty Cart State */
+          <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
+              <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <ShoppingBag className="w-10 h-10 text-gray-400" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Your bag is empty</h3>
-              <p className="text-gray-500 text-sm mb-4">Add some items to get started</p>
-              <Button onClick={() => setCartOpen(false)}>Continue Shopping</Button>
+              <h3 className="font-semibold text-gray-900 mb-2 text-lg">Your bag is empty</h3>
+              <p className="text-gray-500 text-sm mb-6">Add some items to get started</p>
+              <Button 
+                onClick={() => setCartOpen(false)}
+                className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 px-6 py-2 rounded-lg font-medium"
+              >
+                Continue Shopping
+              </Button>
             </div>
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto py-4 space-y-4">
+            {/* Scrollable Items Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div key={item.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-16 h-16 object-cover rounded"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg flex-shrink-0"
                   />
-                  <div className="flex-1">
-                    <h4 className="font-medium text-sm">{item.name}</h4>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-sm sm:text-base line-clamp-2">{item.name}</h4>
                     <p className="text-xs text-gray-600 mb-1">{item.brand}</p>
                     {(item.size || item.color) && (
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-gray-600 mb-2">
                         {item.size && `Size: ${item.size}`}
                         {item.size && item.color && ", "}
                         {item.color && `Color: ${item.color}`}
                       </p>
                     )}
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center space-x-1">
-                        {item.salePrice ? (
-                          <>
-                            <span className="font-semibold text-sm">
-                              {formatPrice(item.salePrice)}
-                            </span>
-                            <span className="text-xs text-gray-500 line-through">
-                              {formatPrice(item.price)}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="font-semibold text-sm">
+                    
+                    {/* Price */}
+                    <div className="flex items-center mb-3">
+                      {item.salePrice ? (
+                        <div className="flex items-center space-x-2">
+                          <span className="font-semibold text-sm sm:text-base">
+                            {formatPrice(item.salePrice)}
+                          </span>
+                          <span className="text-xs text-gray-500 line-through">
                             {formatPrice(item.price)}
                           </span>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-2">
+                        </div>
+                      ) : (
+                        <span className="font-semibold text-sm sm:text-base">
+                          {formatPrice(item.price)}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Quantity Controls */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-1 bg-white rounded-lg border border-gray-300 p-1">
                         <Button
-                          variant="outline"
-                          size="icon"
-                          className="w-6 h-6"
+                          variant="ghost"
+                          size="sm"
+                          className="w-8 h-8 p-0 hover:bg-gray-100"
                           onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
                         >
                           <Minus className="w-3 h-3" />
@@ -103,40 +117,65 @@ export default function CartSlideout() {
                           {item.quantity}
                         </span>
                         <Button
-                          variant="outline"
-                          size="icon"
-                          className="w-6 h-6"
+                          variant="ghost"
+                          size="sm"
+                          className="w-8 h-8 p-0 hover:bg-gray-100"
                           onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
                         >
                           <Plus className="w-3 h-3" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon" 
-                          className="w-6 h-6 text-sale-red hover:text-sale-red hover:bg-red-50"
-                          onClick={() => removeFromCart(item.id)}
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
                       </div>
+                      
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-8 h-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="border-t pt-4">
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-semibold">Total:</span>
-                <span className="font-bold text-lg">
-                  {formatPrice(cartTotal.toString())}
-                </span>
+            {/* Fixed Footer with Total and Checkout */}
+            <div className="border-t border-gray-200 bg-white p-4 space-y-4">
+              {/* Order Summary */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Subtotal ({cartCount} items)</span>
+                  <span className="font-medium">{formatPrice(cartTotal.toString())}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="text-green-600 font-medium">FREE</span>
+                </div>
+                <hr className="border-gray-200" />
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-lg">Total</span>
+                  <span className="font-bold text-lg text-hednor-gold">
+                    {formatPrice(cartTotal.toString())}
+                  </span>
+                </div>
               </div>
+              
+              {/* Checkout Button */}
               <Button 
-                className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold"
+                className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold py-3 text-base rounded-lg"
                 onClick={handleProceedToCheckout}
               >
                 Proceed to Checkout
+              </Button>
+              
+              {/* Continue Shopping Link */}
+              <Button 
+                variant="outline"
+                className="w-full border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark py-2 text-sm"
+                onClick={() => setCartOpen(false)}
+              >
+                Continue Shopping
               </Button>
             </div>
           </>

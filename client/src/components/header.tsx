@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Heart, ShoppingBag, Menu, X, User, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -1372,130 +1373,334 @@ export default function Header() {
 
         {/* Main Navigation */}
         <nav className="container mx-auto px-4 py-2 md:py-3">
-          <div className="flex items-center justify-between lg:justify-start">
-            {/* Mobile: Wishlist on left */}
-            <div className="flex items-center lg:hidden">
-              <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
-                <Heart className="h-4 w-4" />
-                {wishlistItems.length > 0 && (
-                  <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
-                    {wishlistItems.length}
-                  </Badge>
-                )}
+          <div className="flex items-center justify-between">
+            {/* Mobile Layout */}
+            <div className="lg:hidden w-full">
+              <div className="flex items-center justify-between">
+                {/* Left side - Search and Menu */}
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:text-hednor-gold p-2"
+                    onClick={() => setMobileSearchOpen(true)}
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  
+                  <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                    <SheetTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-white hover:text-hednor-gold p-2"
+                      >
+                        <Menu className="h-5 w-5" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent
+                      side="left"
+                      className="w-[280px] sm:w-[320px] p-0"
+                    >
+                      <div className="flex flex-col h-full">
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200">
+                          <h2 className="font-semibold text-lg text-gray-800">
+                            Menu
+                          </h2>
+                        </div>
+
+                        {/* Navigation Items */}
+                        <div className="flex-1 overflow-y-auto">
+                          <div className="p-4 space-y-1">
+                            {navigation.map((item) => (
+                              <div key={item.name} className="space-y-1">
+                                {/* Main Category */}
+                                <div className="flex items-center justify-between">
+                                  <Link
+                                    href={item.href}
+                                    className="flex-1 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium text-sm py-3 px-3 rounded-md transition-colors"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    {item.name.toUpperCase()}
+                                  </Link>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="p-2"
+                                    onClick={() =>
+                                      setExpandedMobileMenu(
+                                        expandedMobileMenu === item.name
+                                          ? null
+                                          : item.name,
+                                      )
+                                    }
+                                  >
+                                    {expandedMobileMenu === item.name ? (
+                                      <ChevronDown className="h-4 w-4" />
+                                    ) : (
+                                      <ChevronRight className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </div>
+
+                                {/* Submenu */}
+                                {expandedMobileMenu === item.name &&
+                                  item.submenu && (
+                                    <div className="ml-4 space-y-1 border-l border-gray-200 pl-3">
+                                      {item.submenu.map((subItem) => (
+                                        <Link
+                                          key={subItem.name}
+                                          href={subItem.href}
+                                          className={`block text-sm py-2 px-3 rounded-md transition-colors ${
+                                            subItem.isCategory
+                                              ? "font-semibold text-hednor-gold hover:bg-hednor-gold/10"
+                                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                          }`}
+                                          onClick={() => setIsMobileMenuOpen(false)}
+                                        >
+                                          {subItem.name}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* User Actions */}
+                          <div className="border-t border-gray-200 p-4 space-y-2">
+                            {isAuthenticated && user ? (
+                              <div className="flex flex-col gap-2">
+                                <Link href="/profile">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    {user.firstName}
+                                  </Button>
+                                </Link>
+                                <Link href="/admin">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    Admin
+                                  </Button>
+                                </Link>
+                              </div>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="outline"
+                                  className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsAuthModalOpen(true);
+                                  }}
+                                >
+                                  Login
+                                </Button>
+                                <Button
+                                  className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsAuthModalOpen(true);
+                                  }}
+                                >
+                                  Register
+                                </Button>
+                              </>
+                            )}
+                            <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4">
+                              <Heart className="h-4 w-4" />
+                              <span>Wishlist ({wishlistItems.length})</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-4 border-t border-gray-200 bg-gray-50">
+                          <p className="text-xs text-gray-500 text-center">
+                            © 2025 Hednor. All rights reserved.
+                          </p>
+                        </div>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
+
+                {/* Center - Logo */}
+                <Link href="/" className="flex items-center">
+                  <img
+                    src={hednorLogoPath}
+                    alt="Hednor"
+                    className="w-12 h-12 object-contain"
+                  />
+                </Link>
+
+                {/* Right side - User Actions and Cart */}
+                <div className="flex items-center space-x-1">
+                  {/* Profile/Login */}
+                  {isAuthenticated && user ? (
+                    <Link href="/profile">
+                      <Button variant="ghost" size="sm" className="text-white hover:text-hednor-gold p-2">
+                        <User className="h-5 w-5" />
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:text-hednor-gold p-2"
+                      onClick={() => setIsAuthModalOpen(true)}
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  )}
+
+                  {/* Wishlist */}
+                  <div className="relative">
+                    <Button variant="ghost" size="sm" className="text-white hover:text-hednor-gold p-2">
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    {wishlistItems.length > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                        {wishlistItems.length}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* Cart */}
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:text-hednor-gold p-2"
+                      onClick={() => setCartOpen(true)}
+                    >
+                      <ShoppingBag className="h-5 w-5" />
+                    </Button>
+                    {cartCount > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                        {cartCount}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Logo - positioned more to the right */}
-            <Link href="/" className="flex items-center lg:mr-6 ml-12 lg:ml-0">
-              <img
-                src={hednorLogoPath}
-                alt="Hednor"
-                className="w-16 h-16 md:w-20 md:h-20 object-contain"
-              />
-            </Link>
+            {/* Desktop Layout */}
+            <div className="hidden lg:flex items-center justify-between w-full">
+              {/* Logo */}
+              <Link href="/" className="flex items-center mr-8">
+                <img
+                  src={hednorLogoPath}
+                  alt="Hednor"
+                  className="w-16 h-16 md:w-20 md:h-20 object-contain"
+                />
+              </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8 flex-1">
-              {navigation.map((item, index) => (
-                <div key={item.name} className="relative group">
-                  <Link
-                    href={item.href}
-                    className="text-gray-200 dark:text-gray-200 hover:text-hednor-gold dark:hover:text-hednor-gold font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-hednor-gold"
-                  >
-                    {item.name}
-                  </Link>
+              {/* Navigation */}
+              <div className="flex items-center space-x-8 flex-1">
+                {navigation.map((item, index) => (
+                  <div key={item.name} className="relative group">
+                    <Link
+                      href={item.href}
+                      className="text-gray-200 dark:text-gray-200 hover:text-hednor-gold dark:hover:text-hednor-gold font-bold text-sm uppercase tracking-wide transition-colors px-3 py-2 hover:border-b-2 hover:border-hednor-gold"
+                    >
+                      {item.name}
+                    </Link>
 
-                  {/* Myntra-style Mega Menu */}
-                  <div
-                    className="absolute top-full left-0 mt-4 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
-                    style={{
-                      width: "70vw",
-                      maxWidth: "800px",
-                      minWidth: "600px",
-                    }}
-                  >
-                    <div className="p-6 lg:p-8">
-                      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
-                        {(() => {
-                          const categoryGroups: {
-                            [key: string]: typeof item.submenu;
-                          } = {};
-                          let currentCategory = "General";
+                    {/* Mega Menu */}
+                    <div
+                      className="absolute top-full left-0 mt-4 bg-white dark:bg-gray-800 shadow-xl border-t-4 border-hednor-gold opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-lg"
+                      style={{
+                        width: "70vw",
+                        maxWidth: "800px",
+                        minWidth: "600px",
+                      }}
+                    >
+                      <div className="p-6 lg:p-8">
+                        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
+                          {(() => {
+                            const categoryGroups: {
+                              [key: string]: typeof item.submenu;
+                            } = {};
+                            let currentCategory = "General";
 
-                          item.submenu.forEach((subItem) => {
-                            if (subItem.isCategory) {
-                              currentCategory = subItem.name;
-                              categoryGroups[currentCategory] = [];
-                            } else {
-                              if (!categoryGroups[currentCategory]) {
+                            item.submenu.forEach((subItem) => {
+                              if (subItem.isCategory) {
+                                currentCategory = subItem.name;
                                 categoryGroups[currentCategory] = [];
+                              } else {
+                                if (!categoryGroups[currentCategory]) {
+                                  categoryGroups[currentCategory] = [];
+                                }
+                                categoryGroups[currentCategory].push(subItem);
                               }
-                              categoryGroups[currentCategory].push(subItem);
-                            }
-                          });
+                            });
 
-                          return Object.entries(categoryGroups)
-                            .slice(0, 5)
-                            .map(([categoryName, items]) => (
-                              <div key={categoryName} className="space-y-4">
-                                <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide">
-                                  {categoryName}
-                                </h3>
-                                <div className="space-y-2">
-                                  {items.slice(0, 8).map((subItem) => (
-                                    <Link
-                                      key={`${categoryName}-${subItem.name}`}
-                                      href={subItem.href}
-                                      className="block text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium"
-                                    >
-                                      {subItem.name}
-                                    </Link>
-                                  ))}
+                            return Object.entries(categoryGroups)
+                              .slice(0, 5)
+                              .map(([categoryName, items]) => (
+                                <div key={categoryName} className="space-y-4">
+                                  <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide">
+                                    {categoryName}
+                                  </h3>
+                                  <div className="space-y-2">
+                                    {items.slice(0, 8).map((subItem) => (
+                                      <Link
+                                        key={`${categoryName}-${subItem.name}`}
+                                        href={subItem.href}
+                                        className="block text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium"
+                                      >
+                                        {subItem.name}
+                                      </Link>
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            ));
-                        })()}
+                              ));
+                          })()}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* Desktop Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-sm mx-4">
-              <form onSubmit={handleSearch} className="relative w-full">
-                <Input
-                  type="text"
-                  placeholder="Search for products, brands and more"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:ring-1 focus:ring-hednor-gold focus:border-hednor-gold text-sm"
-                />
-                <Search className="absolute right-3 top-3 h-4 w-4 text-gray-500" />
-              </form>
-            </div>
+              {/* Search Bar */}
+              <div className="flex flex-1 max-w-lg mx-6">
+                <form onSubmit={handleSearch} className="relative w-full">
+                  <div className="relative flex items-center">
+                    <Input
+                      type="text"
+                      placeholder="Search for products, brands and more"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full h-10 pl-4 pr-12 text-sm border-2 border-gray-300 rounded-lg bg-white focus:border-hednor-gold focus:ring-2 focus:ring-hednor-gold/20 transition-all"
+                    />
+                    <Button
+                      type="submit"
+                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 bg-hednor-gold hover:bg-yellow-500 text-hednor-dark rounded-md"
+                    >
+                      <Search className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </form>
+              </div>
 
-            {/* User Actions */}
-            <div className="flex items-center space-x-2 lg:space-x-4">
-              {/* Mobile Search Button - moved to right of logo */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden text-white hover:text-hednor-gold p-1"
-                onClick={() => setMobileSearchOpen(true)}
-              >
-                <Search className="h-4 w-4" />
-              </Button>
-
-              {/* Desktop User Actions */}
-              <div className="hidden md:flex items-center space-x-5">
+              {/* User Actions */}
+              <div className="flex items-center space-x-4">
                 {isAuthenticated && user ? (
                   <div className="flex gap-2">
                     <Link href="/profile">
                       <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
                         <User className="h-5 w-5" />
-                        <span className="text-xs mt-1 font-medium hidden md:block">
+                        <span className="text-xs mt-1 font-medium">
                           {user.firstName}
                         </span>
                       </Button>
@@ -1505,7 +1710,7 @@ export default function Header() {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                         </svg>
-                        <span className="text-xs mt-1 font-medium hidden md:block">
+                        <span className="text-xs mt-1 font-medium">
                           Admin
                         </span>
                       </Button>
@@ -1519,7 +1724,7 @@ export default function Header() {
                     onClick={() => setIsAuthModalOpen(true)}
                   >
                     <User className="h-5 w-5" />
-                    <span className="text-xs mt-1 font-medium hidden md:block">
+                    <span className="text-xs mt-1 font-medium">
                       Profile
                     </span>
                   </Button>
@@ -1527,7 +1732,7 @@ export default function Header() {
 
                 <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
                   <Heart className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium hidden md:block">
+                  <span className="text-xs mt-1 font-medium">
                     Wishlist
                   </span>
                   {wishlistItems.length > 0 && (
@@ -1537,170 +1742,23 @@ export default function Header() {
                   )}
                 </div>
 
-                {/* <ThemeToggle /> */}
-              </div>
-
-              {/* Cart */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative border border-transparent hover:bg-transparent lg:p-2 p-1"
-                onClick={() => setCartOpen(true)}
-              >
-                <ShoppingBag className="h-4 w-4 lg:h-5 lg:w-5" />
-                <span className="text-xs mt-1 font-medium hidden md:block">
-                  Bag
-                </span>
-                {cartCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
-                    {cartCount}
-                  </Badge>
-                )}
-              </Button>
-
-              {/* Mobile Menu Button */}
-              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="lg:hidden text-white hover:text-hednor-gold p-1"
-                  >
-                    <Menu className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="w-[280px] sm:w-[320px] p-0"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex flex-col items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative border border-transparent hover:bg-transparent p-2"
+                  onClick={() => setCartOpen(true)}
                 >
-                  <div className="flex flex-col h-full">
-                    {/* Header */}
-                    <div className="p-4 border-b border-gray-200">
-                      <h2 className="font-semibold text-lg text-gray-800">
-                        Menu
-                      </h2>
-                    </div>
-
-                    {/* Navigation Items */}
-                    <div className="flex-1 overflow-y-auto">
-                      <div className="p-4 space-y-1">
-                        {navigation.map((item) => (
-                          <div key={item.name} className="space-y-1">
-                            {/* Main Category */}
-                            <div className="flex items-center justify-between">
-                              <Link
-                                href={item.href}
-                                className="flex-1 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium text-sm py-3 px-3 rounded-md transition-colors"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                {item.name.toUpperCase()}
-                              </Link>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="p-2"
-                                onClick={() =>
-                                  setExpandedMobileMenu(
-                                    expandedMobileMenu === item.name
-                                      ? null
-                                      : item.name,
-                                  )
-                                }
-                              >
-                                {expandedMobileMenu === item.name ? (
-                                  <ChevronDown className="h-4 w-4" />
-                                ) : (
-                                  <ChevronRight className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </div>
-
-                            {/* Submenu */}
-                            {expandedMobileMenu === item.name &&
-                              item.submenu && (
-                                <div className="ml-4 space-y-1 border-l border-gray-200 pl-3">
-                                  {item.submenu.map((subItem) => (
-                                    <Link
-                                      key={subItem.name}
-                                      href={subItem.href}
-                                      className={`block text-sm py-2 px-3 rounded-md transition-colors ${
-                                        subItem.isCategory
-                                          ? "font-semibold text-hednor-gold hover:bg-hednor-gold/10"
-                                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-                                      }`}
-                                      onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                      {subItem.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* User Actions */}
-                      <div className="border-t border-gray-200 p-4 space-y-2">
-                        {isAuthenticated && user ? (
-                          <div className="flex flex-col gap-2">
-                            <Link href="/profile">
-                              <Button
-                                variant="outline"
-                                className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                {user.firstName}
-                              </Button>
-                            </Link>
-                            <Link href="/admin">
-                              <Button
-                                variant="outline"
-                                className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                Admin
-                              </Button>
-                            </Link>
-                          </div>
-                        ) : (
-                          <>
-                            <Button
-                              variant="outline"
-                              className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                              onClick={() => {
-                                setIsMobileMenuOpen(false);
-                                setIsAuthModalOpen(true);
-                              }}
-                            >
-                              Login
-                            </Button>
-                            <Button
-                              className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
-                              onClick={() => {
-                                setIsMobileMenuOpen(false);
-                                setIsAuthModalOpen(true);
-                              }}
-                            >
-                              Register
-                            </Button>
-                          </>
-                        )}
-                        <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4">
-                          <Heart className="h-4 w-4" />
-                          <span>Wishlist ({wishlistItems.length})</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="p-4 border-t border-gray-200 bg-gray-50">
-                      <p className="text-xs text-gray-500 text-center">
-                        © 2025 Hednor. All rights reserved.
-                      </p>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
+                  <ShoppingBag className="h-5 w-5" />
+                  <span className="text-xs mt-1 font-medium">
+                    Bag
+                  </span>
+                  {cartCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[10px]">
+                      {cartCount}
+                    </Badge>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </nav>
