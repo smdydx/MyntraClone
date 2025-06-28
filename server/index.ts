@@ -37,13 +37,14 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Seed database on first run
-  if (process.env.SEED_DB === 'true') {
-    const { seedDatabase } = await import('./seed-data');
-    await seedDatabase();
-  }
+  try {
+    // Seed database on first run
+    if (process.env.SEED_DB === 'true') {
+      const { seedDatabase } = await import('./seed-data');
+      await seedDatabase();
+    }
 
-  const server = await registerRoutes(app);
+    const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -81,10 +82,14 @@ app.use((req, res, next) => {
   }
 
   server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    }, () => {
+      log(`serving on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Server startup error:', error);
+    process.exit(1);
+  }
 })();

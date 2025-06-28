@@ -416,29 +416,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get site settings
-  app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
-    try {
-      // Mock settings data - replace with actual database query
-      const settings = {
-        _id: "settings-1",
-        logoUrl: "/logo.png",
-        siteName: "Hednor Store",
-        heroVideo: "/hero-video.mp4",
-        primaryColor: "#F59E0B",
-        secondaryColor: "#1F2937",
-        footerText: "© 2025 Hednor Store. All rights reserved.",
-        updatedAt: new Date().toISOString(),
-        siteDescription: "Premium fashion and lifestyle products",
-        contactEmail: "contact@hednorstore.com",
-        contactPhone: "+91 9876543210"
-      };
-      res.json(settings);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch settings" });
-    }
-  });
-
   app.put("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       // Mock response - replace with actual database operation
@@ -482,104 +459,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Users Management
   app.get("/api/admin/users", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock data - replace with actual database query
-      const users = [
-        {
-          _id: "1",
-          name: "John Doe",
-          email: "john@example.com",
-          createdAt: new Date().toISOString(),
-          totalOrders: 5,
-          totalSpent: 12500,
-          status: "active"
-        },
-        {
-          _id: "2", 
-          name: "Jane Smith",
-          email: "jane@example.com",
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          totalOrders: 3,
-          totalSpent: 7500,
-          status: "active"
-        }
-      ];
+      const userService = new UserService();
+      const users = await userService.getAllUsers();
       res.json(users);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch users" });
-    }
-  });
-
-  // Admin Products Management
-  app.post("/api/admin/products", authenticateToken, async (req: AuthenticatedRequest, res) => {
-    try {
-      // Mock response - replace with actual database operation
-      const newProduct = { _id: Date.now().toString(), ...req.body };
-      res.json({ message: "Product created successfully", product: newProduct });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to create product" });
-    }
-  });
-
-  app.put("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const product = await productService.updateProduct(req.params.id, req.body);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.json(product);
-    } catch (error) {
-      console.error('Product update error:', error);
-      res.status(400).json({ message: "Failed to update product" });
-    }
-  });
-
-  app.delete("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const success = await productService.deleteProduct(req.params.id);
-      if (!success) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.json({ message: "Product deleted successfully" });
-    } catch (error) {
-      console.error('Product deletion error:', error);
-      res.status(500).json({ message: "Failed to delete product" });
-    }
-  });
-
-  // Admin Categories Management
-  app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
-    try {
-      // Mock response - replace with actual database operation
-      const newCategory = { _id: Date.now().toString(), ...req.body, createdAt: new Date().toISOString() };
-      res.json({ message: "Category created successfully", category: newCategory });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to create category" });
-    }
-  });
-
-  app.put("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const category = await categoryService.updateCategory(req.params.id, req.body);
-      if (!category) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      res.json(category);
-    } catch (error) {
-      console.error('Category update error:', error);
-      res.status(400).json({ message: "Failed to update category" });
-    }
-  });
-
-  app.delete("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const success = await categoryService.deleteCategory(req.params.id);
-      if (!success) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      res.json({ message: "Category deleted successfully" });
-    } catch (error) {
-      console.error('Category deletion error:', error);
-      res.status(500).json({ message: "Failed to delete category" });
     }
   });
 
@@ -625,6 +509,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Razorpay Order Creation
   app.post("/api/payment/razorpay/create-order", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
+      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        return res.status(500).json({ message: "Razorpay credentials not configured" });
+      }
+
       const Razorpay = require('razorpay');
       const razorpay = new Razorpay({
         key_id: process.env.RAZORPAY_KEY_ID,
@@ -632,6 +520,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       const { amount, currency = 'INR' } = req.body;
+
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
 
       const options = {
         amount: amount * 100, // Razorpay expects amount in paise
@@ -649,6 +541,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         key: process.env.RAZORPAY_KEY_ID
       });
     } catch (error) {
+      console.error('Razorpay order creation error:', error);
       res.status(500).json({ message: "Failed to create Razorpay order" });
     }
   });
@@ -704,8 +597,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe Payment Intent
   app.post("/api/payment/stripe/create-intent", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
+      if (!process.env.STRIPE_SECRET_KEY) {
+        return res.status(500).json({ message: "Stripe credentials not configured" });
+      }
+
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
       const { amount, currency = 'inr' } = req.body;
+
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
 
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount * 100, // Stripe expects amount in smallest currency unit
@@ -720,6 +621,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
       });
     } catch (error) {
+      console.error('Stripe payment intent error:', error);
       res.status(500).json({ message: "Failed to create payment intent" });
     }
   });

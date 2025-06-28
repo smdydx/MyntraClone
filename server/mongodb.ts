@@ -26,7 +26,16 @@ export function verifyToken(token: string): { userId: string; email: string } {
 
 export async function connectToMongoDB() {
   try {
-    client = new MongoClient(MONGODB_URI);
+    if (!client) {
+      client = new MongoClient(MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+        maxPoolSize: 10,
+        retryWrites: true,
+        w: 'majority'
+      });
+    }
+    
     await client.connect();
     db = client.db('hednor-ecommerce');
     console.log('Connected to MongoDB');
