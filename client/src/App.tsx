@@ -7,8 +7,9 @@ import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import Profile from "@/pages/profile";
+import Admin from "@/pages/admin";
+import Checkout from "@/pages/checkout";
 import NotFound from "@/pages/not-found";
-import AdminDashboard from "@/pages/admin"; // Assuming you have an AdminDashboard component
 
 function Router() {
   return (
@@ -17,7 +18,8 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/products/:slug" component={ProductDetail} />
       <Route path="/profile" component={Profile} />
-      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin" component={Admin} />
+      <Route path="/checkout" component={Checkout} />
       <Route component={NotFound} />
     </Switch>
   );

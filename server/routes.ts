@@ -1,7 +1,7 @@
 
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService } from "./mongodb";
+import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService, OrderService, PaymentService } from "./mongodb";
 import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -13,6 +13,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const productService = new ProductService();
   const cartService = new CartService();
   const wishlistService = new WishlistService();
+  const orderService = new OrderService();
+  const paymentService = new PaymentService();
   const siteSettingsService = new SiteSettingsService();
 
   // Authentication routes
@@ -419,6 +421,270 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(overview);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  // Payment Gateway Routes
+
+  // Razorpay Order Creation
+  app.post("/api/payment/razorpay/create-order", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const Razorpay = require('razorpay');
+      const razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET
+      });
+
+      const { amount, currency = 'INR' } = req.body;
+      
+      const options = {
+        amount: amount * 100, // Razorpay expects amount in paise
+        currency,
+        receipt: `receipt_${Date.now()}`,
+        payment_capture: 1
+      };
+
+      const order = await razorpay.orders.create(options);
+      
+      res.json({
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        key: process.env.RAZORPAY_KEY_ID
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create Razorpay order" });
+    }
+  });
+
+  // Razorpay Payment Verification
+  app.post("/api/payment/razorpay/verify", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
+      
+      const isValid = await paymentService.verifyRazorpayPayment(
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature
+      );
+
+      if (isValid) {
+        // Create order
+        const order = await orderService.createOrder({
+          ...orderData,
+          userId: req.user!.userId,
+          paymentMethod: 'razorpay',
+          paymentStatus: 'completed'
+        });
+
+        // Create payment record
+        await paymentService.createPayment({
+          orderId: order.orderId,
+          userId: req.user!.userId,
+          amount: orderData.finalAmount,
+          paymentMethod: 'razorpay',
+          razorpayOrderId: razorpay_order_id,
+          razorpayPaymentId: razorpay_payment_id,
+          razorpaySignature: razorpay_signature,
+          status: 'completed'
+        });
+
+        // Clear user's cart
+        await cartService.clearCart(req.user!.userId);
+
+        res.json({ 
+          success: true, 
+          message: "Payment verified successfully",
+          orderId: order.orderId
+        });
+      } else {
+        res.status(400).json({ success: false, message: "Payment verification failed" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Payment verification failed" });
+    }
+  });
+
+  // Stripe Payment Intent
+  app.post("/api/payment/stripe/create-intent", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      const { amount, currency = 'inr' } = req.body;
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount * 100, // Stripe expects amount in smallest currency unit
+        currency,
+        metadata: {
+          userId: req.user!.userId
+        }
+      });
+
+      res.json({
+        clientSecret: paymentIntent.client_secret,
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create payment intent" });
+    }
+  });
+
+  // Stripe Payment Confirmation
+  app.post("/api/payment/stripe/confirm", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { payment_intent_id, orderData } = req.body;
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      
+      const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);
+      
+      if (paymentIntent.status === 'succeeded') {
+        // Create order
+        const order = await orderService.createOrder({
+          ...orderData,
+          userId: req.user!.userId,
+          paymentMethod: 'stripe',
+          paymentStatus: 'completed'
+        });
+
+        // Create payment record
+        await paymentService.createPayment({
+          orderId: order.orderId,
+          userId: req.user!.userId,
+          amount: orderData.finalAmount,
+          paymentMethod: 'stripe',
+          stripePaymentIntentId: payment_intent_id,
+          status: 'completed'
+        });
+
+        // Clear user's cart
+        await cartService.clearCart(req.user!.userId);
+
+        res.json({ 
+          success: true, 
+          message: "Payment completed successfully",
+          orderId: order.orderId
+        });
+      } else {
+        res.status(400).json({ success: false, message: "Payment failed" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Payment confirmation failed" });
+    }
+  });
+
+  // UPI Payment (Mock implementation)
+  app.post("/api/payment/upi/initiate", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { amount, upiId, orderData } = req.body;
+      
+      // In real implementation, integrate with UPI payment gateway like Razorpay UPI, PayU, etc.
+      const transactionId = `UPI${Date.now()}${Math.floor(Math.random() * 1000)}`;
+      
+      // Create order
+      const order = await orderService.createOrder({
+        ...orderData,
+        userId: req.user!.userId,
+        paymentMethod: 'upi',
+        paymentStatus: 'pending'
+      });
+
+      // Create payment record
+      await paymentService.createPayment({
+        orderId: order.orderId,
+        userId: req.user!.userId,
+        amount: orderData.finalAmount,
+        paymentMethod: 'upi',
+        upiTransactionId: transactionId,
+        status: 'pending'
+      });
+
+      res.json({
+        success: true,
+        transactionId,
+        orderId: order.orderId,
+        message: "UPI payment initiated. Please complete payment on your UPI app."
+      });
+    } catch (error) {
+      res.status(500).json({ message: "UPI payment initiation failed" });
+    }
+  });
+
+  // Cash on Delivery
+  app.post("/api/payment/cod", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { orderData } = req.body;
+      
+      // Create order
+      const order = await orderService.createOrder({
+        ...orderData,
+        userId: req.user!.userId,
+        paymentMethod: 'cod',
+        paymentStatus: 'pending'
+      });
+
+      // Create payment record
+      await paymentService.createPayment({
+        orderId: order.orderId,
+        userId: req.user!.userId,
+        amount: orderData.finalAmount,
+        paymentMethod: 'cod',
+        status: 'pending'
+      });
+
+      // Clear user's cart
+      await cartService.clearCart(req.user!.userId);
+
+      res.json({ 
+        success: true, 
+        message: "Order placed successfully. Pay on delivery.",
+        orderId: order.orderId
+      });
+    } catch (error) {
+      res.status(500).json({ message: "COD order creation failed" });
+    }
+  });
+
+  // Order Management Routes
+  app.get("/api/orders", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const orders = await orderService.getUserOrders(req.user!.userId);
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
+
+  app.get("/api/orders/:orderId", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const order = await orderService.getOrderById(req.params.orderId);
+      if (!order || order.userId.toString() !== req.user!.userId) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      res.json(order);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch order" });
+    }
+  });
+
+  // Admin Order Management
+  app.get("/api/admin/orders", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const orders = await orderService.getAllOrders();
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
+
+  app.put("/api/admin/orders/:orderId/status", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { status, trackingNumber } = req.body;
+      const order = await orderService.updateOrderStatus(req.params.orderId, status, trackingNumber);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      res.json({ message: "Order status updated successfully", order });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update order status" });
     }
   });
 

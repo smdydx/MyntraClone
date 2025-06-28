@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useStore } from "@/lib/store";
 
 export default function CartSlideout() {
+  const [, setLocation] = useLocation();
   const {
     isCartOpen,
     setCartOpen,
@@ -21,8 +23,8 @@ export default function CartSlideout() {
   };
 
   const handleProceedToCheckout = () => {
-    // For demo purposes - would integrate with payment gateway
-    alert(`Proceeding to checkout with ${cartCount} items worth ${formatPrice(cartTotal.toString())}`);
+    setCartOpen(false);
+    setLocation("/checkout");
   };
 
   return (
