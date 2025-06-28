@@ -1471,26 +1471,15 @@ export default function Header() {
                           {/* User Actions */}
                           <div className="border-t border-gray-200 p-4 space-y-2">
                             {isAuthenticated && user ? (
-                              <div className="flex flex-col gap-2">
-                                <Link href="/profile">
-                                  <Button
-                                    variant="outline"
-                                    className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                  >
-                                    {user.firstName}
-                                  </Button>
-                                </Link>
-                                <Link href="/admin">
-                                  <Button
-                                    variant="outline"
-                                    className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                  >
-                                    Admin
-                                  </Button>
-                                </Link>
-                              </div>
+                              <Link href="/profile">
+                                <Button
+                                  variant="outline"
+                                  className="w-full text-hednor-gold border-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium py-3"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {user.firstName}
+                                </Button>
+                              </Link>
                             ) : (
                               <>
                                 <Button
@@ -1696,26 +1685,14 @@ export default function Header() {
               {/* User Actions */}
               <div className="flex items-center space-x-4">
                 {isAuthenticated && user ? (
-                  <div className="flex gap-2">
-                    <Link href="/profile">
-                      <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
-                        <User className="h-5 w-5" />
-                        <span className="text-xs mt-1 font-medium">
-                          {user.firstName}
-                        </span>
-                      </Button>
-                    </Link>
-                    <Link href="/admin">
-                      <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                        </svg>
-                        <span className="text-xs mt-1 font-medium">
-                          Admin
-                        </span>
-                      </Button>
-                    </Link>
-                  </div>
+                  <Link href="/profile">
+                    <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
+                      <User className="h-5 w-5" />
+                      <span className="text-xs mt-1 font-medium">
+                        {user.firstName}
+                      </span>
+                    </Button>
+                  </Link>
                 ) : (
                   <Button
                     variant="ghost"
