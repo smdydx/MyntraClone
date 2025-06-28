@@ -601,6 +601,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Homepage sections management
+  app.get("/api/admin/homepage-sections", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // Mock homepage sections configuration - in real app, store in database
+      const homepageSections = {
+        dealsSection: {
+          title: "Deals for You",
+          enabled: true,
+          maxProducts: 5,
+          filterCriteria: "onSale",
+          order: 2
+        },
+        topPicksSection: {
+          title: "Related Top Picks for You",
+          enabled: true,
+          maxProducts: 6,
+          filterCriteria: "highRating",
+          order: 3
+        },
+        mustHaveSection: {
+          title: "Must-Have Items",
+          enabled: true,
+          maxProducts: 6,
+          filterCriteria: "popular",
+          order: 4
+        },
+        categoryDealsSection: {
+          title: "Deals for You in Clothing & Accessories",
+          enabled: true,
+          maxProducts: 6,
+          filterCriteria: "onSale",
+          targetCategory: "clothing",
+          order: 5
+        }
+      };
+      res.json(homepageSections);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch homepage sections" });
+    }
+  });
+
+  app.put("/api/admin/homepage-sections", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const sectionsConfig = req.body;
+      
+      // In real implementation, save to database
+      // For now, just return success
+      res.json({ 
+        message: "Homepage sections updated successfully", 
+        config: sectionsConfig 
+      });
+    } catch (error) {
+      console.error('Homepage sections update error:', error);
+      res.status(500).json({ message: "Failed to update homepage sections" });
+    }
+  });
+
+  // Get products for specific homepage section
+  app.get("/api/homepage-section-products/:sectionType", async (req, res) => {
+    try {
+      const { sectionType } = req.params;
+      const { limit = 6 } = req.query;
+      
+      let filterConditions = {};
+      
+      switch (sectionType) {
+        case 'deals':
+          filterConditions = { $or: [{ isOnSale: true }, { salePrice: { $exists: true, $ne: null } }] };
+          break;
+        case 'topPicks':
+          filterConditions = { rating: { $gte: 4.0 } };
+          break;
+        case 'mustHave':
+          filterConditions = { $or: [{ reviewCount: { $gte: 500 } }, { isFeatured: true }] };
+          break;
+        case 'categoryDeals':
+          // This would need category filtering logic
+          filterConditions = { isOnSale: true };
+          break;
+        default:
+          filterConditions = {};
+      }
+
+      const products = await productService.getProducts({ 
+        ...filterConditions,
+        limit: parseInt(limit as string)
+      });
+      
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch section products" });
+    }
+  });
+
   // Payment Gateway Routes
 
   // Razorpay Order Creation

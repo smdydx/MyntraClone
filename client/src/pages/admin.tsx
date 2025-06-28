@@ -1930,9 +1930,10 @@ export default function AdminDashboard() {
                 </div>
 
                 <Tabs defaultValue="branding" className="space-y-6">
-                  <TabsList className="grid grid-cols-4 w-full max-w-md">
+                  <TabsList className="grid grid-cols-5 w-full max-w-2xl">
                     <TabsTrigger value="branding">Branding</TabsTrigger>
                     <TabsTrigger value="hero">Hero Section</TabsTrigger>
+                    <TabsTrigger value="homepage">Homepage</TabsTrigger>
                     <TabsTrigger value="media">Media</TabsTrigger>
                     <TabsTrigger value="general">General</TabsTrigger>
                   </TabsList>
@@ -2163,6 +2164,331 @@ export default function AdminDashboard() {
                         </form>
                       </CardContent>
                     </Card>
+                  </TabsContent>
+
+                  {/* Homepage Sections Tab */}
+                  <TabsContent value="homepage">
+                    <div className="space-y-6">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <Home className="h-5 w-5" />
+                            Homepage Sections Management
+                          </CardTitle>
+                          <CardDescription>
+                            Configure which products appear in different homepage sections
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-8">
+                            {/* Deals for You Section */}
+                            <div className="border rounded-lg p-6">
+                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Deals for You Section</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="dealsTitle">Section Title</Label>
+                                  <Input 
+                                    id="dealsTitle" 
+                                    defaultValue="Deals for You" 
+                                    placeholder="Section title"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="dealsMaxProducts">Max Products to Show</Label>
+                                  <Input 
+                                    id="dealsMaxProducts" 
+                                    type="number" 
+                                    defaultValue="5" 
+                                    min="1" 
+                                    max="20"
+                                  />
+                                </div>
+                                <div className="md:col-span-2">
+                                  <Label htmlFor="dealsFilter">Product Filter Criteria</Label>
+                                  <Select defaultValue="onSale">
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="onSale">Products on Sale</SelectItem>
+                                      <SelectItem value="discounted">Products with Discounts</SelectItem>
+                                      <SelectItem value="lowPrice">Low Price Products</SelectItem>
+                                      <SelectItem value="featured">Featured Products</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Switch id="showDealsSection" defaultChecked />
+                                  <Label htmlFor="showDealsSection">Show this section</Label>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Related Top Picks Section */}
+                            <div className="border rounded-lg p-6">
+                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Related Top Picks Section</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="topPicksTitle">Section Title</Label>
+                                  <Input 
+                                    id="topPicksTitle" 
+                                    defaultValue="Related Top Picks for You" 
+                                    placeholder="Section title"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="topPicksMaxProducts">Max Products to Show</Label>
+                                  <Input 
+                                    id="topPicksMaxProducts" 
+                                    type="number" 
+                                    defaultValue="6" 
+                                    min="1" 
+                                    max="20"
+                                  />
+                                </div>
+                                <div className="md:col-span-2">
+                                  <Label htmlFor="topPicksFilter">Product Filter Criteria</Label>
+                                  <Select defaultValue="highRating">
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="highRating">High Rating Products (4.0+)</SelectItem>
+                                      <SelectItem value="mostReviewed">Most Reviewed Products</SelectItem>
+                                      <SelectItem value="trending">Trending Products</SelectItem>
+                                      <SelectItem value="recentlyAdded">Recently Added</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Switch id="showTopPicksSection" defaultChecked />
+                                  <Label htmlFor="showTopPicksSection">Show this section</Label>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Must-Have Items Section */}
+                            <div className="border rounded-lg p-6">
+                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Must-Have Items Section</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="mustHaveTitle">Section Title</Label>
+                                  <Input 
+                                    id="mustHaveTitle" 
+                                    defaultValue="Must-Have Items" 
+                                    placeholder="Section title"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="mustHaveMaxProducts">Max Products to Show</Label>
+                                  <Input 
+                                    id="mustHaveMaxProducts" 
+                                    type="number" 
+                                    defaultValue="6" 
+                                    min="1" 
+                                    max="20"
+                                  />
+                                </div>
+                                <div className="md:col-span-2">
+                                  <Label htmlFor="mustHaveFilter">Product Filter Criteria</Label>
+                                  <Select defaultValue="popular">
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="popular">Popular Products (High Reviews)</SelectItem>
+                                      <SelectItem value="featured">Featured Products</SelectItem>
+                                      <SelectItem value="bestseller">Best Selling Products</SelectItem>
+                                      <SelectItem value="essential">Essential Items</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Switch id="showMustHaveSection" defaultChecked />
+                                  <Label htmlFor="showMustHaveSection">Show this section</Label>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Category-Specific Deals Section */}
+                            <div className="border rounded-lg p-6">
+                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Category-Specific Deals Section</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="categoryDealsTitle">Section Title</Label>
+                                  <Input 
+                                    id="categoryDealsTitle" 
+                                    defaultValue="Deals for You in Clothing & Accessories" 
+                                    placeholder="Section title"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="categoryDealsMaxProducts">Max Products to Show</Label>
+                                  <Input 
+                                    id="categoryDealsMaxProducts" 
+                                    type="number" 
+                                    defaultValue="6" 
+                                    min="1" 
+                                    max="20"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="categoryDealsCategory">Target Category</Label>
+                                  <Select defaultValue="clothing">
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {categories.map((category) => (
+                                        <SelectItem key={category._id} value={category.slug}>
+                                          {category.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <Label htmlFor="categoryDealsFilter">Product Filter</Label>
+                                  <Select defaultValue="onSale">
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="onSale">On Sale Products</SelectItem>
+                                      <SelectItem value="discounted">Discounted Products</SelectItem>
+                                      <SelectItem value="featured">Featured in Category</SelectItem>
+                                      <SelectItem value="trending">Trending in Category</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Switch id="showCategoryDealsSection" defaultChecked />
+                                  <Label htmlFor="showCategoryDealsSection">Show this section</Label>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Section Order */}
+                            <div className="border rounded-lg p-6">
+                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Section Display Order</h3>
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                  <span className="font-medium">1. Featured Products</span>
+                                  <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm">↑</Button>
+                                    <Button variant="ghost" size="sm">↓</Button>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                  <span className="font-medium">2. Deals for You</span>
+                                  <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm">↑</Button>
+                                    <Button variant="ghost" size="sm">↓</Button>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                  <span className="font-medium">3. Related Top Picks</span>
+                                  <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm">↑</Button>
+                                    <Button variant="ghost" size="sm">↓</Button>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                  <span className="font-medium">4. Must-Have Items</span>
+                                  <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm">↑</Button>
+                                    <Button variant="ghost" size="sm">↓</Button>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                  <span className="font-medium">5. Category-Specific Deals</span>
+                                  <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm">↑</Button>
+                                    <Button variant="ghost" size="sm">↓</Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="pt-4 border-t">
+                              <Button className="w-full md:w-auto">
+                                Save Homepage Configuration
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Current Products Preview */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Current Homepage Products Preview</CardTitle>
+                          <CardDescription>
+                            Preview of products currently displayed in each section
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-6">
+                            {/* Deals for You Preview */}
+                            <div>
+                              <h4 className="font-medium mb-3 text-gray-900">Deals for You ({saleProducts.length} products)</h4>
+                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                                {saleProducts.slice(0, 5).map((product) => (
+                                  <div key={product._id} className="border rounded-lg p-2">
+                                    <img 
+                                      src={product.images[0]} 
+                                      alt={product.name}
+                                      className="w-full h-20 object-cover rounded mb-2"
+                                    />
+                                    <p className="text-xs font-medium truncate">{product.name}</p>
+                                    <p className="text-xs text-gray-500">₹{product.salePrice || product.price}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Top Picks Preview */}
+                            <div>
+                              <h4 className="font-medium mb-3 text-gray-900">Related Top Picks ({products.filter(p => p.rating >= 4.0).length} products)</h4>
+                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                                {products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
+                                  <div key={product._id} className="border rounded-lg p-2">
+                                    <img 
+                                      src={product.images[0]} 
+                                      alt={product.name}
+                                      className="w-full h-20 object-cover rounded mb-2"
+                                    />
+                                    <p className="text-xs font-medium truncate">{product.name}</p>
+                                    <p className="text-xs text-gray-500">★ {product.rating}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Must-Have Items Preview */}
+                            <div>
+                              <h4 className="font-medium mb-3 text-gray-900">Must-Have Items ({products.filter(p => p.reviewCount >= 500 || p.isFeatured).length} products)</h4>
+                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                                {products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
+                                  <div key={product._id} className="border rounded-lg p-2">
+                                    <img 
+                                      src={product.images[0]} 
+                                      alt={product.name}
+                                      className="w-full h-20 object-cover rounded mb-2"
+                                    />
+                                    <p className="text-xs font-medium truncate">{product.name}</p>
+                                    <div className="flex items-center gap-1">
+                                      {product.isFeatured && <Badge variant="secondary" className="text-xs">Featured</Badge>}
+                                      {product.reviewCount >= 500 && <span className="text-xs text-gray-500">({product.reviewCount})</span>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </TabsContent>
 
                   {/* Media Management Tab */}
