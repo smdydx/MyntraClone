@@ -43,7 +43,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -65,7 +65,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
         description: `Welcome back, ${data.user.firstName}!`,
       });
       onOpenChange(false);
-      
+
       // Reset form
       setLoginData({ email: "", password: "" });
     } catch (error: any) {
@@ -81,7 +81,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (registerData.password !== registerData.confirmPassword) {
       toast({
         title: "Password mismatch",
@@ -92,7 +92,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
     }
 
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -120,7 +120,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
         description: `Welcome to Hednor, ${data.user.firstName}!`,
       });
       onOpenChange(false);
-      
+
       // Reset form
       setRegisterData({
         firstName: "",
@@ -141,6 +141,8 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
     }
   };
 
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -160,8 +162,8 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger value="login" onClick={() => setIsLogin(true)}>Login</TabsTrigger>
+            <TabsTrigger value="register" onClick={() => setIsLogin(false)}>Register</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login" className="space-y-4">

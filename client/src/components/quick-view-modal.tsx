@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { Eye, Heart, ShoppingBag, Star, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "@/lib/store";
 import type { Product } from "@shared/schema";
@@ -60,6 +66,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden">
+        <DialogTitle className="sr-only">
+          Quick View: {product.name}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          Quick preview of {product.name} - {product.description}
+        </DialogDescription>
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Product Images */}
           <div className="relative">
