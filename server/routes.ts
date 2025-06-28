@@ -1,14 +1,19 @@
+
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertUserSchema, insertCartItemSchema, insertWishlistItemSchema } from "@shared/schema";
-import { connectToMongoDB, UserService } from "./mongodb";
+import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService } from "./mongodb";
 import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize MongoDB connection
   await connectToMongoDB();
+  
   const userService = new UserService();
+  const categoryService = new CategoryService();
+  const productService = new ProductService();
+  const cartService = new CartService();
+  const wishlistService = new WishlistService();
+  const siteSettingsService = new SiteSettingsService();
 
   // Authentication routes
   app.post("/api/auth/register", async (req, res) => {
@@ -95,7 +100,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
-      const categories = await storage.getCategories();
+      const categories = await categoryService.getCategories();
       res.json(categories);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch categories" });
@@ -107,13 +112,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { categoryId, featured, onSale, search } = req.query;
       const filters = {
-        categoryId: categoryId ? parseInt(categoryId as string) : undefined,
+        categoryId: categoryId as string,
         featured: featured === "true",
         onSale: onSale === "true",
         search: search as string
       };
       
-      const products = await storage.getProducts(filters);
+      const products = await productService.getProducts(filters);
       res.json(products);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
@@ -122,8 +127,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/products/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const product = await storage.getProduct(id);
+      const id = req.params.id;
+      const product = await productService.getProductById(id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -136,7 +141,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/products/slug/:slug", async (req, res) => {
     try {
       const slug = req.params.slug;
-      const product = await storage.getProductBySlug(slug);
+      const product = await productService.getProductBySlug(slug);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -146,38 +151,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Cart (using authenticated user)
-  app.get("/api/cart", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  // Cart
+  app.get("/api/cart", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
-      const cartItems = await storage.getCartItems(userId);
+      const cartItems = await cartService.getCartItems(req.user!.userId);
       res.json(cartItems);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch cart items" });
     }
   });
 
-  app.post("/api/cart", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.post("/api/cart", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
-      const validatedData = insertCartItemSchema.parse({
+      const cartData = {
         ...req.body,
-        userId
-      });
+        userId: req.user!.userId
+      };
       
-      const cartItem = await storage.addToCart(validatedData);
+      const cartItem = await cartService.addToCart(cartData);
       res.json(cartItem);
     } catch (error) {
       res.status(400).json({ message: "Invalid cart item data" });
     }
   });
 
-  app.put("/api/cart/:id", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/cart/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const { quantity } = req.body;
       
-      const updatedItem = await storage.updateCartItem(id, quantity);
+      const updatedItem = await cartService.updateCartItem(id, quantity);
       if (!updatedItem) {
         return res.status(404).json({ message: "Cart item not found" });
       }
@@ -188,10 +191,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/cart/:id", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/cart/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const success = await storage.removeFromCart(id);
+      const id = req.params.id;
+      const success = await cartService.removeFromCart(id);
       
       if (!success) {
         return res.status(404).json({ message: "Cart item not found" });
@@ -204,36 +207,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Wishlist
-  app.get("/api/wishlist", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.get("/api/wishlist", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
-      const wishlistItems = await storage.getWishlistItems(userId);
+      const wishlistItems = await wishlistService.getWishlistItems(req.user!.userId);
       res.json(wishlistItems);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch wishlist items" });
     }
   });
 
-  app.post("/api/wishlist", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.post("/api/wishlist", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
-      const validatedData = insertWishlistItemSchema.parse({
+      const wishlistData = {
         ...req.body,
-        userId
-      });
+        userId: req.user!.userId
+      };
       
-      const wishlistItem = await storage.addToWishlist(validatedData);
+      const wishlistItem = await wishlistService.addToWishlist(wishlistData);
       res.json(wishlistItem);
     } catch (error) {
       res.status(400).json({ message: "Invalid wishlist item data" });
     }
   });
 
-  app.delete("/api/wishlist/:productId", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/wishlist/:productId", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const productId = parseInt(req.params.productId);
-      const userId = req.user?.userId ? parseInt(req.user.userId) : 1;
-      const success = await storage.removeFromWishlist(userId, productId);
+      const productId = req.params.productId;
+      const success = await wishlistService.removeFromWishlist(req.user!.userId, productId);
       
       if (!success) {
         return res.status(404).json({ message: "Wishlist item not found" });
@@ -245,11 +245,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin routes
+  // Admin routes for products
   app.post("/api/admin/products", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const productData = req.body;
-      const product = await storage.addProduct(productData);
+      const product = await productService.createProduct(req.body);
       res.status(201).json(product);
     } catch (error) {
       res.status(400).json({ message: "Failed to add product" });
@@ -258,9 +257,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const productData = req.body;
-      const product = await storage.updateProduct(id, productData);
+      const id = req.params.id;
+      const product = await productService.updateProduct(id, req.body);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -272,8 +270,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const success = await storage.deleteProduct(id);
+      const id = req.params.id;
+      const success = await productService.deleteProduct(id);
       if (!success) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -283,10 +281,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin routes for categories
   app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const categoryData = req.body;
-      const category = await storage.addCategory(categoryData);
+      const category = await categoryService.createCategory(req.body);
       res.status(201).json(category);
     } catch (error) {
       res.status(400).json({ message: "Failed to add category" });
@@ -295,9 +293,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const categoryData = req.body;
-      const category = await storage.updateCategory(id, categoryData);
+      const id = req.params.id;
+      const category = await categoryService.updateCategory(id, req.body);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
@@ -309,8 +306,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = parseInt(req.params.id);
-      const success = await storage.deleteCategory(id);
+      const id = req.params.id;
+      const success = await categoryService.deleteCategory(id);
       if (!success) {
         return res.status(404).json({ message: "Category not found" });
       }
@@ -321,23 +318,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Site settings management
-  const siteSettings = {
-    logoUrl: "/attached_assets/Hednor Logo 22 updated-5721x3627_1750949407940.png",
-    siteName: "Hednor",
-    heroVideo: "/client/src/assets/hero-video.mp4",
-    primaryColor: "#F59E0B",
-    secondaryColor: "#1F2937",
-    footerText: "© 2025 Hednor. All rights reserved."
-  };
-
   app.get("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
-    res.json(siteSettings);
+    try {
+      const settings = await siteSettingsService.getSettings();
+      res.json(settings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
   });
 
   app.put("/api/admin/settings", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      Object.assign(siteSettings, req.body);
-      res.json({ message: "Settings updated successfully", settings: siteSettings });
+      const settings = await siteSettingsService.updateSettings(req.body);
+      res.json({ message: "Settings updated successfully", settings });
     } catch (error) {
       res.status(500).json({ message: "Failed to update settings" });
     }
@@ -350,6 +343,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "File uploaded successfully", url: "/path/to/uploaded/file" });
     } catch (error) {
       res.status(500).json({ message: "Failed to upload file" });
+    }
+  });
+
+  // Dashboard analytics endpoints
+  app.get("/api/admin/analytics/overview", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      // This would fetch real analytics data from MongoDB
+      const overview = {
+        totalUsers: 3500,
+        totalOrders: 1250,
+        totalRevenue: 125000,
+        totalProducts: 150
+      };
+      res.json(overview);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch analytics" });
     }
   });
 

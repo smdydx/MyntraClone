@@ -37,6 +37,12 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Seed database on first run
+  if (process.env.SEED_DB === 'true') {
+    const { seedDatabase } = await import('./seed-data');
+    await seedDatabase();
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
