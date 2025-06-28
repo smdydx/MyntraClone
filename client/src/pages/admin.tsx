@@ -575,11 +575,13 @@ export default function AdminDashboard() {
   const handleCategorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const parentId = formData.get("parentId") as string;
     const categoryData = {
       name: formData.get("name"),
       slug: formData.get("slug"),
       description: formData.get("description"),
       image: formData.get("image"),
+      parentId: parentId === "none" ? undefined : parentId,
       isActive: formData.get("isActive") === "on"
     };
 
@@ -1305,7 +1307,7 @@ export default function AdminDashboard() {
                                 <SelectValue placeholder="Select parent category" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">No Parent (Main Category)</SelectItem>
+                                <SelectItem value="none">No Parent (Main Category)</SelectItem>
                                 {categories.filter(cat => !cat.parentId).map((category) => (
                                   <SelectItem key={category._id} value={category._id}>
                                     {category.name}
@@ -2611,12 +2613,12 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <Label htmlFor="parentId">Parent Category</Label>
-                <Select name="parentId" defaultValue={editingCategory.parentId || ""}>
+                <Select name="parentId" defaultValue={editingCategory.parentId || "none"}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select parent category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No Parent (Main Category)</SelectItem>
+                    <SelectItem value="none">No Parent (Main Category)</SelectItem>
                     {categories.filter(cat => !cat.parentId && cat._id !== editingCategory._id).map((category) => (
                       <SelectItem key={category._id} value={category._id}>
                         {category.name}
