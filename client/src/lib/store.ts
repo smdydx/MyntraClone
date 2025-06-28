@@ -1,7 +1,4 @@
-The code modifications involve adding a `clearCart` method to the store, updating the interface, and implementing the method in the store's state management logic.
-```
 
-```replit_final_file
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
