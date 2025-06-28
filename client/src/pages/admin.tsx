@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
@@ -924,6 +924,9 @@ export default function AdminDashboard() {
                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>Add New Product</DialogTitle>
+                        <DialogDescription>
+                          Create a new product by filling out the information below.
+                        </DialogDescription>
                       </DialogHeader>
                       <form onSubmit={handleProductSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1134,6 +1137,9 @@ export default function AdminDashboard() {
                       <DialogContent className="max-w-md">
                         <DialogHeader>
                           <DialogTitle>Add New Category</DialogTitle>
+                          <DialogDescription>
+                            Create a new category to organize your products.
+                          </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleCategorySubmit} className="space-y-4">
                           <div>
@@ -2338,6 +2344,9 @@ export default function AdminDashboard() {
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Product</DialogTitle>
+            <DialogDescription>
+              Update the product information using the form below.
+            </DialogDescription>
           </DialogHeader>
           {editingProduct && (
             <form onSubmit={handleProductSubmit} className="space-y-4">
@@ -2435,6 +2444,9 @@ export default function AdminDashboard() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Category</DialogTitle>
+            <DialogDescription>
+              Modify the category details using the form below.
+            </DialogDescription>
           </DialogHeader>
           {editingCategory && (
             <form onSubmit={handleCategorySubmit} className="space-y-4">
