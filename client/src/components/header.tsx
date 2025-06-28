@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, User, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
