@@ -22,9 +22,15 @@ export async function seedDatabase() {
 
 export async function seedCategories() {
   const categoryService = new CategoryService();
-  const productService = new ProductService();
 
   try {
+    // Check if categories already exist
+    const existingCategories = await categoryService.getCategories();
+    if (existingCategories.length > 0) {
+      console.log('Categories already exist, skipping seeding');
+      return existingCategories;
+    }
+
     // Main Categories
     const menCategory = await categoryService.createCategory({
       name: "Men",
@@ -81,6 +87,114 @@ export async function seedCategories() {
       image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400",
       isActive: true
     });
+
+    // Create subcategories for Men
+    const menSubcategories = [
+      {
+        name: "Shirts",
+        slug: "men-shirts",
+        description: "Men's casual and formal shirts",
+        image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400",
+        parentId: menCategory._id,
+        isActive: true
+      },
+      {
+        name: "T-Shirts",
+        slug: "men-tshirts",
+        description: "Men's t-shirts and polos",
+        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+        parentId: menCategory._id,
+        isActive: true
+      },
+      {
+        name: "Jeans",
+        slug: "men-jeans",
+        description: "Men's jeans and denim",
+        image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
+        parentId: menCategory._id,
+        isActive: true
+      },
+      {
+        name: "Shoes",
+        slug: "men-shoes",
+        description: "Men's footwear",
+        image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400",
+        parentId: menCategory._id,
+        isActive: true
+      }
+    ];
+
+    // Create subcategories for Women
+    const womenSubcategories = [
+      {
+        name: "Dresses",
+        slug: "women-dresses",
+        description: "Women's dresses and gowns",
+        image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
+        parentId: womenCategory._id,
+        isActive: true
+      },
+      {
+        name: "Tops",
+        slug: "women-tops",
+        description: "Women's tops and blouses",
+        image: "https://images.unsplash.com/photo-1564257577-0659a5bbc8b9?w=400",
+        parentId: womenCategory._id,
+        isActive: true
+      },
+      {
+        name: "Jeans",
+        slug: "women-jeans",
+        description: "Women's jeans and pants",
+        image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
+        parentId: womenCategory._id,
+        isActive: true
+      },
+      {
+        name: "Heels",
+        slug: "women-heels",
+        description: "Women's heels and footwear",
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400",
+        parentId: womenCategory._id,
+        isActive: true
+      }
+    ];
+
+    // Create subcategories for Kids
+    const kidsSubcategories = [
+      {
+        name: "Boys",
+        slug: "kids-boys",
+        description: "Boys clothing and accessories",
+        image: "https://images.unsplash.com/photo-1519689373023-dd07c7988603?w=400",
+        parentId: kidsCategory._id,
+        isActive: true
+      },
+      {
+        name: "Girls",
+        slug: "kids-girls",
+        description: "Girls clothing and accessories",
+        image: "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400",
+        parentId: kidsCategory._id,
+        isActive: true
+      }
+    ];
+
+    // Create all subcategories
+    const allSubcategories = [
+      ...menSubcategories,
+      ...womenSubcategories,
+      ...kidsSubcategories
+    ];
+
+    for (const subcategory of allSubcategories) {
+      await categoryService.createCategory(subcategory);
+    }
+
+    console.log('Categories seeded successfully!');
+    
+    const allCategories = await categoryService.getCategories();
+    return allCategories;
 
     // Men's Subcategories
     const menSubcategories = [
@@ -363,32 +477,7 @@ export async function seedCategories() {
       { name: "Jewelry", slug: "studio-jewelry", description: "Designer jewelry", parentId: studioCategory._id }
     ];
 
-    // Create all subcategories
-    const allSubcategories = [
-      ...menSubcategories,
-      ...womenSubcategories,
-      ...kidsSubcategories,
-      ...homeSubcategories,
-      ...beautySubcategories,
-      ...genzSubcategories,
-      ...studioSubcategories
-    ];
-
-    for (const subcategory of allSubcategories) {
-      await categoryService.createCategory(subcategory);
-    }
-
-    console.log('Categories seeded successfully!');
-    return {
-      menCategory,
-      womenCategory,
-      kidsCategory,
-      homeCategory,
-      beautyCategory,
-      genzCategory,
-      studioCategory
-    };
-  } catch (error) {
+    } catch (error) {
     console.error('Error seeding categories:', error);
     throw error;
   }
@@ -399,14 +488,97 @@ export async function seedProducts() {
   const categoryService = new CategoryService();
 
   try {
-    // Get some categories for products
+    // Check if products already exist
+    const existingProducts = await productService.getProducts({});
+    if (existingProducts.length > 0) {
+      console.log('Products already exist, skipping seeding');
+      return existingProducts;
+    }
+
+    // Get categories for products
     const categories = await categoryService.getCategories();
     const menCategory = categories.find(cat => cat.slug === 'men');
     const womenCategory = categories.find(cat => cat.slug === 'women');
     const kidsCategory = categories.find(cat => cat.slug === 'kids');
     const homeCategory = categories.find(cat => cat.slug === 'home');
     const beautyCategory = categories.find(cat => cat.slug === 'beauty');
-    const genzCategory = categories.find(cat => cat.slug === 'genz');
+
+    if (!menCategory || !womenCategory || !kidsCategory) {
+      throw new Error('Required categories not found. Please seed categories first.');
+    }
+
+    // Sample products
+    const sampleProducts = [
+      {
+        name: "Classic Cotton T-Shirt",
+        slug: "classic-cotton-tshirt",
+        description: "Comfortable cotton t-shirt perfect for everyday wear",
+        brand: "Hednor",
+        categoryId: menCategory._id,
+        price: 999,
+        salePrice: 799,
+        images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"],
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["Black", "White", "Gray"],
+        inStock: true,
+        stockQuantity: 50,
+        rating: 4.5,
+        reviewCount: 25,
+        tags: ["casual", "cotton", "comfortable"],
+        isFeatured: true,
+        isOnSale: true
+      },
+      {
+        name: "Elegant Summer Dress",
+        slug: "elegant-summer-dress",
+        description: "Beautiful flowy dress perfect for summer occasions",
+        brand: "Hednor",
+        categoryId: womenCategory._id,
+        price: 2499,
+        images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"],
+        sizes: ["XS", "S", "M", "L"],
+        colors: ["Blue", "Pink", "White"],
+        inStock: true,
+        stockQuantity: 30,
+        rating: 4.8,
+        reviewCount: 42,
+        tags: ["dress", "summer", "elegant"],
+        isFeatured: true,
+        isOnSale: false
+      },
+      {
+        name: "Kids Cartoon T-Shirt",
+        slug: "kids-cartoon-tshirt",
+        description: "Fun cartoon print t-shirt for kids",
+        brand: "Hednor Kids",
+        categoryId: kidsCategory._id,
+        price: 699,
+        images: ["https://images.unsplash.com/photo-1519689373023-dd07c7988603?w=500"],
+        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
+        colors: ["Red", "Blue", "Yellow"],
+        inStock: true,
+        stockQuantity: 40,
+        rating: 4.3,
+        reviewCount: 18,
+        tags: ["kids", "cartoon", "fun"],
+        isFeatured: false,
+        isOnSale: false
+      }
+    ];
+
+    // Create products
+    for (const productData of sampleProducts) {
+      await productService.createProduct(productData);
+    }
+
+    console.log('Products seeded successfully!');
+    
+    const allProducts = await productService.getProducts({});
+    return allProducts;
+  } catch (error) {
+    console.error('Error seeding products:', error);
+    throw error;
+  });
 
     if (!menCategory || !womenCategory || !kidsCategory || !homeCategory) {
       throw new Error('Required categories not found. Please seed categories first.');
