@@ -1070,91 +1070,248 @@ export default function AdminDashboard() {
                           Create a new product by filling out the information below.
                         </DialogDescription>
                       </DialogHeader>
-                      <form onSubmit={handleProductSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="name">Product Name</Label>
-                            <Input id="name" name="name" required />
-                          </div>
-                          <div>
-                            <Label htmlFor="slug">Slug</Label>
-                            <Input id="slug" name="slug" required />
+                      <form onSubmit={handleProductSubmit} className="space-y-6">
+                        {/* Basic Information Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Basic Information</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="name" className="text-sm font-medium">Product Name *</Label>
+                              <Input 
+                                id="name" 
+                                name="name" 
+                                placeholder="Enter product name"
+                                className="h-11"
+                                required 
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="slug" className="text-sm font-medium">URL Slug *</Label>
+                              <Input 
+                                id="slug" 
+                                name="slug" 
+                                placeholder="product-url-slug"
+                                className="h-11"
+                                required 
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Used in product URL</p>
+                            </div>
                           </div>
                         </div>
                         <div>
-                          <Label htmlFor="description">Description</Label>
-                          <Textarea id="description" name="description" />
+                          <Label htmlFor="description" className="text-sm font-medium">Product Description</Label>
+                          <Textarea 
+                            id="description" 
+                            name="description" 
+                            placeholder="Describe your product features, specifications, and benefits..."
+                            rows={4}
+                            className="resize-none"
+                          />
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="brand">Brand</Label>
-                            <Input id="brand" name="brand" required />
-                          </div>
+                        
+                        {/* Category & Brand Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Category & Brand</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="brand" className="text-sm font-medium">Brand *</Label>
+                              <Input 
+                                id="brand" 
+                                name="brand" 
+                                placeholder="e.g., Nike, Apple, Samsung"
+                                className="h-11"
+                                required 
+                              />
+                            </div>
                           <div>
                             <Label htmlFor="categoryId">Category</Label>
                             <Select name="categoryId" required>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select category" />
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Choose a category for your product" />
                               </SelectTrigger>
-                              <SelectContent>
-                                {categories.map((category) => (
-                                  <SelectItem key={category._id} value={category._id}>
-                                    {category.name}
-                                  </SelectItem>
+                              <SelectContent className="max-h-80">
+                                {/* Main Categories */}
+                                {categories.filter(cat => !cat.parentId).map((mainCategory) => (
+                                  <div key={mainCategory._id}>
+                                    <SelectItem 
+                                      value={mainCategory._id}
+                                      className="font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100"
+                                    >
+                                      📂 {mainCategory.name}
+                                    </SelectItem>
+                                    {/* Subcategories */}
+                                    {categories
+                                      .filter(cat => cat.parentId === mainCategory._id)
+                                      .map((subCategory) => (
+                                      <SelectItem 
+                                        key={subCategory._id} 
+                                        value={subCategory._id}
+                                        className="pl-6 text-gray-700 border-l-2 border-gray-200 ml-2"
+                                      >
+                                        └── {subCategory.name}
+                                      </SelectItem>
+                                    ))}
+                                  </div>
                                 ))}
+                                
+                                {/* Show message if no categories */}
+                                {categories.length === 0 && (
+                                  <div className="p-4 text-center text-gray-500">
+                                    <p className="text-sm">No categories available</p>
+                                    <p className="text-xs mt-1">Please add categories first</p>
+                                  </div>
+                                )}
                               </SelectContent>
                             </Select>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Select the most specific category for your product
+                            </p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Pricing Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Pricing</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="price" className="text-sm font-medium">Regular Price (₹) *</Label>
+                              <Input 
+                                id="price" 
+                                name="price" 
+                                type="number" 
+                                step="0.01" 
+                                min="0"
+                                placeholder="0.00"
+                                className="h-11"
+                                required 
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="salePrice" className="text-sm font-medium">Sale Price (₹)</Label>
+                              <Input 
+                                id="salePrice" 
+                                name="salePrice" 
+                                type="number" 
+                                step="0.01" 
+                                min="0"
+                                placeholder="Optional discount price"
+                                className="h-11"
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Leave empty if not on sale</p>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Media Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Product Images</h3>
                           <div>
-                            <Label htmlFor="price">Price</Label>
-                            <Input id="price" name="price" type="number" step="0.01" required />
+                            <Label htmlFor="images" className="text-sm font-medium">Image URLs *</Label>
+                            <Textarea 
+                              id="images" 
+                              name="images" 
+                              placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                              rows={3}
+                              className="resize-none"
+                              required 
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Separate multiple URLs with commas</p>
+                          </div>
+                        </div>
+
+                        {/* Product Details Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Product Details</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="sizes" className="text-sm font-medium">Available Sizes</Label>
+                              <Input 
+                                id="sizes" 
+                                name="sizes" 
+                                placeholder="XS, S, M, L, XL, XXL"
+                                className="h-11"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="colors" className="text-sm font-medium">Available Colors</Label>
+                              <Input 
+                                id="colors" 
+                                name="colors" 
+                                placeholder="Red, Blue, Green, Black"
+                                className="h-11"
+                              />
+                            </div>
                           </div>
                           <div>
-                            <Label htmlFor="salePrice">Sale Price</Label>
-                            <Input id="salePrice" name="salePrice" type="number" step="0.01" />
+                            <Label htmlFor="tags" className="text-sm font-medium">Product Tags</Label>
+                            <Input 
+                              id="tags" 
+                              name="tags" 
+                              placeholder="trendy, comfortable, bestseller, new-arrival"
+                              className="h-11"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Used for search and filtering</p>
                           </div>
                         </div>
-                        <div>
-                          <Label htmlFor="images">Images (comma-separated URLs)</Label>
-                          <Textarea id="images" name="images" required />
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        {/* Inventory Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Inventory</h3>
                           <div>
-                            <Label htmlFor="sizes">Sizes (comma-separated)</Label>
-                            <Input id="sizes" name="sizes" />
-                          </div>
-                          <div>
-                            <Label htmlFor="colors">Colors (comma-separated)</Label>
-                            <Input id="colors" name="colors" />
-                          </div>
-                        </div>
-                        <div>
-                          <Label htmlFor="tags">Tags (comma-separated)</Label>
-                          <Input id="tags" name="tags" />
-                        </div>
-                        <div>
-                          <Label htmlFor="stockQuantity">Stock Quantity</Label>
-                          <Input id="stockQuantity" name="stockQuantity" type="number" required />
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div className="flex items-center space-x-2">
-                            <Switch id="inStock" name="inStock" defaultChecked />
-                            <Label htmlFor="inStock">In Stock</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Switch id="isFeatured" name="isFeatured" />
-                            <Label htmlFor="isFeatured">Featured</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Switch id="isOnSale" name="isOnSale" />
-                            <Label htmlFor="isOnSale">On Sale</Label>
+                            <Label htmlFor="stockQuantity" className="text-sm font-medium">Stock Quantity *</Label>
+                            <Input 
+                              id="stockQuantity" 
+                              name="stockQuantity" 
+                              type="number" 
+                              min="0"
+                              placeholder="100"
+                              className="h-11"
+                              required 
+                            />
                           </div>
                         </div>
-                        <Button type="submit" disabled={addProductMutation.isPending} className="w-full">
-                          Add Product
-                        </Button>
+                        {/* Product Settings Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Product Settings</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <div>
+                                <Label htmlFor="inStock" className="text-sm font-medium">In Stock</Label>
+                                <p className="text-xs text-gray-500">Available for purchase</p>
+                              </div>
+                              <Switch id="inStock" name="inStock" defaultChecked />
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <div>
+                                <Label htmlFor="isFeatured" className="text-sm font-medium">Featured</Label>
+                                <p className="text-xs text-gray-500">Show on homepage</p>
+                              </div>
+                              <Switch id="isFeatured" name="isFeatured" />
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <div>
+                                <Label htmlFor="isOnSale" className="text-sm font-medium">On Sale</Label>
+                                <p className="text-xs text-gray-500">Special promotion</p>
+                              </div>
+                              <Switch id="isOnSale" name="isOnSale" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="pt-4 border-t">
+                          <Button 
+                            type="submit" 
+                            disabled={addProductMutation.isPending} 
+                            className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700"
+                          >
+                            {addProductMutation.isPending ? (
+                              <div className="flex items-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                Adding Product...
+                              </div>
+                            ) : (
+                              "Add Product"
+                            )}
+                          </Button>
+                        </div>
                       </form>
                     </DialogContent>
                   </Dialog>
@@ -2494,40 +2651,101 @@ export default function AdminDashboard() {
             </DialogDescription>
           </DialogHeader>
           {editingProduct && (
-            <form onSubmit={handleProductSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="name">Product Name</Label>
-                  <Input id="name" name="name" defaultValue={editingProduct.name} required />
-                </div>
-                <div>
-                  <Label htmlFor="slug">Slug</Label>
-                  <Input id="slug" name="slug" defaultValue={editingProduct.slug} required />
+            <form onSubmit={handleProductSubmit} className="space-y-6">
+              {/* Basic Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Basic Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name" className="text-sm font-medium">Product Name *</Label>
+                    <Input 
+                      id="name" 
+                      name="name" 
+                      defaultValue={editingProduct.name} 
+                      className="h-11"
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="slug" className="text-sm font-medium">URL Slug *</Label>
+                    <Input 
+                      id="slug" 
+                      name="slug" 
+                      defaultValue={editingProduct.slug} 
+                      className="h-11"
+                      required 
+                    />
+                  </div>
                 </div>
               </div>
               <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" defaultValue={editingProduct.description} />
+                <Label htmlFor="description" className="text-sm font-medium">Product Description</Label>
+                <Textarea 
+                  id="description" 
+                  name="description" 
+                  defaultValue={editingProduct.description} 
+                  rows={4}
+                  className="resize-none"
+                />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input id="brand" name="brand" defaultValue={editingProduct.brand} required />
-                </div>
+              
+              {/* Category & Brand Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Category & Brand</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="brand" className="text-sm font-medium">Brand *</Label>
+                    <Input 
+                      id="brand" 
+                      name="brand" 
+                      defaultValue={editingProduct.brand} 
+                      className="h-11"
+                      required 
+                    />
+                  </div>
                 <div>
                   <Label htmlFor="categoryId">Category</Label>
                   <Select name="categoryId" defaultValue={editingProduct.categoryId}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Choose a category for your product" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
-                        </SelectItem>
+                    <SelectContent className="max-h-80">
+                      {/* Main Categories */}
+                      {categories.filter(cat => !cat.parentId).map((mainCategory) => (
+                        <div key={mainCategory._id}>
+                          <SelectItem 
+                            value={mainCategory._id}
+                            className="font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100"
+                          >
+                            📂 {mainCategory.name}
+                          </SelectItem>
+                          {/* Subcategories */}
+                          {categories
+                            .filter(cat => cat.parentId === mainCategory._id)
+                            .map((subCategory) => (
+                            <SelectItem 
+                              key={subCategory._id} 
+                              value={subCategory._id}
+                              className="pl-6 text-gray-700 border-l-2 border-gray-200 ml-2"
+                            >
+                              └── {subCategory.name}
+                            </SelectItem>
+                          ))}
+                        </div>
                       ))}
+                      
+                      {/* Show message if no categories */}
+                      {categories.length === 0 && (
+                        <div className="p-4 text-center text-gray-500">
+                          <p className="text-sm">No categories available</p>
+                          <p className="text-xs mt-1">Please add categories first</p>
+                        </div>
+                      )}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the most specific category for your product
+                  </p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
