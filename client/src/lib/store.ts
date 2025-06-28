@@ -43,8 +43,6 @@ interface StoreState {
   // UI State
   isCartOpen: boolean;
   setCartOpen: (open: boolean) => void;
-  isMobileSearchOpen: boolean;
-  setMobileSearchOpen: (open: boolean) => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -126,8 +124,6 @@ export const useStore = create<StoreState>()(
       // UI State
       isCartOpen: false,
       setCartOpen: (open) => set({ isCartOpen: open }),
-      isMobileSearchOpen: false,
-      setMobileSearchOpen: (open) => set({ isMobileSearchOpen: open }),
     }),
     {
       name: 'hednor-store',

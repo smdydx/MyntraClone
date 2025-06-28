@@ -1348,10 +1348,10 @@ export default function Header() {
     cartCount,
     isCartOpen,
     setCartOpen,
-    isMobileSearchOpen,
-    setMobileSearchOpen,
     wishlistItems,
   } = useStore();
+
+  const [isMobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const { user, isAuthenticated } = useAuthStore();
 
@@ -1710,7 +1710,10 @@ export default function Header() {
       <CartSlideout />
 
       {/* Mobile Search */}
-      <MobileSearch />
+      <MobileSearch 
+        isOpen={isMobileSearchOpen} 
+        onClose={() => setMobileSearchOpen(false)} 
+      />
 
       {/* Auth Modal */}
       <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
