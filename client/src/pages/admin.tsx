@@ -869,7 +869,7 @@ export default function AdminDashboard() {
                         <TrendingUp className="h-3 w-3 inline mr-1" />
                         +8.3% from last month
                       </p>
-                      <Progress value{60} className="mt-2" />
+                      <Progress value={60} className="mt-2" />
                     </CardContent>
                   </Card>
 
