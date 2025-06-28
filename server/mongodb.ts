@@ -678,6 +678,10 @@ export class UserService {
     return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
   }
 
+  async getUserCount(): Promise<number> {
+    return await this.collection.countDocuments();
+  }
+
   async getUserStats(): Promise<any> {
     const totalUsers = await this.collection.countDocuments();
     const todayStart = new Date();

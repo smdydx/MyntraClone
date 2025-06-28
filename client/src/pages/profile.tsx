@@ -19,36 +19,8 @@ import { useLocation } from "wouter";
 
 
 
-// Mock order data - in real app this would come from API
-const mockOrders = [
-  {
-    id: 1,
-    orderNumber: "HD2024001",
-    date: "2024-01-15",
-    status: "Delivered",
-    total: "₹2,497",
-    items: 3,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500",
-  },
-  {
-    id: 2,
-    orderNumber: "HD2024002", 
-    date: "2024-01-20",
-    status: "Shipped",
-    total: "₹1,299",
-    items: 1,
-    image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500",
-  },
-  {
-    id: 3,
-    orderNumber: "HD2024003",
-    date: "2024-01-25", 
-    status: "Processing",
-    total: "₹3,499",
-    items: 2,
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500",
-  },
-];
+// Real orders from API
+import { useQuery } from "@tanstack/react-query";
 
 export default function Profile() {
   const { wishlistItems, removeFromWishlist } = useStore();
@@ -62,6 +34,24 @@ export default function Profile() {
     lastName: "",
     email: "",
     phone: "",
+  });
+
+  // Fetch real orders from API
+  const { data: userOrders = [], isLoading: ordersLoading } = useQuery({
+    queryKey: ["orders", user?.email],
+    queryFn: async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return [];
+      
+      const response = await fetch('/api/orders', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch orders');
+      return response.json();
+    },
+    enabled: isAuthenticated && !!user,
   });
 
   useEffect(() => {
@@ -136,13 +126,15 @@ export default function Profile() {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'delivered':
-        return 'bg-success-green text-white';
+        return 'bg-green-500 text-white';
       case 'shipped':
         return 'bg-blue-500 text-white';
-      case 'processing':
+      case 'confirmed':
         return 'bg-hednor-gold text-hednor-dark';
+      case 'pending':
+        return 'bg-yellow-500 text-white';
       case 'cancelled':
-        return 'bg-sale-red text-white';
+        return 'bg-red-500 text-white';
       default:
         return 'bg-gray-500 text-white';
     }
@@ -230,40 +222,49 @@ export default function Profile() {
                   <CardTitle className="text-lg sm:text-xl">Order History</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6">
-                  {mockOrders.length === 0 ? (
+                  {ordersLoading ? (
+                    <div className="text-center py-8 sm:py-12">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-hednor-gold mx-auto mb-4"></div>
+                      <p className="text-gray-500">Loading your orders...</p>
+                    </div>
+                  ) : userOrders.length === 0 ? (
                     <div className="text-center py-8 sm:py-12">
                       <Package className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-gray-400" />
                       <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">No orders yet</h3>
                       <p className="text-gray-500 text-sm mb-4 px-4">Start shopping to see your orders here</p>
-                      <Button className="text-sm">Continue Shopping</Button>
+                      <Button className="text-sm" onClick={() => setLocation('/')}>Continue Shopping</Button>
                     </div>
                   ) : (
                     <div className="space-y-3 sm:space-y-4">
-                      {mockOrders.map((order) => (
-                        <div key={order.id} className="border rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+                      {userOrders.map((order: any) => (
+                        <div key={order._id} className="border rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 space-y-3 sm:space-y-0">
                             <div className="flex items-center space-x-3 sm:space-x-4">
-                              <img
-                                src={order.image}
-                                alt="Order item"
-                                className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded flex-shrink-0"
-                              />
+                              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                <Package className="w-6 h-6 text-gray-500" />
+                              </div>
                               <div className="min-w-0 flex-1">
-                                <h4 className="font-semibold text-sm sm:text-base truncate">Order #{order.orderNumber}</h4>
+                                <h4 className="font-semibold text-sm sm:text-base truncate">
+                                  Order #{order.orderId || order._id?.slice(-8)}
+                                </h4>
                                 <p className="text-xs sm:text-sm text-gray-600">
-                                  {new Date(order.date).toLocaleDateString('en-IN', {
+                                  {new Date(order.createdAt).toLocaleDateString('en-IN', {
                                     year: 'numeric',
                                     month: 'short',
                                     day: 'numeric'
                                   })}
                                 </p>
-                                <p className="text-xs sm:text-sm text-gray-600">{order.items} items</p>
+                                <p className="text-xs sm:text-sm text-gray-600">
+                                  {order.items?.length || 0} items
+                                </p>
                               </div>
                             </div>
                             <div className="flex justify-between sm:block sm:text-right">
-                              <p className="font-semibold text-base sm:text-lg">{order.total}</p>
-                              <Badge className={`${getStatusColor(order.status)} text-xs`}>
-                                {order.status}
+                              <p className="font-semibold text-base sm:text-lg">
+                                ₹{(order.finalAmount || order.totalAmount || 0).toLocaleString('en-IN')}
+                              </p>
+                              <Badge className={`${getStatusColor(order.status || 'pending')} text-xs`}>
+                                {(order.status || 'pending').charAt(0).toUpperCase() + (order.status || 'pending').slice(1)}
                               </Badge>
                             </div>
                           </div>
@@ -273,12 +274,12 @@ export default function Profile() {
                               View Details
                             </Button>
                             <div className="flex space-x-2 w-full sm:w-auto">
-                              {order.status === 'Delivered' && (
+                              {order.status === 'delivered' && (
                                 <Button variant="outline" size="sm" className="flex-1 sm:flex-none text-xs sm:text-sm">
                                   Reorder
                                 </Button>
                               )}
-                              {order.status === 'Processing' && (
+                              {order.status === 'pending' && (
                                 <Button variant="outline" size="sm" className="text-sale-red hover:text-sale-red flex-1 sm:flex-none text-xs sm:text-sm">
                                   Cancel Order
                                 </Button>
