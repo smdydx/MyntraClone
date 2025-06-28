@@ -1,18 +1,17 @@
-
 import { CategoryService, ProductService } from './mongodb';
 
 export async function seedDatabase() {
   try {
     console.log('Starting database seeding...');
-    
+
     // Seed categories first
     await seedCategories();
     console.log('Categories seeded successfully!');
-    
+
     // Then seed products
     await seedProducts();
     console.log('Products seeded successfully!');
-    
+
     console.log('Database seeding completed successfully!');
   } catch (error) {
     console.error('Error seeding database:', error);
@@ -192,292 +191,11 @@ export async function seedCategories() {
     }
 
     console.log('Categories seeded successfully!');
-    
+
     const allCategories = await categoryService.getCategories();
     return allCategories;
 
-    // Men's Subcategories
-    const menSubcategories = [
-      { name: "Topwear", slug: "men-topwear", description: "Men's topwear collection", parentId: menCategory._id },
-      { name: "T-Shirts", slug: "men-tshirts", description: "Men's T-shirts", parentId: menCategory._id },
-      { name: "Casual Shirts", slug: "men-casual-shirts", description: "Men's casual shirts", parentId: menCategory._id },
-      { name: "Formal Shirts", slug: "men-formal-shirts", description: "Men's formal shirts", parentId: menCategory._id },
-      { name: "Sweatshirts", slug: "men-sweatshirts", description: "Men's sweatshirts", parentId: menCategory._id },
-      { name: "Sweaters", slug: "men-sweaters", description: "Men's sweaters", parentId: menCategory._id },
-      { name: "Jackets", slug: "men-jackets", description: "Men's jackets", parentId: menCategory._id },
-      { name: "Blazers & Coats", slug: "men-blazers-coats", description: "Men's blazers and coats", parentId: menCategory._id },
-      { name: "Suits", slug: "men-suits", description: "Men's suits", parentId: menCategory._id },
-      { name: "Rain Jackets", slug: "men-rain-jackets", description: "Men's rain jackets", parentId: menCategory._id },
-      { name: "Indian & Festive Wear", slug: "men-indian-festive", description: "Men's Indian and festive wear", parentId: menCategory._id },
-      { name: "Kurtas & Kurta Sets", slug: "men-kurtas", description: "Men's kurtas and kurta sets", parentId: menCategory._id },
-      { name: "Sherwanis", slug: "men-sherwanis", description: "Men's sherwanis", parentId: menCategory._id },
-      { name: "Nehru Jackets", slug: "men-nehru-jackets", description: "Men's Nehru jackets", parentId: menCategory._id },
-      { name: "Dhotis", slug: "men-dhotis", description: "Men's dhotis", parentId: menCategory._id },
-      { name: "Bottomwear", slug: "men-bottomwear", description: "Men's bottomwear", parentId: menCategory._id },
-      { name: "Jeans", slug: "men-jeans", description: "Men's jeans", parentId: menCategory._id },
-      { name: "Casual Trousers", slug: "men-casual-trousers", description: "Men's casual trousers", parentId: menCategory._id },
-      { name: "Formal Trousers", slug: "men-formal-trousers", description: "Men's formal trousers", parentId: menCategory._id },
-      { name: "Shorts", slug: "men-shorts", description: "Men's shorts", parentId: menCategory._id },
-      { name: "Track Pants & Joggers", slug: "men-track-pants", description: "Men's track pants and joggers", parentId: menCategory._id },
-      { name: "Innerwear & Sleepwear", slug: "men-innerwear", description: "Men's innerwear and sleepwear", parentId: menCategory._id },
-      { name: "Briefs & Trunks", slug: "men-briefs-trunks", description: "Men's briefs and trunks", parentId: menCategory._id },
-      { name: "Boxers", slug: "men-boxers", description: "Men's boxers", parentId: menCategory._id },
-      { name: "Vests", slug: "men-vests", description: "Men's vests", parentId: menCategory._id },
-      { name: "Sleepwear & Loungewear", slug: "men-sleepwear", description: "Men's sleepwear and loungewear", parentId: menCategory._id },
-      { name: "Thermals", slug: "men-thermals", description: "Men's thermals", parentId: menCategory._id },
-      { name: "Plus Size", slug: "men-plus-size", description: "Men's plus size clothing", parentId: menCategory._id },
-      { name: "Footwear", slug: "men-footwear", description: "Men's footwear", parentId: menCategory._id },
-      { name: "Casual Shoes", slug: "men-casual-shoes", description: "Men's casual shoes", parentId: menCategory._id },
-      { name: "Sports Shoes", slug: "men-sports-shoes", description: "Men's sports shoes", parentId: menCategory._id },
-      { name: "Formal Shoes", slug: "men-formal-shoes", description: "Men's formal shoes", parentId: menCategory._id },
-      { name: "Sneakers", slug: "men-sneakers", description: "Men's sneakers", parentId: menCategory._id },
-      { name: "Sandals & Floaters", slug: "men-sandals-floaters", description: "Men's sandals and floaters", parentId: menCategory._id },
-      { name: "Flip Flops", slug: "men-flip-flops", description: "Men's flip flops", parentId: menCategory._id },
-      { name: "Socks", slug: "men-socks", description: "Men's socks", parentId: menCategory._id },
-      { name: "Personal Care & Grooming", slug: "men-personal-care", description: "Men's personal care and grooming", parentId: menCategory._id },
-      { name: "Sunglasses & Frames", slug: "men-sunglasses", description: "Men's sunglasses and frames", parentId: menCategory._id },
-      { name: "Watches", slug: "men-watches", description: "Men's watches", parentId: menCategory._id },
-      { name: "Sports & Active Wear", slug: "men-sports-active", description: "Men's sports and active wear", parentId: menCategory._id },
-      { name: "Sports Shoes", slug: "men-sports-shoes-active", description: "Men's sports shoes", parentId: menCategory._id },
-      { name: "Sports Sandals", slug: "men-sports-sandals", description: "Men's sports sandals", parentId: menCategory._id },
-      { name: "Active T-Shirts", slug: "men-active-tshirts", description: "Men's active T-shirts", parentId: menCategory._id },
-      { name: "Track Pants & Shorts", slug: "men-track-pants-shorts", description: "Men's track pants and shorts", parentId: menCategory._id },
-      { name: "Tracksuits", slug: "men-tracksuits", description: "Men's tracksuits", parentId: menCategory._id },
-      { name: "Jackets & Sweatshirts", slug: "men-jackets-sweatshirts", description: "Men's jackets and sweatshirts", parentId: menCategory._id },
-      { name: "Sports Accessories", slug: "men-sports-accessories", description: "Men's sports accessories", parentId: menCategory._id },
-      { name: "Swimwear", slug: "men-swimwear", description: "Men's swimwear", parentId: menCategory._id },
-      { name: "Gadgets", slug: "men-gadgets", description: "Men's gadgets", parentId: menCategory._id },
-      { name: "Smart Wearables", slug: "men-smart-wearables", description: "Men's smart wearables", parentId: menCategory._id },
-      { name: "Fitness Gadgets", slug: "men-fitness-gadgets", description: "Men's fitness gadgets", parentId: menCategory._id },
-      { name: "Headphones", slug: "men-headphones", description: "Men's headphones", parentId: menCategory._id },
-      { name: "Speakers", slug: "men-speakers", description: "Men's speakers", parentId: menCategory._id },
-      { name: "Fashion & Accessories", slug: "men-fashion-accessories", description: "Men's fashion and accessories", parentId: menCategory._id },
-      { name: "Wallets", slug: "men-wallets", description: "Men's wallets", parentId: menCategory._id },
-      { name: "Belts", slug: "men-belts", description: "Men's belts", parentId: menCategory._id },
-      { name: "Perfumes & Body Mists", slug: "men-perfumes", description: "Men's perfumes and body mists", parentId: menCategory._id },
-      { name: "Trimmers", slug: "men-trimmers", description: "Men's trimmers", parentId: menCategory._id },
-      { name: "Deodorants", slug: "men-deodorants", description: "Men's deodorants", parentId: menCategory._id }
-    ];
-
-    // Women's Subcategories
-    const womenSubcategories = [
-      { name: "Indian & Fusion Wear", slug: "women-indian-fusion", description: "Women's Indian and fusion wear", parentId: womenCategory._id },
-      { name: "Kurtas & Suits", slug: "women-kurtas-suits", description: "Women's kurtas and suits", parentId: womenCategory._id },
-      { name: "Kurtis, Tunics & Tops", slug: "women-kurtis-tunics", description: "Women's kurtis, tunics and tops", parentId: womenCategory._id },
-      { name: "Sarees", slug: "women-sarees", description: "Women's sarees", parentId: womenCategory._id },
-      { name: "Ethnic Wear", slug: "women-ethnic", description: "Women's ethnic wear", parentId: womenCategory._id },
-      { name: "Leggings, Salwars & Churidars", slug: "women-leggings-salwars", description: "Women's leggings, salwars and churidars", parentId: womenCategory._id },
-      { name: "Skirts & Palazzos", slug: "women-skirts-palazzos", description: "Women's skirts and palazzos", parentId: womenCategory._id },
-      { name: "Dress Materials", slug: "women-dress-materials", description: "Women's dress materials", parentId: womenCategory._id },
-      { name: "Lehenga Cholis", slug: "women-lehenga-cholis", description: "Women's lehenga cholis", parentId: womenCategory._id },
-      { name: "Dupattas & Shawls", slug: "women-dupattas-shawls", description: "Women's dupattas and shawls", parentId: womenCategory._id },
-      { name: "Jackets", slug: "women-jackets", description: "Women's jackets", parentId: womenCategory._id },
-      { name: "Western Wear", slug: "women-western", description: "Women's western wear", parentId: womenCategory._id },
-      { name: "Dresses", slug: "women-dresses", description: "Women's dresses", parentId: womenCategory._id },
-      { name: "Tops", slug: "women-tops", description: "Women's tops", parentId: womenCategory._id },
-      { name: "Tshirts", slug: "women-tshirts", description: "Women's T-shirts", parentId: womenCategory._id },
-      { name: "Jeans", slug: "women-jeans", description: "Women's jeans", parentId: womenCategory._id },
-      { name: "Trousers & Capris", slug: "women-trousers-capris", description: "Women's trousers and capris", parentId: womenCategory._id },
-      { name: "Shorts & Skirts", slug: "women-shorts-skirts", description: "Women's shorts and skirts", parentId: womenCategory._id },
-      { name: "Co-ords", slug: "women-coords", description: "Women's co-ords", parentId: womenCategory._id },
-      { name: "Playsuits", slug: "women-playsuits", description: "Women's playsuits", parentId: womenCategory._id },
-      { name: "Jumpsuits", slug: "women-jumpsuits", description: "Women's jumpsuits", parentId: womenCategory._id },
-      { name: "Shrugs", slug: "women-shrugs", description: "Women's shrugs", parentId: womenCategory._id },
-      { name: "Sweaters & Sweatshirts", slug: "women-sweaters-sweatshirts", description: "Women's sweaters and sweatshirts", parentId: womenCategory._id },
-      { name: "Jackets & Coats", slug: "women-jackets-coats", description: "Women's jackets and coats", parentId: womenCategory._id },
-      { name: "Blazers & Waistcoats", slug: "women-blazers-waistcoats", description: "Women's blazers and waistcoats", parentId: womenCategory._id },
-      { name: "Plus Size", slug: "women-plus-size", description: "Women's plus size clothing", parentId: womenCategory._id },
-      { name: "Maternity", slug: "women-maternity", description: "Women's maternity wear", parentId: womenCategory._id },
-      { name: "Sunglasses & Frames", slug: "women-sunglasses", description: "Women's sunglasses and frames", parentId: womenCategory._id },
-      { name: "Watches", slug: "women-watches", description: "Women's watches", parentId: womenCategory._id },
-      { name: "Sports & Active Wear", slug: "women-sports-active", description: "Women's sports and active wear", parentId: womenCategory._id },
-      { name: "Clothing", slug: "women-sports-clothing", description: "Women's sports clothing", parentId: womenCategory._id },
-      { name: "Footwear", slug: "women-sports-footwear", description: "Women's sports footwear", parentId: womenCategory._id },
-      { name: "Sports Accessories", slug: "women-sports-accessories", description: "Women's sports accessories", parentId: womenCategory._id },
-      { name: "Sports Equipment", slug: "women-sports-equipment", description: "Women's sports equipment", parentId: womenCategory._id },
-      { name: "Lingerie & Sleepwear", slug: "women-lingerie-sleepwear", description: "Women's lingerie and sleepwear", parentId: womenCategory._id },
-      { name: "Bra", slug: "women-bra", description: "Women's bras", parentId: womenCategory._id },
-      { name: "Briefs", slug: "women-briefs", description: "Women's briefs", parentId: womenCategory._id },
-      { name: "Shapewear", slug: "women-shapewear", description: "Women's shapewear", parentId: womenCategory._id },
-      { name: "Sleepwear & Loungewear", slug: "women-sleepwear-loungewear", description: "Women's sleepwear and loungewear", parentId: womenCategory._id },
-      { name: "Swimwear", slug: "women-swimwear", description: "Women's swimwear", parentId: womenCategory._id },
-      { name: "Camisoles", slug: "women-camisoles", description: "Women's camisoles", parentId: womenCategory._id },
-      { name: "Beauty & Personal Care", slug: "women-beauty-personal-care", description: "Women's beauty and personal care", parentId: womenCategory._id },
-      { name: "Makeup", slug: "women-makeup", description: "Women's makeup", parentId: womenCategory._id },
-      { name: "Skincare", slug: "women-skincare", description: "Women's skincare", parentId: womenCategory._id },
-      { name: "Premium Beauty", slug: "women-premium-beauty", description: "Women's premium beauty", parentId: womenCategory._id },
-      { name: "Lipsticks", slug: "women-lipsticks", description: "Women's lipsticks", parentId: womenCategory._id },
-      { name: "Fragrances", slug: "women-fragrances", description: "Women's fragrances", parentId: womenCategory._id },
-      { name: "Gadgets", slug: "women-gadgets", description: "Women's gadgets", parentId: womenCategory._id },
-      { name: "Smart Wearables", slug: "women-smart-wearables", description: "Women's smart wearables", parentId: womenCategory._id },
-      { name: "Fitness Gadgets", slug: "women-fitness-gadgets", description: "Women's fitness gadgets", parentId: womenCategory._id },
-      { name: "Headphones", slug: "women-headphones", description: "Women's headphones", parentId: womenCategory._id },
-      { name: "Speakers", slug: "women-speakers", description: "Women's speakers", parentId: womenCategory._id },
-      { name: "Jewellery", slug: "women-jewellery", description: "Women's jewellery", parentId: womenCategory._id },
-      { name: "Fashion Jewellery", slug: "women-fashion-jewellery", description: "Women's fashion jewellery", parentId: womenCategory._id },
-      { name: "Fine Jewellery", slug: "women-fine-jewellery", description: "Women's fine jewellery", parentId: womenCategory._id },
-      { name: "Earrings", slug: "women-earrings", description: "Women's earrings", parentId: womenCategory._id },
-      { name: "Backpacks", slug: "women-backpacks", description: "Women's backpacks", parentId: womenCategory._id },
-      { name: "Handbags", slug: "women-handbags", description: "Women's handbags", parentId: womenCategory._id },
-      { name: "Wallets", slug: "women-wallets", description: "Women's wallets", parentId: womenCategory._id },
-      { name: "Belts", slug: "women-belts", description: "Women's belts", parentId: womenCategory._id },
-      { name: "Casual Shoes", slug: "women-casual-shoes", description: "Women's casual shoes", parentId: womenCategory._id },
-      { name: "Heels", slug: "women-heels", description: "Women's heels", parentId: womenCategory._id },
-      { name: "Boots", slug: "women-boots", description: "Women's boots", parentId: womenCategory._id },
-      { name: "Sports Shoes", slug: "women-sports-shoes", description: "Women's sports shoes", parentId: womenCategory._id },
-      { name: "Flats", slug: "women-flats", description: "Women's flats", parentId: womenCategory._id },
-      { name: "Flip Flops", slug: "women-flip-flops", description: "Women's flip flops", parentId: womenCategory._id },
-      { name: "Socks", slug: "women-socks", description: "Women's socks", parentId: womenCategory._id }
-    ];
-
-    // Kids Subcategories
-    const kidsSubcategories = [
-      { name: "Boys Clothing", slug: "kids-boys-clothing", description: "Boys clothing", parentId: kidsCategory._id },
-      { name: "T-Shirts", slug: "kids-boys-tshirts", description: "Boys T-shirts", parentId: kidsCategory._id },
-      { name: "Shirts", slug: "kids-boys-shirts", description: "Boys shirts", parentId: kidsCategory._id },
-      { name: "Shorts", slug: "kids-boys-shorts", description: "Boys shorts", parentId: kidsCategory._id },
-      { name: "Jeans", slug: "kids-boys-jeans", description: "Boys jeans", parentId: kidsCategory._id },
-      { name: "Polos", slug: "kids-boys-polos", description: "Boys polos", parentId: kidsCategory._id },
-      { name: "Trousers", slug: "kids-boys-trousers", description: "Boys trousers", parentId: kidsCategory._id },
-      { name: "Ethnic Wear", slug: "kids-boys-ethnic", description: "Boys ethnic wear", parentId: kidsCategory._id },
-      { name: "Thermals", slug: "kids-boys-thermals", description: "Boys thermals", parentId: kidsCategory._id },
-      { name: "Girls Clothing", slug: "kids-girls-clothing", description: "Girls clothing", parentId: kidsCategory._id },
-      { name: "Dresses", slug: "kids-girls-dresses", description: "Girls dresses", parentId: kidsCategory._id },
-      { name: "Tops", slug: "kids-girls-tops", description: "Girls tops", parentId: kidsCategory._id },
-      { name: "T-Shirts", slug: "kids-girls-tshirts", description: "Girls T-shirts", parentId: kidsCategory._id },
-      { name: "Clothing Sets", slug: "kids-girls-clothing-sets", description: "Girls clothing sets", parentId: kidsCategory._id },
-      { name: "Lehenga choli", slug: "kids-girls-lehenga-choli", description: "Girls lehenga choli", parentId: kidsCategory._id },
-      { name: "Kurta Sets", slug: "kids-girls-kurta-sets", description: "Girls kurta sets", parentId: kidsCategory._id },
-      { name: "Party wear", slug: "kids-girls-party-wear", description: "Girls party wear", parentId: kidsCategory._id },
-      { name: "Dungarees & Jumpsuits", slug: "kids-girls-dungarees-jumpsuits", description: "Girls dungarees and jumpsuits", parentId: kidsCategory._id },
-      { name: "Skirts & shorts", slug: "kids-girls-skirts-shorts", description: "Girls skirts and shorts", parentId: kidsCategory._id },
-      { name: "Tights & Leggings", slug: "kids-girls-tights-leggings", description: "Girls tights and leggings", parentId: kidsCategory._id },
-      { name: "Jeans, Trousers & Capris", slug: "kids-girls-jeans-trousers-capris", description: "Girls jeans, trousers and capris", parentId: kidsCategory._id },
-      { name: "Innerwear & Thermals", slug: "kids-girls-innerwear-thermals", description: "Girls innerwear and thermals", parentId: kidsCategory._id },
-      { name: "Nightwear & Loungewear", slug: "kids-girls-nightwear-loungewear", description: "Girls nightwear and loungewear", parentId: kidsCategory._id },
-      { name: "Sweaters", slug: "kids-girls-sweaters", description: "Girls sweaters", parentId: kidsCategory._id },
-      { name: "Jackets & Coats", slug: "kids-girls-jackets-coats", description: "Girls jackets and coats", parentId: kidsCategory._id },
-      { name: "Brand Store", slug: "kids-brand-store", description: "Kids brand store", parentId: kidsCategory._id },
-      { name: "Character Store", slug: "kids-character-store", description: "Kids character store", parentId: kidsCategory._id },
-      { name: "Footwear", slug: "kids-footwear", description: "Kids footwear", parentId: kidsCategory._id },
-      { name: "Casual Shoes", slug: "kids-casual-shoes", description: "Kids casual shoes", parentId: kidsCategory._id },
-      { name: "Flipflops", slug: "kids-flipflops", description: "Kids flipflops", parentId: kidsCategory._id },
-      { name: "Sports Shoes", slug: "kids-sports-shoes", description: "Kids sports shoes", parentId: kidsCategory._id },
-      { name: "Flats", slug: "kids-flats", description: "Kids flats", parentId: kidsCategory._id },
-      { name: "Sandals", slug: "kids-sandals", description: "Kids sandals", parentId: kidsCategory._id },
-      { name: "Heels", slug: "kids-heels", description: "Kids heels", parentId: kidsCategory._id },
-      { name: "School Shoes", slug: "kids-school-shoes", description: "Kids school shoes", parentId: kidsCategory._id },
-      { name: "Socks", slug: "kids-socks", description: "Kids socks", parentId: kidsCategory._id },
-      { name: "Toys & Games", slug: "kids-toys", description: "Kids toys and games", parentId: kidsCategory._id },
-      { name: "Learning & Development", slug: "kids-learning-toys", description: "Kids learning and development toys", parentId: kidsCategory._id },
-      { name: "Activity Toys", slug: "kids-activity-toys", description: "Kids activity toys", parentId: kidsCategory._id },
-      { name: "Soft Toys", slug: "kids-soft-toys", description: "Kids soft toys", parentId: kidsCategory._id },
-      { name: "Action Figure / Play set", slug: "kids-action-figures", description: "Kids action figures and play sets", parentId: kidsCategory._id },
-      { name: "Infants", slug: "kids-infants", description: "Infant products", parentId: kidsCategory._id },
-      { name: "Bodysuits", slug: "kids-bodysuits", description: "Infant bodysuits", parentId: kidsCategory._id },
-      { name: "Rompers & Sleepsuits", slug: "kids-rompers", description: "Infant rompers and sleepsuits", parentId: kidsCategory._id },
-      { name: "Kids Accessories", slug: "kids-accessories", description: "Kids accessories", parentId: kidsCategory._id },
-      { name: "Bags & Backpacks", slug: "kids-bags-backpacks", description: "Kids bags and backpacks", parentId: kidsCategory._id },
-      { name: "Watches", slug: "kids-watches", description: "Kids watches", parentId: kidsCategory._id },
-      { name: "Jewellery & Hair accessory", slug: "kids-jewellery-hair", description: "Kids jewellery and hair accessories", parentId: kidsCategory._id },
-      { name: "Sunglasses", slug: "kids-sunglasses", description: "Kids sunglasses", parentId: kidsCategory._id },
-      { name: "Caps & Hats", slug: "kids-caps-hats", description: "Kids caps and hats", parentId: kidsCategory._id }
-    ];
-
-    // Home & Living Subcategories
-    const homeSubcategories = [
-      { name: "Bed Linen", slug: "home-bed-linen", description: "Bed linen and bedding", parentId: homeCategory._id },
-      { name: "Bedsheets", slug: "home-bedsheets", description: "Bedsheets", parentId: homeCategory._id },
-      { name: "Bedding Sets", slug: "home-bedding-sets", description: "Bedding sets", parentId: homeCategory._id },
-      { name: "Blankets, Quilts & Dohars", slug: "home-blankets-quilts", description: "Blankets, quilts and dohars", parentId: homeCategory._id },
-      { name: "Pillows & Pillow Covers", slug: "home-pillows-covers", description: "Pillows and pillow covers", parentId: homeCategory._id },
-      { name: "Bed Covers", slug: "home-bed-covers", description: "Bed covers", parentId: homeCategory._id },
-      { name: "Diwan Sets", slug: "home-diwan-sets", description: "Diwan sets", parentId: homeCategory._id },
-      { name: "Chair Pads & Covers", slug: "home-chair-covers", description: "Chair pads and covers", parentId: homeCategory._id },
-      { name: "Sofa Covers", slug: "home-sofa-covers", description: "Sofa covers", parentId: homeCategory._id },
-      { name: "Flooring", slug: "home-flooring", description: "Flooring solutions", parentId: homeCategory._id },
-      { name: "Floor Runners", slug: "home-floor-runners", description: "Floor runners", parentId: homeCategory._id },
-      { name: "Carpets", slug: "home-carpets", description: "Carpets", parentId: homeCategory._id },
-      { name: "Floor Mats & Dhurries", slug: "home-floor-mats", description: "Floor mats and dhurries", parentId: homeCategory._id },
-      { name: "Door Mats", slug: "home-door-mats", description: "Door mats", parentId: homeCategory._id },
-      { name: "Bath", slug: "home-bath", description: "Bath essentials", parentId: homeCategory._id },
-      { name: "Bath Towels", slug: "home-bath-towels", description: "Bath towels", parentId: homeCategory._id },
-      { name: "Hand & Face Towels", slug: "home-hand-towels", description: "Hand and face towels", parentId: homeCategory._id },
-      { name: "Beach Towels", slug: "home-beach-towels", description: "Beach towels", parentId: homeCategory._id },
-      { name: "Towels Set", slug: "home-towels-set", description: "Towel sets", parentId: homeCategory._id },
-      { name: "Bath Rugs", slug: "home-bath-rugs", description: "Bath rugs", parentId: homeCategory._id },
-      { name: "Bath Robes", slug: "home-bath-robes", description: "Bath robes", parentId: homeCategory._id },
-      { name: "Bathroom Accessories", slug: "home-bathroom-accessories", description: "Bathroom accessories", parentId: homeCategory._id },
-      { name: "Shower Curtains", slug: "home-shower-curtains", description: "Shower curtains", parentId: homeCategory._id },
-      { name: "Lamps & Lighting", slug: "home-lamps-lighting", description: "Lamps and lighting", parentId: homeCategory._id },
-      { name: "Home Décor", slug: "home-decor", description: "Home decoration items", parentId: homeCategory._id },
-      { name: "Plants & Planters", slug: "home-plants", description: "Plants and planters", parentId: homeCategory._id },
-      { name: "Aromas & Candles", slug: "home-candles", description: "Aromas and candles", parentId: homeCategory._id },
-      { name: "Clocks", slug: "home-clocks", description: "Clocks", parentId: homeCategory._id },
-      { name: "Mirrors", slug: "home-mirrors", description: "Mirrors", parentId: homeCategory._id },
-      { name: "Wall Décor", slug: "home-wall-decor", description: "Wall decoration", parentId: homeCategory._id },
-      { name: "Festive Decor", slug: "home-festive-decor", description: "Festive decoration", parentId: homeCategory._id },
-      { name: "Pooja Essentials", slug: "home-pooja", description: "Pooja essentials", parentId: homeCategory._id },
-      { name: "Wall Shelves", slug: "home-wall-shelves", description: "Wall shelves", parentId: homeCategory._id },
-      { name: "Fountains", slug: "home-fountains", description: "Fountains", parentId: homeCategory._id },
-      { name: "Showpieces & Vases", slug: "home-showpieces", description: "Showpieces and vases", parentId: homeCategory._id },
-      { name: "Ottoman", slug: "home-ottoman", description: "Ottoman", parentId: homeCategory._id },
-      { name: "Cushions & Cushion Covers", slug: "home-cushions", description: "Cushions and cushion covers", parentId: homeCategory._id },
-      { name: "Curtains", slug: "home-curtains", description: "Curtains", parentId: homeCategory._id },
-      { name: "Furniture", slug: "home-furniture", description: "Furniture", parentId: homeCategory._id },
-      { name: "Home Gift Sets", slug: "home-gift-sets", description: "Home gift sets", parentId: homeCategory._id },
-      { name: "Kitchen & Table", slug: "home-kitchen", description: "Kitchen and table essentials", parentId: homeCategory._id },
-      { name: "Table Runners", slug: "home-table-runners", description: "Table runners", parentId: homeCategory._id },
-      { name: "Dinnerware & Serveware", slug: "home-dinnerware", description: "Dinnerware and serveware", parentId: homeCategory._id },
-      { name: "Cups and Mugs", slug: "home-cups-mugs", description: "Cups and mugs", parentId: homeCategory._id },
-      { name: "Bakeware & Cookware", slug: "home-cookware", description: "Bakeware and cookware", parentId: homeCategory._id },
-      { name: "Kitchen Storage & Tools", slug: "home-kitchen-storage", description: "Kitchen storage and tools", parentId: homeCategory._id },
-      { name: "Bar & Drinkware", slug: "home-barware", description: "Bar and drinkware", parentId: homeCategory._id },
-      { name: "Table Covers & Furnishings", slug: "home-table-covers", description: "Table covers and furnishings", parentId: homeCategory._id },
-      { name: "Storage", slug: "home-storage", description: "Home storage solutions", parentId: homeCategory._id },
-      { name: "Bins", slug: "home-bins", description: "Storage bins", parentId: homeCategory._id },
-      { name: "Hangers", slug: "home-hangers", description: "Hangers", parentId: homeCategory._id },
-      { name: "Organisers", slug: "home-organisers", description: "Organisers", parentId: homeCategory._id },
-      { name: "Hooks & Holders", slug: "home-hooks", description: "Hooks and holders", parentId: homeCategory._id },
-      { name: "Laundry Bags", slug: "home-laundry-bags", description: "Laundry bags", parentId: homeCategory._id }
-    ];
-
-    // Beauty Subcategories
-    const beautySubcategories = [
-      { name: "Makeup", slug: "beauty-makeup", description: "Makeup products", parentId: beautyCategory._id },
-      { name: "Skincare", slug: "beauty-skincare", description: "Skincare products", parentId: beautyCategory._id },
-      { name: "Premium Beauty", slug: "beauty-premium", description: "Premium beauty products", parentId: beautyCategory._id },
-      { name: "Lipsticks", slug: "beauty-lipsticks", description: "Lipsticks", parentId: beautyCategory._id },
-      { name: "Fragrances", slug: "beauty-fragrances", description: "Fragrances", parentId: beautyCategory._id },
-      { name: "Hair Care", slug: "beauty-hair-care", description: "Hair care products", parentId: beautyCategory._id },
-      { name: "Personal Care", slug: "beauty-personal-care", description: "Personal care products", parentId: beautyCategory._id }
-    ];
-
-    // GenZ Subcategories
-    const genzSubcategories = [
-      { name: "GenZ Fashion", slug: "genz-fashion", description: "GenZ fashion trends", parentId: genzCategory._id },
-      { name: "Streetwear", slug: "genz-streetwear", description: "Streetwear collection", parentId: genzCategory._id },
-      { name: "Sneakers", slug: "genz-sneakers", description: "Trendy sneakers", parentId: genzCategory._id },
-      { name: "Accessories", slug: "genz-accessories", description: "GenZ accessories", parentId: genzCategory._id },
-      { name: "Tech Gadgets", slug: "genz-tech", description: "Tech gadgets for GenZ", parentId: genzCategory._id }
-    ];
-
-    // Studio Subcategories
-    const studioSubcategories = [
-      { name: "Collections", slug: "studio-collections", description: "Designer collections", parentId: studioCategory._id },
-      { name: "New Arrivals", slug: "studio-new", description: "New arrivals", parentId: studioCategory._id },
-      { name: "Premium Collection", slug: "studio-premium", description: "Premium collection", parentId: studioCategory._id },
-      { name: "Limited Edition", slug: "studio-limited", description: "Limited edition", parentId: studioCategory._id },
-      { name: "Designer Wear", slug: "studio-designer", description: "Designer wear", parentId: studioCategory._id },
-      { name: "Couture", slug: "studio-couture", description: "Couture collection", parentId: studioCategory._id },
-      { name: "Ready to Wear", slug: "studio-ready-to-wear", description: "Ready to wear collection", parentId: studioCategory._id },
-      { name: "Bridal Collection", slug: "studio-bridal", description: "Bridal collection", parentId: studioCategory._id },
-      { name: "Accessories", slug: "studio-accessories", description: "Designer accessories", parentId: studioCategory._id },
-      { name: "Handbags", slug: "studio-handbags", description: "Designer handbags", parentId: studioCategory._id },
-      { name: "Jewelry", slug: "studio-jewelry", description: "Designer jewelry", parentId: studioCategory._id }
-    ];
-
-    } catch (error) {
+  } catch (error) {
     console.error('Error seeding categories:', error);
     throw error;
   }
@@ -502,83 +220,7 @@ export async function seedProducts() {
     const kidsCategory = categories.find(cat => cat.slug === 'kids');
     const homeCategory = categories.find(cat => cat.slug === 'home');
     const beautyCategory = categories.find(cat => cat.slug === 'beauty');
-
-    if (!menCategory || !womenCategory || !kidsCategory) {
-      throw new Error('Required categories not found. Please seed categories first.');
-    }
-
-    // Sample products
-    const sampleProducts = [
-      {
-        name: "Classic Cotton T-Shirt",
-        slug: "classic-cotton-tshirt",
-        description: "Comfortable cotton t-shirt perfect for everyday wear",
-        brand: "Hednor",
-        categoryId: menCategory._id,
-        price: 999,
-        salePrice: 799,
-        images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"],
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["Black", "White", "Gray"],
-        inStock: true,
-        stockQuantity: 50,
-        rating: 4.5,
-        reviewCount: 25,
-        tags: ["casual", "cotton", "comfortable"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Elegant Summer Dress",
-        slug: "elegant-summer-dress",
-        description: "Beautiful flowy dress perfect for summer occasions",
-        brand: "Hednor",
-        categoryId: womenCategory._id,
-        price: 2499,
-        images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"],
-        sizes: ["XS", "S", "M", "L"],
-        colors: ["Blue", "Pink", "White"],
-        inStock: true,
-        stockQuantity: 30,
-        rating: 4.8,
-        reviewCount: 42,
-        tags: ["dress", "summer", "elegant"],
-        isFeatured: true,
-        isOnSale: false
-      },
-      {
-        name: "Kids Cartoon T-Shirt",
-        slug: "kids-cartoon-tshirt",
-        description: "Fun cartoon print t-shirt for kids",
-        brand: "Hednor Kids",
-        categoryId: kidsCategory._id,
-        price: 699,
-        images: ["https://images.unsplash.com/photo-1519689373023-dd07c7988603?w=500"],
-        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
-        colors: ["Red", "Blue", "Yellow"],
-        inStock: true,
-        stockQuantity: 40,
-        rating: 4.3,
-        reviewCount: 18,
-        tags: ["kids", "cartoon", "fun"],
-        isFeatured: false,
-        isOnSale: false
-      }
-    ];
-
-    // Create products
-    for (const productData of sampleProducts) {
-      await productService.createProduct(productData);
-    }
-
-    console.log('Products seeded successfully!');
-    
-    const allProducts = await productService.getProducts({});
-    return allProducts;
-  } catch (error) {
-    console.error('Error seeding products:', error);
-    throw error;
-  });
+    const genzCategory = categories.find(cat => cat.slug === 'genz');
 
     if (!menCategory || !womenCategory || !kidsCategory || !homeCategory) {
       throw new Error('Required categories not found. Please seed categories first.');
@@ -850,6 +492,9 @@ export async function seedProducts() {
     }
 
     console.log('Products seeded successfully!');
+
+    const allProducts = await productService.getProducts({});
+    return allProducts;
   } catch (error) {
     console.error('Error seeding products:', error);
     throw error;
