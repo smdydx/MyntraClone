@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Heart, ShoppingBag, Menu, X, User, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -1387,7 +1386,7 @@ export default function Header() {
                   >
                     <Search className="h-5 w-5" />
                   </Button>
-                  
+
                   <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                     <SheetTrigger asChild>
                       <Button
@@ -1585,6 +1584,7 @@ export default function Header() {
             {/* Desktop Layout */}
             <div className="hidden lg:flex items-center justify-between w-full">
               {/* Logo */}
+              
               <Link href="/" className="flex items-center mr-8">
                 <img
                   src={hednorLogoPath}

@@ -10,10 +10,15 @@ import Checkout from "@/pages/checkout";
 import Profile from "@/pages/profile";
 import Admin from "@/pages/admin";
 import About from "@/pages/about";
-import Contact from "@/pages/contact";
-import SizeGuide from "@/pages/size-guide";
-import Returns from "@/pages/returns";
-import Shipping from "@/pages/shipping";
+import Contact from "./pages/contact";
+import Shipping from "./pages/shipping";
+import Returns from "./pages/returns";
+import SizeGuide from "./pages/size-guide";
+import Privacy from "./pages/privacy";
+import Terms from "./pages/terms";
+import Cookies from "./pages/cookies";
+import FAQ from "./pages/faq";
+import LiveChat from "./pages/live-chat";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,9 +32,14 @@ function Router() {
       <Route path="/admin" component={Admin} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
-      <Route path="/size-guide" component={SizeGuide} />
-      <Route path="/returns" component={Returns} />
       <Route path="/shipping" component={Shipping} />
+      <Route path="/returns" component={Returns} />
+      <Route path="/size-guide" component={SizeGuide} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/cookies" component={Cookies} />
+      <Route path="/faq" component={FAQ} />
+      <Route path="/live-chat" component={LiveChat} />
       <Route component={NotFound} />
     </Switch>
   );
