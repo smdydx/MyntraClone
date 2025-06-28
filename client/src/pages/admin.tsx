@@ -1686,8 +1686,7 @@ export default function AdminDashboard() {
                                   </Select>
                                 </div>
                               </TableCell>
-                            </```text
-TableCell>
+                            </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
