@@ -1329,7 +1329,6 @@ export default function AdminDashboard() {
                     </DialogContent>
                   </Dialog>
                 </div>
-              </div>
 
                 <Card>
                   <CardContent>
