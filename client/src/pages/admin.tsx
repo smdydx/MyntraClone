@@ -1180,6 +1180,7 @@ export default function AdminDashboard() {
                             </p>
                           </div>
                         </div>
+                        </div>
                         {/* Pricing Section */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Pricing</h3>
