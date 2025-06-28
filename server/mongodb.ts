@@ -8,6 +8,18 @@ const JWT_SECRET = "your-jwt-secret-key";
 let client: MongoClient;
 let db: Db;
 
+export function verifyToken(token: string): { userId: string; email: string } {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    return {
+      userId: decoded.userId,
+      email: decoded.email
+    };
+  } catch (error) {
+    throw new Error('Invalid or expired token');
+  }
+}
+
 export async function connectToMongoDB() {
   try {
     client = new MongoClient(MONGODB_URI);
