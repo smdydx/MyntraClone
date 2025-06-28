@@ -23,7 +23,7 @@
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
-  
+
   /* Custom Hednor colors */
   --hednor-gold: hsl(45, 93%, 58%);
   --hednor-dark: hsl(0, 0%, 10%);
@@ -51,7 +51,7 @@
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(240, 4.9%, 83.9%);
-  
+
   /* Custom Hednor colors for dark mode */
   --hednor-gold: hsl(45, 93%, 58%);
   --hednor-dark: hsl(0, 0%, 98%);
@@ -78,39 +78,60 @@
   .text-hednor-gold {
     color: var(--hednor-gold);
   }
-  
+
   .bg-hednor-gold {
     background-color: var(--hednor-gold);
   }
-  
+
   .text-hednor-dark {
     color: var(--hednor-dark);
   }
-  
+
   .bg-hednor-dark {
     background-color: var(--hednor-dark);
   }
-  
+
   .text-sale-red {
     color: var(--sale-red);
   }
-  
+
   .bg-sale-red {
     background-color: var(--sale-red);
   }
-  
+
   .text-success-green {
     color: var(--success-green);
   }
-  
+
   .bg-success-green {
     background-color: var(--success-green);
   }
-  
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+
+  .line-clamp-1 {
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Extra small screen utilities */
+  @media (min-width: 360px) {
+    .xs\:inline {
+      display: inline;
+    }
   }
 }
