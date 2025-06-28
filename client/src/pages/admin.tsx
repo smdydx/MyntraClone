@@ -90,12 +90,50 @@ interface SalesData {
 interface Order {
   _id: string;
   orderNumber: string;
+  userId: string;
   customerName: string;
   customerEmail: string;
-  status: string;
+  customerPhone: string;
+  items: Array<{
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    size?: string;
+    color?: string;
+    image: string;
+  }>;
+  subtotal: number;
+  shippingCost: number;
+  tax: number;
   total: number;
-  items: number;
+  shippingAddress: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  billingAddress: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  paymentStatus: "pending" | "paid" | "failed";
+  paymentMethod: string;
+  trackingNumber?: string;
+  notes?: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 interface User {
@@ -211,6 +249,34 @@ export default function AdminDashboard() {
     }
   });
 
+  // Fetch orders
+  const { data: orders = [] } = useQuery<Order[]>({
+    queryKey: ["admin", "orders"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/orders", {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (!response.ok) throw new Error("Failed to fetch orders");
+      return response.json();
+    }
+  });
+
+  // Fetch users
+  const { data: users = [] } = useQuery<User[]>({
+    queryKey: ["admin", "users"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users", {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (!response.ok) throw new Error("Failed to fetch users");
+      return response.json();
+    }
+  });
+
   // Mock data for demonstration
   const salesData: SalesData[] = [
     { month: "Jan", revenue: 125000, orders: 450, users: 120 },
@@ -235,49 +301,9 @@ export default function AdminDashboard() {
     { name: "Vans Old Skool", sales: 98, revenue: 29400 }
   ];
 
-  const recentOrders: Order[] = [
-    {
-      _id: '1',
-      orderNumber: 'ORD-001',
-      customerName: 'Rahul Sharma',
-      customerEmail: 'rahul@example.com',
-      status: 'Processing',
-      total: 2999,
-      items: 2,
-      createdAt: '2024-01-15T10:30:00Z'
-    },
-    {
-      _id: '2',
-      orderNumber: 'ORD-002',
-      customerName: 'Priya Singh',
-      customerEmail: 'priya@example.com',
-      status: 'Shipped',
-      total: 4599,
-      items: 3,
-      createdAt: '2024-01-15T09:15:00Z'
-    }
-  ];
+  const recentOrders = orders.slice(0, 10); // Show latest 10 orders
 
-  const recentUsers: User[] = [
-    {
-      _id: '1',
-      name: 'Amit Kumar',
-      email: 'amit@example.com',
-      joinedAt: '2024-01-15',
-      totalOrders: 5,
-      totalSpent: 15000,
-      status: 'Active'
-    },
-    {
-      _id: '2',
-      name: 'Sneha Patel',
-      email: 'sneha@example.com',
-      joinedAt: '2024-01-14',
-      totalOrders: 2,
-      totalSpent: 6000,
-      status: 'Active'
-    }
-  ];
+  const recentUsers = users.slice(0, 10); // Show latest 10 users
 
   // Product mutations
   const addProductMutation = useMutation({
@@ -822,7 +848,7 @@ export default function AdminDashboard() {
                               </Badge>
                               <div className="text-right">
                                 <div className="font-medium">₹{order.total.toLocaleString()}</div>
-                                <div className="text-xs text-gray-500">{order.items} items</div>
+                                <div className="text-xs text-gray-500">{order.items?.length || 0} items</div>
                               </div>
                             </div>
                           </div>
@@ -1480,9 +1506,39 @@ export default function AdminDashboard() {
                                 {new Date(order.createdAt).toLocaleDateString()}
                               </TableCell>
                               <TableCell>
-                                <Button variant="ghost" size="sm">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
+                                <div className="flex gap-2">
+                                  <Button variant="ghost" size="sm" title="View Order">
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Select
+                                    value={order.status}
+                                    onValueChange={(newStatus) => {
+                                      // Update order status
+                                      fetch(`/api/admin/orders/${order._id}/status`, {
+                                        method: 'PUT',
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                          'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                        },
+                                        body: JSON.stringify({ status: newStatus })
+                                      }).then(() => {
+                                        queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+                                        toast({ title: "Order status updated successfully" });
+                                      });
+                                    }}
+                                  >
+                                    <SelectTrigger className="w-24 h-8">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="pending">Pending</SelectItem>
+                                      <SelectItem value="processing">Processing</SelectItem>
+                                      <SelectItem value="shipped">Shipped</SelectItem>
+                                      <SelectItem value="delivered">Delivered</SelectItem>
+                                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -1555,12 +1611,14 @@ export default function AdminDashboard() {
                                 </div>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">
-                                {new Date(user.joinedAt).toLocaleDateString()}
+                                {new Date(user.createdAt).toLocaleDateString()}
                               </TableCell>
-                              <TableCell>{user.totalOrders}</TableCell>
-                              <TableCell className="font-medium">₹{user.totalSpent.toLocaleString()}</TableCell>
+                              <TableCell>{orders.filter(o => o.userId === user._id).length}</TableCell>
+                              <TableCell className="font-medium">
+                                ₹{orders.filter(o => o.userId === user._id).reduce((sum, o) => sum + o.total, 0).toLocaleString()}
+                              </TableCell>
                               <TableCell className="hidden md:table-cell">
-                                <Badge variant="default">{user.status}</Badge>
+                                <Badge variant="default">Active</Badge>
                               </TableCell>
                               <TableCell>
                                 <div className="flex gap-2">

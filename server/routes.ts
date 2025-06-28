@@ -1,4 +1,3 @@
-
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService, OrderService, PaymentService } from "./mongodb";
@@ -7,15 +6,15 @@ import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middlew
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize MongoDB connection
   await connectToMongoDB();
-  
+
   const userService = new UserService();
   const categoryService = new CategoryService();
   const productService = new ProductService();
   const cartService = new CartService();
   const wishlistService = new WishlistService();
-  const orderService = new OrderService();
-  const paymentService = new PaymentService();
   const siteSettingsService = new SiteSettingsService();
+  const paymentService = new PaymentService();
+  const orderService = new OrderService();
 
   // Authentication routes
   app.post("/api/auth/register", async (req, res) => {
@@ -119,7 +118,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         onSale: onSale === "true",
         search: search as string
       };
-      
+
       const products = await productService.getProducts(filters);
       res.json(products);
     } catch (error) {
@@ -169,7 +168,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         userId: req.user!.userId
       };
-      
+
       const cartItem = await cartService.addToCart(cartData);
       res.json(cartItem);
     } catch (error) {
@@ -181,12 +180,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = req.params.id;
       const { quantity } = req.body;
-      
+
       const updatedItem = await cartService.updateCartItem(id, quantity);
       if (!updatedItem) {
         return res.status(404).json({ message: "Cart item not found" });
       }
-      
+
       res.json(updatedItem);
     } catch (error) {
       res.status(500).json({ message: "Failed to update cart item" });
@@ -197,11 +196,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = req.params.id;
       const success = await cartService.removeFromCart(id);
-      
+
       if (!success) {
         return res.status(404).json({ message: "Cart item not found" });
       }
-      
+
       res.json({ message: "Item removed from cart" });
     } catch (error) {
       res.status(500).json({ message: "Failed to remove cart item" });
@@ -224,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         userId: req.user!.userId
       };
-      
+
       const wishlistItem = await wishlistService.addToWishlist(wishlistData);
       res.json(wishlistItem);
     } catch (error) {
@@ -236,11 +235,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const productId = req.params.productId;
       const success = await wishlistService.removeFromWishlist(req.user!.userId, productId);
-      
+
       if (!success) {
         return res.status(404).json({ message: "Wishlist item not found" });
       }
-      
+
       res.json({ message: "Item removed from wishlist" });
     } catch (error) {
       res.status(500).json({ message: "Failed to remove wishlist item" });
@@ -436,7 +435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       const { amount, currency = 'INR' } = req.body;
-      
+
       const options = {
         amount: amount * 100, // Razorpay expects amount in paise
         currency,
@@ -445,7 +444,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       const order = await razorpay.orders.create(options);
-      
+
       res.json({
         orderId: order.id,
         amount: order.amount,
@@ -461,7 +460,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/razorpay/verify", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
-      
+
       const isValid = await paymentService.verifyRazorpayPayment(
         razorpay_order_id,
         razorpay_payment_id,
@@ -533,9 +532,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { payment_intent_id, orderData } = req.body;
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      
+
       const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);
-      
+
       if (paymentIntent.status === 'succeeded') {
         // Create order
         const order = await orderService.createOrder({
@@ -575,10 +574,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/upi/initiate", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const { amount, upiId, orderData } = req.body;
-      
+
       // In real implementation, integrate with UPI payment gateway like Razorpay UPI, PayU, etc.
       const transactionId = `UPI${Date.now()}${Math.floor(Math.random() * 1000)}`;
-      
+
       // Create order
       const order = await orderService.createOrder({
         ...orderData,
@@ -612,7 +611,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/cod", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const { orderData } = req.body;
-      
+
       // Create order
       const order = await orderService.createOrder({
         ...orderData,

@@ -116,3 +116,66 @@ export type WishlistItem = typeof wishlistItems.$inferSelect;
 export type InsertWishlistItem = z.infer<typeof insertWishlistItemSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
+
+export interface Payment {
+  _id: string;
+  orderId: string;
+  userId: string;
+  amount: number;
+  currency: string;
+  method: "razorpay" | "upi" | "cod" | "paytm" | "phonepe" | "googlepay";
+  status: "pending" | "processing" | "completed" | "failed" | "cancelled";
+  transactionId?: string;
+  gatewayResponse?: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Order {
+  _id: string;
+  orderNumber: string;
+  userId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  items: Array<{
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    size?: string;
+    color?: string;
+    image: string;
+  }>;
+  subtotal: number;
+  shippingCost: number;
+  tax: number;
+  total: number;
+  shippingAddress: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  billingAddress: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    apartment?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  paymentStatus: "pending" | "paid" | "failed";
+  paymentMethod: string;
+  trackingNumber?: string;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
