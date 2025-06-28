@@ -926,7 +926,7 @@ const navigation = [
         href: "/products?category=beauty&subcategory=hair-straightener",
       },
       {
-        name: "Hair Dryer",
+        name: "HairDryer",
         href: "/products?category=/products?category=beauty&subcategory=hair-dryer",
       },
       {

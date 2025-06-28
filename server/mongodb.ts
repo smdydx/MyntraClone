@@ -170,6 +170,256 @@ export interface Payment {
   updatedAt: Date;
 }
 
+export class CartService {
+  private collection: Collection<CartItem>;
+
+  constructor() {
+    this.collection = db.collection<CartItem>('cartItems');
+  }
+
+  async getCartItems(userId: string): Promise<CartItem[]> {
+    return await this.collection.find({ userId: new ObjectId(userId) }).toArray();
+  }
+
+  async addToCart(cartData: Omit<CartItem, '_id' | 'createdAt'>): Promise<CartItem> {
+    const cartItem: CartItem = {
+      ...cartData,
+      userId: new ObjectId(cartData.userId),
+      productId: new ObjectId(cartData.productId),
+      createdAt: new Date()
+    };
+
+    const result = await this.collection.insertOne(cartItem);
+    return { ...cartItem, _id: result.insertedId };
+  }
+
+  async updateCartItem(id: string, quantity: number): Promise<CartItem | null> {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { quantity } },
+      { returnDocument: 'after' }
+    );
+
+    return result;
+  }
+
+  async removeFromCart(id: string): Promise<boolean> {
+    const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount === 1;
+  }
+
+  async clearCart(userId: string): Promise<boolean> {
+    const result = await this.collection.deleteMany({ userId: new ObjectId(userId) });
+    return result.deletedCount > 0;
+  }
+}
+
+export class WishlistService {
+  private collection: Collection<WishlistItem>;
+
+  constructor() {
+    this.collection = db.collection<WishlistItem>('wishlistItems');
+  }
+
+  async getWishlistItems(userId: string): Promise<WishlistItem[]> {
+    return await this.collection.find({ userId: new ObjectId(userId) }).toArray();
+  }
+
+  async addToWishlist(wishlistData: Omit<WishlistItem, '_id' | 'createdAt'>): Promise<WishlistItem> {
+    const wishlistItem: WishlistItem = {
+      ...wishlistData,
+      userId: new ObjectId(wishlistData.userId),
+      productId: new ObjectId(wishlistData.productId),
+      createdAt: new Date()
+    };
+
+    const result = await this.collection.insertOne(wishlistItem);
+    return { ...wishlistItem, _id: result.insertedId };
+  }
+
+  async removeFromWishlist(userId: string, productId: string): Promise<boolean> {
+    const result = await this.collection.deleteOne({ 
+      userId: new ObjectId(userId), 
+      productId: new ObjectId(productId) 
+    });
+    return result.deletedCount === 1;
+  }
+}
+
+export class CategoryService {
+  private collection: Collection<Category>;
+
+  constructor() {
+    this.collection = db.collection<Category>('categories');
+  }
+
+  async getCategories(): Promise<Category[]> {
+    return await this.collection.find({ isActive: true }).toArray();
+  }
+
+  async getCategoryById(id: string): Promise<Category | null> {
+    return await this.collection.findOne({ _id: new ObjectId(id) });
+  }
+
+  async getCategoryBySlug(slug: string): Promise<Category | null> {
+    return await this.collection.findOne({ slug });
+  }
+
+  async createCategory(categoryData: Omit<Category, '_id' | 'createdAt'>): Promise<Category> {
+    const category: Category = {
+      ...categoryData,
+      createdAt: new Date()
+    };
+
+    const result = await this.collection.insertOne(category);
+    return { ...category, _id: result.insertedId };
+  }
+
+  async updateCategory(id: string, updateData: Partial<Category>): Promise<Category | null> {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    );
+
+    return result;
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount === 1;
+  }
+}
+
+export class ProductService {
+  private collection: Collection<Product>;
+
+  constructor() {
+    this.collection = db.collection<Product>('products');
+  }
+
+  async getProducts(filters: any = {}): Promise<Product[]> {
+    const query: any = {};
+
+    if (filters.categoryId) {
+      query.categoryId = new ObjectId(filters.categoryId);
+    }
+
+    if (filters.featured) {
+      query.isFeatured = true;
+    }
+
+    if (filters.onSale) {
+      query.isOnSale = true;
+    }
+
+    if (filters.search) {
+      query.$or = [
+        { name: { $regex: filters.search, $options: 'i' } },
+        { description: { $regex: filters.search, $options: 'i' } },
+        { brand: { $regex: filters.search, $options: 'i' } }
+      ];
+    }
+
+    return await this.collection.find(query).toArray();
+  }
+
+  async getProductById(id: string): Promise<Product | null> {
+    return await this.collection.findOne({ _id: new ObjectId(id) });
+  }
+
+  async getProductBySlug(slug: string): Promise<Product | null> {
+    return await this.collection.findOne({ slug });
+  }
+
+  async createProduct(productData: Omit<Product, '_id' | 'createdAt'>): Promise<Product> {
+    const product: Product = {
+      ...productData,
+      categoryId: new ObjectId(productData.categoryId),
+      createdAt: new Date()
+    };
+
+    const result = await this.collection.insertOne(product);
+    return { ...product, _id: result.insertedId };
+  }
+
+  async updateProduct(id: string, updateData: Partial<Product>): Promise<Product | null> {
+    if (updateData.categoryId) {
+      updateData.categoryId = new ObjectId(updateData.categoryId);
+    }
+
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    );
+
+    return result;
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+    const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount === 1;
+  }
+}
+
+export class SiteSettingsService {
+  private collection: Collection<SiteSettings>;
+
+  constructor() {
+    this.collection = db.collection<SiteSettings>('siteSettings');
+  }
+
+  async getSettings(): Promise<SiteSettings> {
+    let settings = await this.collection.findOne({});
+    
+    if (!settings) {
+      // Create default settings if none exist
+      const defaultSettings: SiteSettings = {
+        logoUrl: '/logo.png',
+        siteName: 'Hednor',
+        siteDescription: 'Premium fashion and lifestyle products',
+        faviconUrl: '/favicon.ico',
+        heroVideo: '/hero-video.mp4',
+        heroTitle: 'Welcome to Hednor',
+        heroSubtitle: 'Discover premium fashion',
+        heroCTA: 'Shop Now',
+        showHeroVideo: true,
+        primaryColor: '#000000',
+        secondaryColor: '#FFD700',
+        accentColor: '#FF6B6B',
+        fontFamily: 'Inter',
+        headerStyle: 'modern',
+        footerStyle: 'minimal',
+        showBreadcrumbs: true,
+        showRecentlyViewed: true,
+        footerText: '© 2024 Hednor. All rights reserved.',
+        aboutText: 'Hednor is your premium destination for fashion and lifestyle products.',
+        contactEmail: 'contact@hednor.com',
+        contactPhone: '+1 (555) 123-4567',
+        businessAddress: '123 Fashion Street, Style City, SC 12345',
+        businessHours: 'Mon-Fri 9AM-6PM',
+        updatedAt: new Date()
+      };
+
+      const result = await this.collection.insertOne(defaultSettings);
+      settings = { ...defaultSettings, _id: result.insertedId };
+    }
+
+    return settings;
+  }
+
+  async updateSettings(updateData: Partial<SiteSettings>): Promise<SiteSettings> {
+    const result = await this.collection.findOneAndUpdate(
+      {},
+      { $set: { ...updateData, updatedAt: new Date() } },
+      { returnDocument: 'after', upsert: true }
+    );
+
+    return result!;
+  }
+}
+
 export class PaymentService {
   private collection: Collection<Payment>;
 
@@ -236,22 +486,24 @@ export class OrderService {
     this.collection = db.collection<Order>("orders");
   }
 
-  async createOrder(orderData: Omit<Order, "_id" | "createdAt">): Promise<Order> {
+  async createOrder(orderData: Omit<Order, "_id" | "createdAt"> & { orderId?: string }): Promise<Order & { orderId: string }> {
+    const orderId = orderData.orderId || `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`;
     const order: Order = {
       _id: new ObjectId(),
       ...orderData,
+      userId: new ObjectId(orderData.userId),
       createdAt: new Date()
     };
 
     await this.collection.insertOne(order);
-    return order;
+    return { ...order, orderId };
   }
 
   async getOrderById(id: string): Promise<Order | null> {
     return await this.collection.findOne({ _id: new ObjectId(id) });
   }
 
-  async getOrdersByUserId(userId: string): Promise<Order[]> {
+  async getUserOrders(userId: string): Promise<Order[]> {
     return await this.collection.find({ userId: new ObjectId(userId) }).sort({ createdAt: -1 }).toArray();
   }
 
@@ -259,10 +511,15 @@ export class OrderService {
     return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
   }
 
-  async updateOrderStatus(id: string, status: Order["status"]): Promise<Order | null> {
+  async updateOrderStatus(id: string, status: Order["status"], trackingNumber?: string): Promise<Order | null> {
+    const updateData: any = { status };
+    if (trackingNumber) {
+      updateData.trackingNumber = trackingNumber;
+    }
+
     const result = await this.collection.findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: { status } },
+      { $set: updateData },
       { returnDocument: "after" }
     );
 
