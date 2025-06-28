@@ -399,6 +399,11 @@ export default function AdminDashboard() {
 
   const recentUsers = users.slice(0, 10); // Show latest 10 users
 
+  // Calculate sale products for homepage preview
+  const saleProducts = React.useMemo(() => {
+    return products.filter(p => p.isOnSale || p.salePrice);
+  }, [products]);
+
   // Product mutations
   const addProductMutation = useMutation({
     mutationFn: async (productData: any) => {
@@ -1260,7 +1265,7 @@ export default function AdminDashboard() {
                       <DialogHeader>
                         <DialogTitle>Add New Product</DialogTitle>
                         <DialogDescription>
-                          Create a new product by filling out the information below.
+                          Create a new product by filling out the information below. All required fields are marked with *.
                         </DialogDescription>
                       </DialogHeader>
                       <form onSubmit={handleProductSubmit} className="space-y-6">
@@ -1631,7 +1636,7 @@ export default function AdminDashboard() {
                         <DialogHeader>
                           <DialogTitle>Add New Category</DialogTitle>
                           <DialogDescription>
-                            Create a new category to organize your products.
+                            Create a new category to organize your products. Fill in the category details below.
                           </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleCategorySubmit} className="space-y-4">

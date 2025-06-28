@@ -19,18 +19,22 @@ import BackToTop from "@/components/back-to-top";
 export default function Home() {
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products", { featured: true }],
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: saleProducts = [] } = useQuery<Product[]>({
     queryKey: ["/api/products", { onSale: true }],
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   return (
@@ -87,7 +91,7 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
               {featuredProducts.slice(0, 5).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           )}
@@ -120,7 +124,7 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
               {saleProducts.slice(0, 5).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           )}
@@ -153,7 +157,7 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
               {products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           )}
@@ -186,7 +190,7 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
               {products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           )}
@@ -227,7 +231,7 @@ export default function Home() {
                 ).map(cat => cat.id.toString());
                 return clothingCategories.includes(p.categoryId?.toString() || '') && (p.isOnSale || p.salePrice);
               }).slice(0, 6).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id || product.id} product={product} />
               ))}
             </div>
           )}
