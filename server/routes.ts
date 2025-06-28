@@ -449,25 +449,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Banner management endpoints
   app.get("/api/admin/banners", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock banner data - replace with actual database query
-      const banners = [
-        {
-          id: "1",
-          type: "main",
-          title: "Main Banner",
-          url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800",
-          active: true,
+      // Get banners from site settings
+      const settings = await siteSettingsService.getSettings();
+      const banners = [];
+      
+      if (settings.heroVideo) {
+        banners.push({
+          id: "hero",
+          type: "hero",
+          title: settings.heroTitle || "Hero Banner",
+          url: settings.heroVideo,
+          active: settings.showHeroVideo || false,
           createdAt: new Date().toISOString()
-        },
-        {
-          id: "2",
-          type: "sale",
-          title: "Sale Poster",
-          url: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-          active: true,
-          createdAt: new Date().toISOString()
-        }
-      ];
+        });
+      }
+      
       res.json(banners);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch banners" });
@@ -536,19 +532,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard analytics endpoints
   app.get("/api/admin/analytics/overview", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock data - in real app, fetch from database
+      // Calculate real analytics from database
+      const totalUsers = await userService.getUserCount();
+      const allOrders = await orderService.getAllOrders();
+      const totalProducts = await productService.getProductCount();
+      
+      const totalOrders = allOrders.length;
+      const totalRevenue = allOrders.reduce((sum, order) => sum + (order.finalAmount || 0), 0);
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const ordersToday = allOrders.filter(order => new Date(order.createdAt) >= today);
+      const newOrdersToday = ordersToday.length;
+      const revenueToday = ordersToday.reduce((sum, order) => sum + (order.finalAmount || 0), 0);
+      
+      const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+      const conversionRate = totalUsers > 0 ? (totalOrders / totalUsers) * 100 : 0;
+
       const overview = {
-        totalUsers: 3500,
-        totalOrders: 1250,
-        totalRevenue: 125000,
-        totalProducts: 150,
-        newOrdersToday: 25,
-        revenueToday: 8500,
-        conversionRate: 3.2,
-        avgOrderValue: 2500
+        totalUsers,
+        totalOrders,
+        totalRevenue,
+        totalProducts,
+        newOrdersToday,
+        revenueToday,
+        conversionRate: Math.round(conversionRate * 100) / 100,
+        avgOrderValue: Math.round(avgOrderValue)
       };
       res.json(overview);
     } catch (error) {
+      console.error('Analytics error:', error);
       res.status(500).json({ message: "Failed to fetch analytics" });
     }
   });
@@ -604,8 +617,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Homepage sections management
   app.get("/api/admin/homepage-sections", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock homepage sections configuration - in real app, store in database
-      const homepageSections = {
+      // Get sections configuration from site settings
+      const settings = await siteSettingsService.getSettings();
+      
+      const homepageSections = settings.homepageSections || {
         dealsSection: {
           title: "Deals for You",
           enabled: true,
@@ -636,6 +651,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           order: 5
         }
       };
+      
       res.json(homepageSections);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch homepage sections" });

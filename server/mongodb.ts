@@ -374,6 +374,10 @@ export class ProductService {
     const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount === 1;
   }
+
+  async getProductCount(): Promise<number> {
+    return await this.collection.countDocuments();
+  }
 }
 
 export class SiteSettingsService {

@@ -337,29 +337,63 @@ export default function AdminDashboard() {
     retry: 2,
   });
 
-  // Mock data for demonstration
-  const salesData: SalesData[] = [
-    { month: "Jan", revenue: 125000, orders: 450, users: 120 },
-    { month: "Feb", revenue: 142000, orders: 520, users: 140 },
-    { month: "Mar", revenue: 165000, orders: 610, users: 180 },
-    { month: "Apr", revenue: 198000, orders: 720, users: 220 },
-    { month: "May", revenue: 225000, orders: 830, users: 250 },
-    { month: "Jun", revenue: 255000, orders: 950, users: 300 }
-  ];
+  // Calculate real sales data from orders
+  const salesData: SalesData[] = React.useMemo(() => {
+    if (!orders.length) return [];
+    
+    const monthlyData = orders.reduce((acc, order) => {
+      const month = new Date(order.createdAt).toLocaleDateString('en', { month: 'short' });
+      if (!acc[month]) {
+        acc[month] = { month, revenue: 0, orders: 0, users: new Set() };
+      }
+      acc[month].revenue += order.finalAmount || 0;
+      acc[month].orders += 1;
+      acc[month].users.add(order.userId);
+      return acc;
+    }, {} as Record<string, any>);
 
-  const deviceData = [
-    { name: 'Mobile', value: 65, color: '#8884d8' },
-    { name: 'Desktop', value: 25, color: '#82ca9d' },
-    { name: 'Tablet', value: 10, color: '#ffc658' }
-  ];
+    return Object.values(monthlyData).map((data: any) => ({
+      month: data.month,
+      revenue: data.revenue,
+      orders: data.orders,
+      users: data.users.size
+    }));
+  }, [orders]);
 
-  const topProducts = [
-    { name: "Nike Air Max", sales: 245, revenue: 73500 },
-    { name: "Adidas Ultraboost", sales: 189, revenue: 56700 },
-    { name: "Puma RS-X", sales: 156, revenue: 46800 },
-    { name: "New Balance 574", sales: 134, revenue: 40200 },
-    { name: "Vans Old Skool", sales: 98, revenue: 29400 }
-  ];
+  // Calculate device data from real analytics or remove if not available
+  const deviceData = React.useMemo(() => {
+    // For now, we'll calculate based on user agents or remove this section
+    // In a real app, this would come from analytics service
+    return [
+      { name: 'Mobile', value: 0, color: '#8884d8' },
+      { name: 'Desktop', value: 0, color: '#82ca9d' },
+      { name: 'Tablet', value: 0, color: '#ffc658' }
+    ];
+  }, []);
+
+  // Calculate top products from real order data
+  const topProducts = React.useMemo(() => {
+    if (!orders.length) return [];
+    
+    const productSales = orders.reduce((acc, order) => {
+      order.items?.forEach((item: any) => {
+        if (!acc[item.productId]) {
+          acc[item.productId] = {
+            name: item.name || 'Unknown Product',
+            sales: 0,
+            revenue: 0
+          };
+        }
+        acc[item.productId].sales += item.quantity;
+        acc[item.productId].revenue += (item.price * item.quantity);
+      });
+      return acc;
+    }, {} as Record<string, any>);
+
+    return Object.values(productSales)
+      .sort((a: any, b: any) => b.revenue - a.revenue)
+      .slice(0, 5);
+  }, [orders]);
 
   const recentOrders = orders.slice(0, 10); // Show latest 10 orders
 
