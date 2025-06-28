@@ -3,6 +3,16 @@ import { createServer, type Server } from "http";
 import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService, OrderService, PaymentService, generateToken } from "./mongodb";
 import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
+// Define a middleware to authenticate admin users
+const authenticateAdmin = (req: AuthenticatedRequest, res: Express.Response, next: Express.NextFunction) => {
+  // Check if user exists and has admin role
+  if (req.user && req.user.email === "adminhednor@gmail.com") {
+    next(); // Proceed to the next middleware or route handler
+  } else {
+    res.status(403).json({ message: "Unauthorized: Admin access required" });
+  }
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize MongoDB connection
   await connectToMongoDB();
@@ -256,28 +266,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = req.params.id;
-      const product = await productService.updateProduct(id, req.body);
+      const product = await productService.updateProduct(req.params.id, req.body);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
       res.json(product);
     } catch (error) {
+      console.error('Product update error:', error);
       res.status(400).json({ message: "Failed to update product" });
     }
   });
 
-  app.delete("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = req.params.id;
-      const success = await productService.deleteProduct(id);
+      const success = await productService.deleteProduct(req.params.id);
       if (!success) {
         return res.status(404).json({ message: "Product not found" });
       }
       res.json({ message: "Product deleted successfully" });
     } catch (error) {
+      console.error('Product deletion error:', error);
       res.status(500).json({ message: "Failed to delete product" });
     }
   });
@@ -286,7 +296,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/admin-login", async (req, res) => {
     try {
       const { email, password } = req.body;
-      
+
       // Simple admin check - in production, use proper authentication
       if (email === "adminhednor@gmail.com" && password === "admin123") {
         const token = generateToken({ userId: "admin", email: "adminhednor@gmail.com" });
@@ -310,28 +320,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = req.params.id;
-      const category = await categoryService.updateCategory(id, req.body);
+      const category = await categoryService.updateCategory(req.params.id, req.body);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
       res.json(category);
     } catch (error) {
+      console.error('Category update error:', error);
       res.status(400).json({ message: "Failed to update category" });
     }
   });
 
-  app.delete("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const id = req.params.id;
-      const success = await categoryService.deleteCategory(id);
+      const success = await categoryService.deleteCategory(req.params.id);
       if (!success) {
         return res.status(404).json({ message: "Category not found" });
       }
       res.json({ message: "Category deleted successfully" });
     } catch (error) {
+      console.error('Category deletion error:', error);
       res.status(500).json({ message: "Failed to delete category" });
     }
   });
@@ -510,21 +520,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock response - replace with actual database operation
-      const updatedProduct = { _id: req.params.id, ...req.body };
-      res.json({ message: "Product updated successfully", product: updatedProduct });
+      const product = await productService.updateProduct(req.params.id, req.body);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
     } catch (error) {
-      res.status(500).json({ message: "Failed to update product" });
+      console.error('Product update error:', error);
+      res.status(400).json({ message: "Failed to update product" });
     }
   });
 
-  app.delete("/api/admin/products/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock response - replace with actual database operation
+      const success = await productService.deleteProduct(req.params.id);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
       res.json({ message: "Product deleted successfully" });
     } catch (error) {
+      console.error('Product deletion error:', error);
       res.status(500).json({ message: "Failed to delete product" });
     }
   });
@@ -540,21 +557,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock response - replace with actual database operation
-      const updatedCategory = { _id: req.params.id, ...req.body };
-      res.json({ message: "Category updated successfully", category: updatedCategory });
+      const category = await categoryService.updateCategory(req.params.id, req.body);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+      res.json(category);
     } catch (error) {
-      res.status(500).json({ message: "Failed to update category" });
+      console.error('Category update error:', error);
+      res.status(400).json({ message: "Failed to update category" });
     }
   });
 
-  app.delete("/api/admin/categories/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock response - replace with actual database operation
+      const success = await categoryService.deleteCategory(req.params.id);
+      if (!success) {
+        return res.status(404).json({ message: "Category not found" });
+      }
       res.json({ message: "Category deleted successfully" });
     } catch (error) {
+      console.error('Category deletion error:', error);
       res.status(500).json({ message: "Failed to delete category" });
     }
   });
