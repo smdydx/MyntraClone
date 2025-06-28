@@ -1,17 +1,29 @@
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircle, Package, ShoppingCart, Users, DollarSign, TrendingUp, Edit, Trash2, Plus, Eye, Search, Settings, BarChart3, Home, RefreshCw, Upload } from "lucide-react";
+import { 
+  AlertCircle, Package, ShoppingCart, Users, DollarSign, TrendingUp, 
+  Edit, Trash2, Plus, Eye, Search, Settings, BarChart3, Home, RefreshCw, 
+  Upload, Bell, Menu, X, Activity, FileText, CheckCircle, Globe, Database, 
+  Star, Smartphone, CreditCard 
+} from "lucide-react";
+import { 
+  ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, 
+  Tooltip, PieChart, Pie, Cell 
+} from "recharts";
 
 interface Product {
   _id: string;
@@ -1316,6 +1328,7 @@ export default function AdminDashboard() {
                       </form>
                     </DialogContent>
                   </Dialog>
+                </div>
                 </div>
 
                 <Card>
