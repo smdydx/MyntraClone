@@ -544,10 +544,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Seed categories endpoint
   app.post("/api/admin/seed-categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Mock seeding categories
-      res.json({ message: "Categories seeded successfully" });
+      const { seedCategories } = await import('./seed-data');
+      const categories = await seedCategories();
+      res.json({ message: "Categories seeded successfully", categories });
     } catch (error) {
-      res.status(500).json({ message: "Failed to seed categories" });
+      console.error('Seed categories error:', error);
+      res.status(500).json({ message: "Failed to seed categories", error: error.message });
+    }
+  });
+
+  // Seed products endpoint
+  app.post("/api/admin/seed-products", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { seedProducts } = await import('./seed-data');
+      await seedProducts();
+      res.json({ message: "Products seeded successfully" });
+    } catch (error) {
+      console.error('Seed products error:', error);
+      res.status(500).json({ message: "Failed to seed products", error: error.message });
+    }
+  });
+
+  // Seed all data endpoint
+  app.post("/api/admin/seed-all", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { seedCategories, seedProducts } = await import('./seed-data');
+      await seedCategories();
+      await seedProducts();
+      res.json({ message: "All data seeded successfully" });
+    } catch (error) {
+      console.error('Seed all data error:', error);
+      res.status(500).json({ message: "Failed to seed data", error: error.message });
     }
   });
 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -216,7 +215,7 @@ export default function AdminDashboard() {
       read: true
     }
   ]);
-  
+
   const queryClient = useQueryClient();
 
   // Real-time data simulation
@@ -621,6 +620,43 @@ export default function AdminDashboard() {
     product.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleProductImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const imageUrl = URL.createObjectURL(file);
+      setNewProduct(prev => ({
+        ...prev,
+        images: [...prev.images, imageUrl]
+      }));
+    }
+  };
+
+  const handleSeedData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/admin/seed-all', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        alert('Sample data seeded successfully! Refresh the page to see the changes.');
+        // Refresh analytics data
+        fetchAnalytics();
+      } else {
+        const error = await response.json();
+        alert(`Failed to seed data: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error seeding data:', error);
+      alert('Failed to seed data. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Mobile Header */}
@@ -640,7 +676,7 @@ export default function AdminDashboard() {
         <div className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-200 ease-in-out lg:block`}>
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Admin Panel</h2>
-            
+
             {/* Navigation */}
             <nav className="space-y-2">
               <Button
@@ -766,7 +802,7 @@ export default function AdminDashboard() {
                   Manage your e-commerce store efficiently
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-2 flex-wrap">
                 {/* Search */}
                 <div className="relative flex-1 sm:flex-initial">
@@ -778,7 +814,7 @@ export default function AdminDashboard() {
                     className="pl-10 w-full sm:w-64"
                   />
                 </div>
-                
+
                 {/* Notifications */}
                 <Button variant="outline" size="sm" className="relative">
                   <Bell className="h-4 w-4" />
@@ -1505,7 +1541,7 @@ export default function AdminDashboard() {
                               {mainCategory.isActive ? "Active" : "Inactive"}
                             </Badge>
                           </div>
-                          
+
                           {/* Subcategories */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ml-4">
                             {categories
@@ -1522,7 +1558,7 @@ export default function AdminDashboard() {
                               </div>
                             ))}
                           </div>
-                          
+
                           {categories.filter(cat => cat.parentId === mainCategory._id).length === 0 && (
                             <div className="ml-4 text-sm text-gray-500 italic">
                               No subcategories yet
@@ -1539,7 +1575,7 @@ export default function AdminDashboard() {
             {activeTab === "orders" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Orders Management</h2>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Card>
                     <CardHeader className="pb-2">
@@ -1650,6 +1686,8 @@ export default function AdminDashboard() {
                                   </Select>
                                 </div>
                               </TableCell>
+                            </```text
+TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -1663,7 +1701,7 @@ export default function AdminDashboard() {
             {activeTab === "customers" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Customer Management</h2>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <Card>
                     <CardHeader className="pb-2">
@@ -1753,7 +1791,7 @@ export default function AdminDashboard() {
             {activeTab === "analytics" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Advanced Analytics</h2>
-                
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Card>
                     <CardHeader>
@@ -1896,7 +1934,7 @@ export default function AdminDashboard() {
             {activeTab === "settings" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Website Management</h2>
-                
+
                 {siteSettings && (
                   <Tabs defaultValue="general" className="w-full">
                     <TabsList className="grid w-full grid-cols-4">
@@ -2529,7 +2567,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center space-x-2">
                   <Switch id="isFeatured" name="isFeatured" defaultChecked={editingProduct.isFeatured} />
                   <Label htmlFor="isFeatured">Featured</Label>
-                </div>
+                                </div>
                 <div className="flex items-center space-x-2">
                   <Switch id="isOnSale" name="isOnSale" defaultChecked={editingProduct.isOnSale} />
                   <Label htmlFor="isOnSale">On Sale</Label>

@@ -66,6 +66,20 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
+
+  // Check for existing categories before starting the server
+  try {
+    const { CategoryService } = await import('./mongodb');
+    const categoryService = new CategoryService();
+    const existingCategories = await categoryService.getCategories();
+
+    if (existingCategories.length === 0) {
+      console.log('No categories found. Consider seeding sample data via admin panel.');
+    }
+  } catch (error) {
+    console.error('Error checking categories:', error);
+  }
+
   server.listen({
     port,
     host: "0.0.0.0",
