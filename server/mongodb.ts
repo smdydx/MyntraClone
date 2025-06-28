@@ -144,16 +144,164 @@ export interface SiteSettings {
   updatedAt: Date;
 }
 
-// Services
-export class UserService {
-  private users: Collection<User>;
+// Payment and Order interfaces
+export interface Payment {
+  _id: string;
+  orderId: string;
+  userId: string;
+  amount: number;
+  currency: string;
+  status: "pending" | "completed" | "failed" | "refunded";
+  paymentMethod: string;
+  transactionId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class PaymentService {
+  private collection: Collection<Payment>;
 
   constructor() {
-    this.users = db.collection<User>('users');
+    this.collection = db.collection<Payment>("payments");
+  }
+
+  async createPayment(paymentData: Omit<Payment, "_id" | "createdAt" | "updatedAt">): Promise<Payment> {
+    const payment: Payment = {
+      _id: new ObjectId().toString(),
+      ...paymentData,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    await this.collection.insertOne(payment as any);
+    return payment;
+  }
+
+  async getPaymentById(id: string): Promise<Payment | null> {
+    return await this.collection.findOne({ _id: id }) as Payment | null;
+  }
+
+  async updatePaymentStatus(id: string, status: Payment["status"], transactionId?: string): Promise<Payment | null> {
+    const updateData: any = { 
+      status, 
+      updatedAt: new Date() 
+    };
+
+    if (transactionId) {
+      updateData.transactionId = transactionId;
+    }
+
+    const result = await this.collection.findOneAndUpdate(
+      { _id: id },
+      { $set: updateData },
+      { returnDocument: "after" }
+    );
+
+    return result as Payment | null;
+  }
+
+  async getPaymentsByUserId(userId: string): Promise<Payment[]> {
+    return await this.collection.find({ userId }).toArray() as Payment[];
+  }
+
+  async verifyRazorpayPayment(razorpayOrderId: string, razorpayPaymentId: string, razorpaySignature: string): Promise<boolean> {
+    try {
+      const crypto = require('crypto');
+      const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
+      hmac.update(`${razorpayOrderId}|${razorpayPaymentId}`);
+      const generatedSignature = hmac.digest('hex');
+      return generatedSignature === razorpaySignature;
+    } catch (error) {
+      return false;
+    }
+  }
+}
+
+export class OrderService {
+  private collection: Collection<Order>;
+
+  constructor() {
+    this.collection = db.collection<Order>("orders");
+  }
+
+  async createOrder(orderData: Omit<Order, "_id" | "createdAt">): Promise<Order> {
+    const order: Order = {
+      _id: new ObjectId(),
+      ...orderData,
+      createdAt: new Date()
+    };
+
+    await this.collection.insertOne(order);
+    return order;
+  }
+
+  async getOrderById(id: string): Promise<Order | null> {
+    return await this.collection.findOne({ _id: new ObjectId(id) });
+  }
+
+  async getOrdersByUserId(userId: string): Promise<Order[]> {
+    return await this.collection.find({ userId: new ObjectId(userId) }).sort({ createdAt: -1 }).toArray();
+  }
+
+  async getAllOrders(): Promise<Order[]> {
+    return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+  }
+
+  async updateOrderStatus(id: string, status: Order["status"]): Promise<Order | null> {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { status } },
+      { returnDocument: "after" }
+    );
+
+    return result;
+  }
+
+  async getOrderStats(): Promise<any> {
+    const totalOrders = await this.collection.countDocuments();
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const newOrdersToday = await this.collection.countDocuments({
+      createdAt: { $gte: todayStart }
+    });
+
+    const totalRevenue = await this.collection.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$totalAmount" }
+        }
+      }
+    ]).toArray();
+
+    const avgOrderValue = await this.collection.aggregate([
+      {
+        $group: {
+          _id: null,
+          avg: { $avg: "$totalAmount" }
+        }
+      }
+    ]).toArray();
+
+    return {
+      totalOrders,
+      newOrdersToday,
+      totalRevenue: totalRevenue[0]?.total || 0,
+      avgOrderValue: Math.round(avgOrderValue[0]?.avg || 0)
+    };
+  }
+}
+
+export class UserService {
+  private collection: Collection<User>;
+
+  constructor() {
+    this.collection = db.collection<User>('users');
   }
 
   async registerUser(userData: any): Promise<{ user: Omit<User, 'password'>, token: string }> {
-    const existingUser = await this.users.findOne({ email: userData.email });
+    const existingUser = await this.collection.findOne({ email: userData.email });
     if (existingUser) {
       throw new Error('User with this email already exists');
     }
@@ -167,8 +315,8 @@ export class UserService {
       createdAt: new Date()
     };
 
-    const result = await this.users.insertOne(user);
-    const createdUser = await this.users.findOne({ _id: result.insertedId });
+    const result = await this.collection.insertOne(user);
+    const createdUser = await this.collection.findOne({ _id: result.insertedId });
 
     if (!createdUser) {
       throw new Error('Failed to create user');
@@ -185,7 +333,7 @@ export class UserService {
   }
 
   async loginUser(loginData: any): Promise<{ user: Omit<User, 'password'>, token: string }> {
-    const user = await this.users.findOne({ email: loginData.email });
+    const user = await this.collection.findOne({ email: loginData.email });
     if (!user) {
       throw new Error('Invalid email or password');
     }
@@ -206,7 +354,7 @@ export class UserService {
   }
 
   async getUserById(userId: string): Promise<Omit<User, 'password'> | null> {
-    const user = await this.users.findOne({ _id: new ObjectId(userId) });
+    const user = await this.collection.findOne({ _id: new ObjectId(userId) });
     if (!user) {
       return null;
     }
@@ -215,8 +363,12 @@ export class UserService {
     return userWithoutPassword;
   }
 
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.collection.findOne({ email });
+  }
+
   async updateUser(userId: string, updateData: any): Promise<Omit<User, 'password'> | null> {
-    const result = await this.users.findOneAndUpdate(
+    const result = await this.collection.findOneAndUpdate(
       { _id: new ObjectId(userId) },
       { $set: updateData },
       { returnDocument: 'after' }
@@ -229,830 +381,9 @@ export class UserService {
     const { password, ...userWithoutPassword } = result;
     return userWithoutPassword;
   }
-}
-
-export class CategoryService {
-  private categories: Collection<Category>;
-
-  constructor() {
-    this.categories = db.collection<Category>('categories');
-  }
-
-  async getCategories(): Promise<Category[]> {
-    return await this.categories.find({}).sort({ name: 1 }).toArray();
-  }
-
-  async getActiveCategories(): Promise<Category[]> {
-    return await this.categories.find({ isActive: true }).sort({ name: 1 }).toArray();
-  }
-
-  async getMainCategories(): Promise<Category[]> {
-    return await this.categories.find({ 
-      isActive: true, 
-      $or: [{ parentId: { $exists: false } }, { parentId: null }] 
-    }).sort({ name: 1 }).toArray();
-  }
-
-  async getSubCategories(parentId: string): Promise<Category[]> {
-    return await this.categories.find({ 
-      isActive: true, 
-      parentId: new ObjectId(parentId) 
-    }).sort({ name: 1 }).toArray();
-  }
-
-  async getCategoryById(id: string): Promise<Category | null> {
-    return await this.categories.findOne({ _id: new ObjectId(id) });
-  }
-
-  async createCategory(categoryData: any): Promise<Category> {
-    const category: Category = {
-      ...categoryData,
-      isActive: true,
-      createdAt: new Date()
-    };
-
-    const result = await this.categories.insertOne(category);
-    const createdCategory = await this.categories.findOne({ _id: result.insertedId });
-    return createdCategory!;
-  }
-
-  async updateCategory(id: string, updateData: any): Promise<Category | null> {
-    const result = await this.categories.findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: updateData },
-      { returnDocument: 'after' }
-    );
-    return result;
-  }
-
-  async deleteCategory(id: string): Promise<boolean> {
-    const result = await this.categories.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-}
-
-export class ProductService {
-  private products: Collection<Product>;
-
-  constructor() {
-    this.products = db.collection<Product>('products');
-  }
-
-  async getProducts(filters: any = {}): Promise<Product[]> {
-    const query: any = {};
-
-    if (filters.categoryId) {
-      query.categoryId = new ObjectId(filters.categoryId);
-    }
-
-    if (filters.featured) {
-      query.isFeatured = true;
-    }
-
-    if (filters.onSale) {
-      query.isOnSale = true;
-    }
-
-    if (filters.search) {
-      query.$or = [
-        { name: { $regex: filters.search, $options: 'i' } },
-        { description: { $regex: filters.search, $options: 'i' } },
-        { brand: { $regex: filters.search, $options: 'i' } }
-      ];
-    }
-
-    return await this.products.find(query).toArray();
-  }
-
-  async getProductById(id: string): Promise<Product | null> {
-    return await this.products.findOne({ _id: new ObjectId(id) });
-  }
-
-  async getProductBySlug(slug: string): Promise<Product | null> {
-    return await this.products.findOne({ slug });
-  }
-
-  async createProduct(productData: any): Promise<Product> {
-    const product: Product = {
-      ...productData,
-      categoryId: new ObjectId(productData.categoryId),
-      price: parseFloat(productData.price),
-      salePrice: productData.salePrice ? parseFloat(productData.salePrice) : undefined,
-      rating: 0,
-      reviewCount: 0,
-      createdAt: new Date()
-    };
-
-    const result = await this.products.insertOne(product);
-    const createdProduct = await this.products.findOne({ _id: result.insertedId });
-    return createdProduct!;
-  }
-
-  async updateProduct(id: string, updateData: any): Promise<Product | null> {
-    if (updateData.categoryId) {
-      updateData.categoryId = new ObjectId(updateData.categoryId);
-    }
-    if (updateData.price) {
-      updateData.price = parseFloat(updateData.price);
-    }
-    if (updateData.salePrice) {
-      updateData.salePrice = parseFloat(updateData.salePrice);
-    }
-
-    const result = await this.products.findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: updateData },
-      { returnDocument: 'after' }
-    );
-    return result;
-  }
-
-  async deleteProduct(id: string): Promise<boolean> {
-    const result = await this.products.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-}
-
-export class CartService {
-  private cartItems: Collection<CartItem>;
-
-  constructor() {
-    this.cartItems = db.collection<CartItem>('cartItems');
-  }
-
-  async getCartItems(userId: string): Promise<CartItem[]> {
-    return await this.cartItems.find({ userId: new ObjectId(userId) }).toArray();
-  }
-
-  async addToCart(cartData: any): Promise<CartItem> {
-    const cartItem: CartItem = {
-      ...cartData,
-      userId: new ObjectId(cartData.userId),
-      productId: new ObjectId(cartData.productId),
-      createdAt: new Date()
-    };
-
-    const result = await this.cartItems.insertOne(cartItem);
-    const createdItem = await this.cartItems.findOne({ _id: result.insertedId });
-    return createdItem!;
-  }
-
-  async updateCartItem(id: string, quantity: number): Promise<CartItem | null> {
-    const result = await this.cartItems.findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: { quantity } },
-      { returnDocument: 'after' }
-    );
-    return result;
-  }
-
-  async removeFromCart(id: string): Promise<boolean> {
-    const result = await this.cartItems.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
-  }
-}
-
-export class WishlistService {
-  private wishlistItems: Collection<WishlistItem>;
-
-  constructor() {
-    this.wishlistItems = db.collection<WishlistItem>('wishlistItems');
-  }
-
-  async getWishlistItems(userId: string): Promise<WishlistItem[]> {
-    return await this.wishlistItems.find({ userId: new ObjectId(userId) }).toArray();
-  }
-
-  async addToWishlist(wishlistData: any): Promise<WishlistItem> {
-    const wishlistItem: WishlistItem = {
-      ...wishlistData,
-      userId: new ObjectId(wishlistData.userId),
-      productId: new ObjectId(wishlistData.productId),
-      createdAt: new Date()
-    };
-
-    const result = await this.wishlistItems.insertOne(wishlistItem);
-    const createdItem = await this.wishlistItems.findOne({ _id: result.insertedId });
-    return createdItem!;
-  }
-
-  async removeFromWishlist(userId: string, productId: string): Promise<boolean> {
-    const result = await this.wishlistItems.deleteOne({
-      userId: new ObjectId(userId),
-      productId: new ObjectId(productId)
-    });
-    return result.deletedCount > 0;
-  }
-}
-
-export class SiteSettingsService {
-  private settings: Collection<SiteSettings>;
-
-  constructor() {
-    this.settings = db.collection<SiteSettings>('siteSettings');
-  }
-
-  async getSettings(): Promise<SiteSettings> {
-    let settings = await this.settings.findOne({});
-
-    if (!settings) {
-      // Create default settings
-      const defaultSettings: SiteSettings = {
-        logoUrl: "/attached_assets/Hednor Logo 22 updated-5721x3627_1750949407940.png",
-        siteName: "Hednor",
-        heroVideo: "/client/src/assets/hero-video.mp4",
-        primaryColor: "#F59E0B",
-        secondaryColor: "#1F2937",
-        footerText: "© 2025 Hednor. All rights reserved.",
-        updatedAt: new Date()
-      };
-
-      await this.settings.insertOne(defaultSettings);
-      settings = defaultSettings;
-    }
-
-    return settings;
-  }
-
-  async updateSettings(updateData: any): Promise<SiteSettings> {
-    const result = await this.settings.findOneAndUpdate(
-      {},
-      { 
-        $set: { 
-          ...updateData, 
-          updatedAt: new Date() 
-        } 
-      },
-      { 
-        returnDocument: 'after',
-        upsert: true 
-      }
-    );
-    return result!;
-  }
-}
-
-export function verifyToken(token: string): { userId: string; email: string } {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; email: string };
-    return decoded;
-  } catch (error) {
-    throw new Error('Invalid token');
-  }
-}
-
-export { db };
-export class PaymentService {
-  private collection: Collection<Payment>;
-
-  constructor() {
-    this.collection = db.collection<Payment>("payments");
-  }
-
-  async createPayment(paymentData: Omit<Payment, "_id" | "createdAt" | "updatedAt">): Promise<Payment> {
-    const payment: Payment = {
-      _id: new ObjectId().toString(),
-      ...paymentData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(payment as any);
-    return payment;
-  }
-
-  async getPaymentById(id: string): Promise<Payment | null> {
-    return await this.collection.findOne({ _id: id }) as Payment | null;
-  }
-
-  async updatePaymentStatus(id: string, status: Payment["status"], transactionId?: string): Promise<Payment | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (transactionId) {
-      updateData.transactionId = transactionId;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Payment | null;
-  }
-
-  async getPaymentsByUserId(userId: string): Promise<Payment[]> {
-    return await this.collection.find({ userId }).toArray() as Payment[];
-  }
-}
-
-export class OrderService {
-  private collection: Collection<Order>;
-
-  constructor() {
-    this.collection = db.collection<Order>("orders");
-  }
-
-  async createOrder(orderData: Omit<Order, "_id" | "orderNumber" | "createdAt" | "updatedAt">): Promise<Order> {
-    const orderNumber = `ORD-${Date.now()}`;
-    const order: Order = {
-      _id: new ObjectId().toString(),
-      orderNumber,
-      ...orderData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(order as any);
-    return order;
-  }
-
-  async getOrderById(id: string): Promise<Order | null> {
-    return await this.collection.findOne({ _id: id }) as Order | null;
-  }
-
-  async getOrdersByUserId(userId: string): Promise<Order[]> {
-    return await this.collection.find({ userId }).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async updateOrderStatus(id: string, status: Order["status"], trackingNumber?: string): Promise<Order | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (trackingNumber) {
-      updateData.trackingNumber = trackingNumber;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Order | null;
-  }
-
-  async getOrderStats(): Promise<any> {
-    const totalOrders = await this.collection.countDocuments();
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const newOrdersToday = await this.collection.countDocuments({
-      createdAt: { $gte: todayStart }
-    });
-
-    const totalRevenue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$total" }
-        }
-      }
-    ]).toArray();
-
-    const avgOrderValue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$total" }
-        }
-      }
-    ]).toArray();
-
-    return {
-      totalOrders,
-      newOrdersToday,
-      totalRevenue: totalRevenue[0]?.total || 0,
-      avgOrderValue: Math.round(avgOrderValue[0]?.avg || 0)
-    };
-  }
-}
-export class PaymentService {
-  private collection: Collection<Payment>;
-
-  constructor() {
-    this.collection = db.collection<Payment>("payments");
-  }
-
-  async createPayment(paymentData: Omit<Payment, "_id" | "createdAt" | "updatedAt">): Promise<Payment> {
-    const payment: Payment = {
-      _id: new ObjectId().toString(),
-      ...paymentData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(payment as any);
-    return payment;
-  }
-
-  async getPaymentById(id: string): Promise<Payment | null> {
-    return await this.collection.findOne({ _id: id }) as Payment | null;
-  }
-
-  async updatePaymentStatus(id: string, status: Payment["status"], transactionId?: string): Promise<Payment | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (transactionId) {
-      updateData.transactionId = transactionId;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Payment | null;
-  }
-
-  async getPaymentsByUserId(userId: string): Promise<Payment[]> {
-    return await this.collection.find({ userId }).toArray() as Payment[];
-  }
-}
-
-export class OrderService {
-  private collection: Collection<Order>;
-
-  constructor() {
-    this.collection = db.collection<Order>("orders");
-  }
-
-  async createOrder(orderData: Omit<Order, "_id" | "orderNumber" | "createdAt" | "updatedAt">): Promise<Order> {
-    const orderNumber = `ORD-${Date.now()}`;
-    const order: Order = {
-      _id: new ObjectId().toString(),
-      orderNumber,
-      ...orderData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(order as any);
-    return order;
-  }
-
-  async getOrderById(id: string): Promise<Order | null> {
-    return await this.collection.findOne({ _id: id }) as Order | null;
-  }
-
-  async getOrdersByUserId(userId: string): Promise<Order[]> {
-    return await this.collection.find({ userId }).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async updateOrderStatus(id: string, status: Order["status"], trackingNumber?: string): Promise<Order | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (trackingNumber) {
-      updateData.trackingNumber = trackingNumber;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Order | null;
-  }
-
-  async getOrderStats(): Promise<any> {
-    const totalOrders = await this.collection.countDocuments();
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const newOrdersToday = await this.collection.countDocuments({
-      createdAt: { $gte: todayStart }
-    });
-
-    const totalRevenue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$total" }
-        }
-      }
-    ]).toArray();
-
-    const avgOrderValue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$total" }
-        }
-      }
-    ]).toArray();
-
-    return {
-      totalOrders,
-      newOrdersToday,
-      totalRevenue: totalRevenue[0]?.total || 0,
-      avgOrderValue: Math.round(avgOrderValue[0]?.avg || 0)
-    };
-  }
-}
-export class PaymentService {
-  private collection: Collection<Payment>;
-
-  constructor() {
-    this.collection = db.collection<Payment>("payments");
-  }
-
-  async createPayment(paymentData: Omit<Payment, "_id" | "createdAt" | "updatedAt">): Promise<Payment> {
-    const payment: Payment = {
-      _id: new ObjectId().toString(),
-      ...paymentData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(payment as any);
-    return payment;
-  }
-
-  async getPaymentById(id: string): Promise<Payment | null> {
-    return await this.collection.findOne({ _id: id }) as Payment | null;
-  }
-
-  async updatePaymentStatus(id: string, status: Payment["status"], transactionId?: string): Promise<Payment | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (transactionId) {
-      updateData.transactionId = transactionId;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Payment | null;
-  }
-
-  async getPaymentsByUserId(userId: string): Promise<Payment[]> {
-    return await this.collection.find({ userId }).toArray() as Payment[];
-  }
-}
-
-export class OrderService {
-  private collection: Collection<Order>;
-
-  constructor() {
-    this.collection = db.collection<Order>("orders");
-  }
-
-  async createOrder(orderData: Omit<Order, "_id" | "orderNumber" | "createdAt" | "updatedAt">): Promise<Order> {
-    const orderNumber = `ORD-${Date.now()}`;
-    const order: Order = {
-      _id: new ObjectId().toString(),
-      orderNumber,
-      ...orderData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(order as any);
-    return order;
-  }
-
-  async getOrderById(id: string): Promise<Order | null> {
-    return await this.collection.findOne({ _id: id }) as Order | null;
-  }
-
-  async getOrdersByUserId(userId: string): Promise<Order[]> {
-    return await this.collection.find({ userId }).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async updateOrderStatus(id: string, status: Order["status"], trackingNumber?: string): Promise<Order | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (trackingNumber) {
-      updateData.trackingNumber = trackingNumber;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Order | null;
-  }
-
-  async getOrderStats(): Promise<any> {
-    const totalOrders = await this.collection.countDocuments();
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const newOrdersToday = await this.collection.countDocuments({
-      createdAt: { $gte: todayStart }
-    });
-
-    const totalRevenue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$total" }
-        }
-      }
-    ]).toArray();
-
-    const avgOrderValue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$total" }
-        }
-      }
-    ]).toArray();
-
-    return {
-      totalOrders,
-      newOrdersToday,
-      totalRevenue: totalRevenue[0]?.total || 0,
-      avgOrderValue: Math.round(avgOrderValue[0]?.avg || 0)
-    };
-  }
-}
-export class PaymentService {
-  private collection: Collection<Payment>;
-
-  constructor() {
-    this.collection = db.collection<Payment>("payments");
-  }
-
-  async createPayment(paymentData: Omit<Payment, "_id" | "createdAt" | "updatedAt">): Promise<Payment> {
-    const payment: Payment = {
-      _id: new ObjectId().toString(),
-      ...paymentData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(payment as any);
-    return payment;
-  }
-
-  async getPaymentById(id: string): Promise<Payment | null> {
-    return await this.collection.findOne({ _id: id }) as Payment | null;
-  }
-
-  async updatePaymentStatus(id: string, status: Payment["status"], transactionId?: string): Promise<Payment | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (transactionId) {
-      updateData.transactionId = transactionId;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Payment | null;
-  }
-
-  async getPaymentsByUserId(userId: string): Promise<Payment[]> {
-    return await this.collection.find({ userId }).toArray() as Payment[];
-  }
-}
-
-export class OrderService {
-  private collection: Collection<Order>;
-
-  constructor() {
-    this.collection = db.collection<Order>("orders");
-  }
-
-  async createOrder(orderData: Omit<Order, "_id" | "orderNumber" | "createdAt" | "updatedAt">): Promise<Order> {
-    const orderNumber = `ORD-${Date.now()}`;
-    const order: Order = {
-      _id: new ObjectId().toString(),
-      orderNumber,
-      ...orderData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await this.collection.insertOne(order as any);
-    return order;
-  }
-
-  async getOrderById(id: string): Promise<Order | null> {
-    return await this.collection.findOne({ _id: id }) as Order | null;
-  }
-
-  async getOrdersByUserId(userId: string): Promise<Order[]> {
-    return await this.collection.find({ userId }).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray() as Order[];
-  }
-
-  async updateOrderStatus(id: string, status: Order["status"], trackingNumber?: string): Promise<Order | null> {
-    const updateData: any = { 
-      status, 
-      updatedAt: new Date() 
-    };
-
-    if (trackingNumber) {
-      updateData.trackingNumber = trackingNumber;
-    }
-
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: updateData },
-      { returnDocument: "after" }
-    );
-
-    return result as Order | null;
-  }
-
-  async getOrderStats(): Promise<any> {
-    const totalOrders = await this.collection.countDocuments();
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const newOrdersToday = await this.collection.countDocuments({
-      createdAt: { $gte: todayStart }
-    });
-
-    const totalRevenue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$total" }
-        }
-      }
-    ]).toArray();
-
-    const avgOrderValue = await this.collection.aggregate([
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$total" }
-        }
-      }
-    ]).toArray();
-
-    return {
-      totalOrders,
-      newOrdersToday,
-      totalRevenue: totalRevenue[0]?.total || 0,
-      avgOrderValue: Math.round(avgOrderValue[0]?.avg || 0)
-    };
-  }
-}
-async getUserByEmail(email: string): Promise<User | null> {
-    return await this.collection.findOne({ email }) as User | null;
-  }
-
-  async updateUser(id: string, userData: Partial<User>): Promise<User | null> {
-    const result = await this.collection.findOneAndUpdate(
-      { _id: id },
-      { $set: { ...userData, updatedAt: new Date() } },
-      { returnDocument: "after" }
-    );
-    return result as User | null;
-  }
 
   async getAllUsers(): Promise<User[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray() as User[];
+    return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
   }
 
   async getUserStats(): Promise<any> {
@@ -1065,9 +396,9 @@ async getUserByEmail(email: string): Promise<User | null> {
     });
 
     return {
-```text
       totalUsers,
       newUsersToday
     };
   }
 }
+export { db };
