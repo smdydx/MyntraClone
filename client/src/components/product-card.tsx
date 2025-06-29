@@ -59,6 +59,17 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
     e.preventDefault();
     e.stopPropagation();
 
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast({
+        title: "Login Required",
+        description: "Please login to proceed with purchase.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     addToCart({
       productId: product.id,
       name: product.name,
@@ -69,8 +80,15 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
       quantity: 1,
     });
 
-    // Redirect to checkout page immediately
-    setLocation("/checkout");
+    toast({
+      title: "Added to cart",
+      description: "Redirecting to checkout...",
+    });
+
+    // Small delay to ensure cart is updated before redirect
+    setTimeout(() => {
+      setLocation("/checkout");
+    }, 500);
   };
 
   const formatPrice = (price: string) => {
