@@ -68,7 +68,9 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
       image: product.images?.[0] || "",
       quantity: 1,
     });
-    setLocation('/checkout');
+
+    // Redirect to checkout page immediately
+    setLocation("/checkout");
   };
 
   const formatPrice = (price: string) => {
