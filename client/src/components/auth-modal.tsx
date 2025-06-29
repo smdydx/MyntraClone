@@ -161,7 +161,7 @@ export default function AuthModal({ open, onOpenChange }: AuthModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="login" className="w-full">
+        <Tabs defaultValue="login" className="w-full" value={isLogin ? "login" : "register"}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login" onClick={() => setIsLogin(true)}>Login</TabsTrigger>
             <TabsTrigger value="register" onClick={() => setIsLogin(false)}>Register</TabsTrigger>
