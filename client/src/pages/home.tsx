@@ -60,9 +60,11 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {categories.map((category) => (
-              <CategoryCard key={category._id || category.id} category={category} />
-            ))}
+            {categories
+              .filter(category => !category.parentId)
+              .map((category) => (
+                <CategoryCard key={category._id || category.id} category={category} />
+              ))}
           </div>
         )}
       </section>
