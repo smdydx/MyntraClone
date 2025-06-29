@@ -925,8 +925,7 @@ const navigation = [
         name: "Hair Straightener",
         href: "/products?category=beauty&subcategory=hair-straightener",
       },
-      {
-        name: "HairDryer",
+      {        name: "HairDryer",
         href: "/products?category=/products?category=beauty&subcategory=hair-dryer",
       },
       {
@@ -1592,7 +1591,7 @@ export default function Header() {
             {/* Desktop Layout */}
             <div className="hidden lg:flex items-center justify-between w-full">
               {/* Logo */}
-              
+
               <Link href="/" className="flex items-center mr-8 ml-4">
                 <img
                   src={hednorLogoPath}

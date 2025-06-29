@@ -1,9 +1,10 @@
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ShoppingBag, Eye } from "lucide-react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import type { Product } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -12,11 +13,12 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useStore();
   const inWishlist = isInWishlist(product.id);
+  const { toast } = useToast();
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (inWishlist) {
       removeFromWishlist(product.id);
     } else {
@@ -63,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
-          
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col space-y-1">
             {product.isOnSale && product.salePrice && (
@@ -97,7 +99,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-normal text-sm text-gray-800 mb-2 line-clamp-1">
             {product.name}
           </h3>
-          
+
           <div className="flex items-baseline space-x-2 mb-2">
             {product.salePrice ? (
               <>
