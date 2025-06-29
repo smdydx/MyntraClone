@@ -226,265 +226,248 @@ export async function seedProducts() {
       throw new Error('Required categories not found. Please seed categories first.');
     }
 
-    // Comprehensive product data for website and admin dashboard
+    // 10 Real Product Implementations
     const sampleProducts = [
-      // Men's Collection
+      // 1. Men's Premium Cotton T-Shirt
       {
-        name: "Premium Cotton T-Shirt",
-        slug: "premium-cotton-tshirt",
-        description: "Ultra-soft premium cotton t-shirt with modern fit. Perfect for everyday wear with superior comfort and style.",
-        brand: "Hednor Premium",
+        name: "Premium Cotton Crew Neck T-Shirt",
+        slug: "premium-cotton-crew-neck-tshirt",
+        description: "100% organic cotton crew neck t-shirt with reinforced seams and pre-shrunk fabric. Soft, breathable, and perfect for daily wear. Available in classic colors.",
+        brand: "Hednor Essentials",
         categoryId: menCategory._id,
         price: 1299,
-        salePrice: 899,
-        images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", "https://images.unsplash.com/photo-1583743814966-8936f37f236f?w=400"],
+        salePrice: 999,
+        images: [
+          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+          "https://images.unsplash.com/photo-1583743814966-8936f37f236f?w=400"
+        ],
         sizes: ["S", "M", "L", "XL", "XXL"],
-        colors: ["Navy Blue", "Black", "White", "Grey"],
+        colors: ["Navy Blue", "Black", "White", "Grey", "Olive Green"],
         inStock: true,
-        stockQuantity: 150,
-        rating: 4.7,
-        reviewCount: 2341,
-        tags: ["premium", "casual", "comfortable", "bestseller"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Formal Dress Shirt",
-        slug: "formal-dress-shirt",
-        description: "Crisp formal shirt made from high-quality cotton blend. Perfect for office and formal occasions.",
-        brand: "Hednor Formals",
-        categoryId: menCategory._id,
-        price: 1899,
-        images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"],
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["White", "Light Blue", "Pink"],
-        inStock: true,
-        stockQuantity: 85,
-        rating: 4.5,
-        reviewCount: 1567,
-        tags: ["formal", "office", "premium"],
-        isFeatured: true,
-        isOnSale: false
-      },
-      {
-        name: "Denim Jeans Classic Fit",
-        slug: "denim-jeans-classic-fit",
-        description: "Classic fit denim jeans with premium stretch fabric. Comfortable all-day wear with timeless style.",
-        brand: "Hednor Denim",
-        categoryId: menCategory._id,
-        price: 2499,
-        salePrice: 1999,
-        images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=400"],
-        sizes: ["30", "32", "34", "36", "38"],
-        colors: ["Dark Blue", "Light Blue", "Black"],
-        inStock: true,
-        stockQuantity: 120,
+        stockQuantity: 125,
         rating: 4.6,
-        reviewCount: 1890,
-        tags: ["denim", "casual", "premium"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Athletic Sports Shoes",
-        slug: "athletic-sports-shoes",
-        description: "High-performance athletic shoes with advanced cushioning technology. Perfect for running and gym workouts.",
-        brand: "Hednor Sports",
-        categoryId: menCategory._id,
-        price: 3999,
-        salePrice: 2999,
-        images: ["https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400"],
-        sizes: ["7", "8", "9", "10", "11", "12"],
-        colors: ["Black/White", "Navy/Orange", "Grey/Blue"],
-        inStock: true,
-        stockQuantity: 75,
-        rating: 4.8,
-        reviewCount: 2156,
-        tags: ["sports", "athletic", "comfortable", "trending"],
+        reviewCount: 1847,
+        tags: ["cotton", "casual", "comfortable", "organic"],
         isFeatured: true,
         isOnSale: true
       },
 
-      // Women's Collection
+      // 2. Women's Floral Midi Dress
       {
-        name: "Elegant Summer Dress",
-        slug: "elegant-summer-dress",
-        description: "Flowing summer dress with beautiful floral patterns. Perfect for casual outings and summer parties.",
+        name: "Floral Print Midi Dress",
+        slug: "floral-print-midi-dress",
+        description: "Elegant floral midi dress with 3/4 sleeves and a flattering A-line silhouette. Made from lightweight chiffon fabric, perfect for spring and summer occasions.",
         brand: "Hednor Femme",
         categoryId: womenCategory._id,
-        price: 2299,
-        salePrice: 1799,
-        images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400"],
+        price: 2799,
+        salePrice: 2199,
+        images: [
+          "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
+          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400"
+        ],
         sizes: ["XS", "S", "M", "L", "XL"],
-        colors: ["Floral Blue", "Floral Pink", "Solid Black", "Solid Navy"],
+        colors: ["Blue Floral", "Pink Floral", "Yellow Floral", "White Floral"],
         inStock: true,
-        stockQuantity: 95,
-        rating: 4.9,
-        reviewCount: 1456,
-        tags: ["elegant", "summer", "floral", "trending"],
+        stockQuantity: 78,
+        rating: 4.8,
+        reviewCount: 1256,
+        tags: ["floral", "midi", "elegant", "summer"],
         isFeatured: true,
         isOnSale: true
       },
+
+      // 3. Men's Slim Fit Jeans
       {
-        name: "Designer Handbag",
-        slug: "designer-handbag",
-        description: "Luxurious designer handbag crafted from premium leather. Spacious and stylish for everyday use.",
+        name: "Slim Fit Dark Wash Jeans",
+        slug: "slim-fit-dark-wash-jeans",
+        description: "Classic slim fit jeans in dark indigo wash. Made from premium denim with 2% elastane for comfort and flexibility. Five-pocket styling with contrast stitching.",
+        brand: "Hednor Denim Co.",
+        categoryId: menCategory._id,
+        price: 3499,
+        salePrice: 2799,
+        images: [
+          "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
+          "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400"
+        ],
+        sizes: ["28", "30", "32", "34", "36", "38", "40"],
+        colors: ["Dark Indigo", "Stone Wash", "Black", "Light Blue"],
+        inStock: true,
+        stockQuantity: 89,
+        rating: 4.5,
+        reviewCount: 2103,
+        tags: ["denim", "slim-fit", "casual", "classic"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 4. Women's Leather Handbag
+      {
+        name: "Genuine Leather Tote Bag",
+        slug: "genuine-leather-tote-bag",
+        description: "Spacious genuine leather tote bag with interior pockets and magnetic closure. Perfect for work or casual outings. Includes adjustable shoulder strap.",
         brand: "Hednor Luxury",
         categoryId: womenCategory._id,
-        price: 5999,
-        salePrice: 4499,
-        images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400"],
+        price: 6999,
+        salePrice: 5499,
+        images: [
+          "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400",
+          "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"
+        ],
         sizes: ["One Size"],
-        colors: ["Black", "Brown", "Tan", "Red"],
+        colors: ["Cognac Brown", "Black", "Navy Blue", "Burgundy"],
         inStock: true,
-        stockQuantity: 45,
+        stockQuantity: 34,
+        rating: 4.9,
+        reviewCount: 789,
+        tags: ["leather", "tote", "luxury", "handbag"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 5. Unisex Running Shoes
+      {
+        name: "Performance Running Shoes",
+        slug: "performance-running-shoes",
+        description: "High-performance running shoes with advanced cushioning technology and breathable mesh upper. Lightweight design with superior grip and support for all terrains.",
+        brand: "Hednor Athletic",
+        categoryId: menCategory._id,
+        price: 4999,
+        salePrice: 3999,
+        images: [
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+          "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400"
+        ],
+        sizes: ["6", "7", "8", "9", "10", "11", "12"],
+        colors: ["Black/White", "Navy/Orange", "Grey/Lime", "All Black"],
+        inStock: true,
+        stockQuantity: 67,
         rating: 4.7,
-        reviewCount: 2234,
-        tags: ["luxury", "designer", "leather", "premium"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Ethnic Kurta Set",
-        slug: "ethnic-kurta-set",
-        description: "Beautiful ethnic kurta set with intricate embroidery. Perfect for festivals and special occasions.",
-        brand: "Hednor Ethnic",
-        categoryId: womenCategory._id,
-        price: 3299,
-        salePrice: 2499,
-        images: ["https://images.unsplash.com/photo-1583391733956-6c78276477e1?w=400"],
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["Royal Blue", "Maroon", "Golden", "Pink"],
-        inStock: true,
-        stockQuantity: 65,
-        rating: 4.6,
-        reviewCount: 987,
-        tags: ["ethnic", "traditional", "festive", "embroidered"],
+        reviewCount: 1534,
+        tags: ["running", "athletic", "performance", "comfortable"],
         isFeatured: true,
         isOnSale: true
       },
 
-      // Kids Collection
+      // 6. Kids' Cotton Shirt Set
       {
-        name: "Kids Cotton Shirt Set",
-        slug: "kids-cotton-shirt-set",
-        description: "Comfortable cotton shirt and shorts set for kids. Soft fabric and vibrant colors kids love.",
+        name: "Kids Cotton Shirt and Shorts Set",
+        slug: "kids-cotton-shirt-shorts-set",
+        description: "Comfortable cotton shirt and shorts set for active kids. Features fun prints and colors. Machine washable and durable for everyday play.",
         brand: "Hednor Kids",
         categoryId: kidsCategory._id,
-        price: 899,
-        salePrice: 699,
-        images: ["https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400"],
+        price: 1299,
+        salePrice: 999,
+        images: [
+          "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400",
+          "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=400"
+        ],
         sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y", "10-11Y"],
-        colors: ["Blue Stripes", "Red Checks", "Green Solid", "Yellow Prints"],
+        colors: ["Blue Dinosaur", "Red Superhero", "Green Safari", "Pink Unicorn"],
         inStock: true,
-        stockQuantity: 110,
-        rating: 4.5,
-        reviewCount: 678,
-        tags: ["kids", "comfortable", "cotton", "colorful"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Kids Party Dress",
-        slug: "kids-party-dress",
-        description: "Adorable party dress for little princesses. Sparkly design perfect for birthdays and special events.",
-        brand: "Hednor Kids",
-        categoryId: kidsCategory._id,
-        price: 1599,
-        salePrice: 1199,
-        images: ["https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400"],
-        sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
-        colors: ["Pink Sparkle", "Purple Glitter", "Blue Shimmer"],
-        inStock: true,
-        stockQuantity: 55,
-        rating: 4.8,
-        reviewCount: 456,
-        tags: ["kids", "party", "dress", "sparkly"],
+        stockQuantity: 94,
+        rating: 4.4,
+        reviewCount: 567,
+        tags: ["kids", "cotton", "comfortable", "playful"],
         isFeatured: true,
         isOnSale: true
       },
 
-      // Home & Living
+      // 7. Home Decor - Throw Pillows
       {
-        name: "Premium Bedsheet Set",
-        slug: "premium-bedsheet-set",
-        description: "Luxurious cotton bedsheet set with matching pillowcases. Ultra-soft and durable for perfect sleep.",
+        name: "Decorative Throw Pillow Set",
+        slug: "decorative-throw-pillow-set",
+        description: "Set of 2 premium throw pillows with removable covers. Made from soft velvet fabric with hidden zipper closure. Perfect for sofas, beds, and chairs.",
         brand: "Hednor Home",
         categoryId: homeCategory._id,
-        price: 2999,
-        salePrice: 2299,
-        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400"],
-        sizes: ["Single", "Double", "Queen", "King"],
-        colors: ["Pure White", "Sky Blue", "Mint Green", "Rose Gold"],
+        price: 1799,
+        salePrice: 1399,
+        images: [
+          "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400",
+          "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400"
+        ],
+        sizes: ["18x18 inches", "20x20 inches"],
+        colors: ["Emerald Green", "Navy Blue", "Mustard Yellow", "Blush Pink"],
         inStock: true,
-        stockQuantity: 80,
-        rating: 4.4,
-        reviewCount: 1234,
-        tags: ["home", "bedding", "premium", "comfortable"],
-        isFeatured: true,
-        isOnSale: true
-      },
-      {
-        name: "Decorative Cushion Set",
-        slug: "decorative-cushion-set",
-        description: "Set of 4 decorative cushions with beautiful patterns. Perfect for adding style to your living room.",
-        brand: "Hednor Home",
-        categoryId: homeCategory._id,
-        price: 1999,
-        salePrice: 1499,
-        images: ["https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400"],
-        sizes: ["16x16 inches"],
-        colors: ["Geometric Blue", "Floral Pink", "Abstract Gold", "Solid Grey"],
-        inStock: true,
-        stockQuantity: 90,
+        stockQuantity: 76,
         rating: 4.3,
-        reviewCount: 567,
-        tags: ["home", "decor", "cushions", "stylish"],
+        reviewCount: 432,
+        tags: ["home", "decor", "pillows", "velvet"],
         isFeatured: false,
         isOnSale: true
       },
 
-      // Beauty Products
+      // 8. Women's Casual Sneakers
       {
-        name: "Skincare Gift Set",
-        slug: "skincare-gift-set",
-        description: "Complete skincare routine set with cleanser, toner, serum, and moisturizer. Perfect for all skin types.",
-        brand: "Hednor Beauty",
-        categoryId: beautyCategory?._id || homeCategory._id,
+        name: "Canvas Low-Top Sneakers",
+        slug: "canvas-low-top-sneakers",
+        description: "Classic canvas sneakers with rubber sole and cotton laces. Versatile design perfect for casual wear. Comfortable padding and durable construction.",
+        brand: "Hednor Casual",
+        categoryId: womenCategory._id,
         price: 2499,
         salePrice: 1999,
-        images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400"],
-        sizes: ["Full Size Set"],
-        colors: ["Natural"],
+        images: [
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+          "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400"
+        ],
+        sizes: ["5", "6", "7", "8", "9", "10"],
+        colors: ["White", "Black", "Pink", "Navy Blue", "Red"],
         inStock: true,
-        stockQuantity: 70,
-        rating: 4.6,
-        reviewCount: 890,
-        tags: ["beauty", "skincare", "gift", "premium"],
+        stockQuantity: 112,
+        rating: 4.5,
+        reviewCount: 1289,
+        tags: ["sneakers", "canvas", "casual", "comfortable"],
         isFeatured: true,
         isOnSale: true
       },
 
-      // GenZ Collection
+      // 9. Men's Formal Dress Shirt
       {
-        name: "Trendy Oversized Hoodie",
-        slug: "trendy-oversized-hoodie",
-        description: "Super comfy oversized hoodie with cool graphics. Perfect for the trendy GenZ vibe.",
-        brand: "Hednor GenZ",
-        categoryId: genzCategory?._id || menCategory._id,
-        price: 1799,
-        salePrice: 1399,
-        images: ["https://images.unsplash.com/photo-1556821840-3a9fbc86b9b3?w=400"],
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["Black", "Grey", "Navy", "Burgundy"],
+        name: "Classic Formal Dress Shirt",
+        slug: "classic-formal-dress-shirt",
+        description: "Premium cotton dress shirt with spread collar and French cuffs. Perfect for business meetings and formal events. Easy care, wrinkle-resistant fabric.",
+        brand: "Hednor Formal",
+        categoryId: menCategory._id,
+        price: 2299,
+        salePrice: 1799,
+        images: [
+          "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400",
+          "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=400"
+        ],
+        sizes: ["14.5", "15", "15.5", "16", "16.5", "17", "17.5"],
+        colors: ["White", "Light Blue", "Light Pink", "Lavender"],
         inStock: true,
-        stockQuantity: 125,
+        stockQuantity: 58,
+        rating: 4.6,
+        reviewCount: 945,
+        tags: ["formal", "dress-shirt", "business", "premium"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 10. Beauty - Skincare Set
+      {
+        name: "Complete Skincare Routine Set",
+        slug: "complete-skincare-routine-set",
+        description: "5-step skincare routine including cleanser, toner, serum, moisturizer, and sunscreen. Suitable for all skin types. Dermatologist tested and cruelty-free.",
+        brand: "Hednor Beauty",
+        categoryId: beautyCategory?._id || homeCategory._id,
+        price: 3499,
+        salePrice: 2799,
+        images: [
+          "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400",
+          "https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=400"
+        ],
+        sizes: ["Full Size Set", "Travel Size Set"],
+        colors: ["Natural"],
+        inStock: true,
+        stockQuantity: 43,
         rating: 4.8,
-        reviewCount: 1567,
-        tags: ["genz", "trendy", "oversized", "hoodie", "comfortable"],
+        reviewCount: 1167,
+        tags: ["skincare", "beauty", "routine", "dermatologist-tested"],
         isFeatured: true,
         isOnSale: true
       }
+      
     ];
 
     for (const product of sampleProducts) {
