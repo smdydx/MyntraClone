@@ -277,29 +277,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/products/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const product = await productService.updateProduct(req.params.id, req.body);
+      const { id } = req.params;
+      
+      // Validate ObjectId
+      if (!id || id.length !== 24) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      const product = await productService.updateProduct(id, req.body);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
       res.json(product);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Product update error:', error);
-      res.status(400).json({ message: "Failed to update product" });
+      res.status(400).json({ message: error.message || "Failed to update product" });
     }
   });
 
-  app.delete("/api/admin/products/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/products/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const success = await productService.deleteProduct(req.params.id);
+      const { id } = req.params;
+      
+      // Validate ObjectId
+      if (!id || id.length !== 24) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      const success = await productService.deleteProduct(id);
       if (!success) {
         return res.status(404).json({ message: "Product not found" });
       }
       res.json({ message: "Product deleted successfully" });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Product deletion error:', error);
-      res.status(500).json({ message: "Failed to delete product" });
+      res.status(500).json({ message: error.message || "Failed to delete product" });
     }
   });
 
@@ -332,29 +346,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+  app.put("/api/admin/categories/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const category = await categoryService.updateCategory(req.params.id, req.body);
+      const { id } = req.params;
+      
+      // Validate ObjectId
+      if (!id || id.length !== 24) {
+        return res.status(400).json({ message: "Invalid category ID" });
+      }
+
+      const category = await categoryService.updateCategory(id, req.body);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
       res.json(category);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Category update error:', error);
-      res.status(400).json({ message: "Failed to update category" });
+      res.status(400).json({ message: error.message || "Failed to update category" });
     }
   });
 
-  app.delete("/api/admin/categories/:id", authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+  app.delete("/api/admin/categories/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
-      const success = await categoryService.deleteCategory(req.params.id);
+      const { id } = req.params;
+      
+      // Validate ObjectId
+      if (!id || id.length !== 24) {
+        return res.status(400).json({ message: "Invalid category ID" });
+      }
+
+      // Check if category has products
+      const products = await productService.getProducts({ categoryId: id });
+      if (products.length > 0) {
+        return res.status(400).json({ 
+          message: `Cannot delete category. It has ${products.length} products assigned to it.`
+        });
+      }
+
+      const success = await categoryService.deleteCategory(id);
       if (!success) {
         return res.status(404).json({ message: "Category not found" });
       }
       res.json({ message: "Category deleted successfully" });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Category deletion error:', error);
-      res.status(500).json({ message: "Failed to delete category" });
+      res.status(500).json({ message: error.message || "Failed to delete category" });
     }
   });
 

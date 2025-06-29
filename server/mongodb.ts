@@ -196,12 +196,32 @@ export class CartService {
 
   async addToCart(cartData: Omit<CartItem, '_id' | 'createdAt'>): Promise<CartItem> {
     try {
+      // Validate required fields
+      if (!cartData.userId || !cartData.productId) {
+        throw new Error('User ID and Product ID are required');
+      }
+
+      // Validate ObjectId format
+      if (typeof cartData.userId === 'string' && cartData.userId.length !== 24) {
+        throw new Error('Invalid User ID format');
+      }
+      if (typeof cartData.productId === 'string' && cartData.productId.length !== 24) {
+        throw new Error('Invalid Product ID format');
+      }
+
+      // Check if product exists
+      const productService = new ProductService();
+      const product = await productService.getProductById(cartData.productId.toString());
+      if (!product) {
+        throw new Error('Product not found');
+      }
+
       // Check if item already exists in cart
       const existingItem = await this.collection.findOne({
         userId: new ObjectId(cartData.userId),
         productId: new ObjectId(cartData.productId),
-        size: cartData.size,
-        color: cartData.color
+        size: cartData.size || null,
+        color: cartData.color || null
       });
 
       if (existingItem) {
@@ -212,7 +232,10 @@ export class CartService {
           { $set: { quantity: updatedQuantity } },
           { returnDocument: 'after' }
         );
-        return result!;
+        if (!result) {
+          throw new Error('Failed to update cart item');
+        }
+        return result;
       }
 
       const cartItem: CartItem = {
@@ -394,24 +417,57 @@ export class ProductService {
         throw new Error('Name, brand, and price are required fields');
       }
 
+      if (!productData.slug) {
+        throw new Error('Product slug is required');
+      }
+
+      if (!productData.categoryId) {
+        throw new Error('Category ID is required');
+      }
+
+      // Validate price
+      const price = parseFloat(productData.price.toString());
+      if (isNaN(price) || price <= 0) {
+        throw new Error('Price must be a positive number');
+      }
+
+      // Validate sale price if provided
+      let salePrice: number | undefined;
+      if (productData.salePrice) {
+        salePrice = parseFloat(productData.salePrice.toString());
+        if (isNaN(salePrice) || salePrice < 0) {
+          throw new Error('Sale price must be a non-negative number');
+        }
+        if (salePrice >= price) {
+          throw new Error('Sale price must be less than regular price');
+        }
+      }
+
       // Check if slug already exists
       const existingProduct = await this.collection.findOne({ slug: productData.slug });
       if (existingProduct) {
         throw new Error('Product with this slug already exists');
       }
 
+      // Validate category exists
+      const categoryService = new CategoryService();
+      const category = await categoryService.getCategoryById(productData.categoryId.toString());
+      if (!category) {
+        throw new Error('Selected category does not exist');
+      }
+
       const product: Product = {
         ...productData,
         categoryId: new ObjectId(productData.categoryId),
-        price: parseFloat(productData.price.toString()),
-        salePrice: productData.salePrice ? parseFloat(productData.salePrice.toString()) : undefined,
-        stockQuantity: productData.stockQuantity || 0,
-        rating: productData.rating || 0,
-        reviewCount: productData.reviewCount || 0,
-        images: productData.images || [],
-        sizes: productData.sizes || [],
-        colors: productData.colors || [],
-        tags: productData.tags || [],
+        price,
+        salePrice,
+        stockQuantity: Math.max(0, productData.stockQuantity || 0),
+        rating: Math.min(5, Math.max(0, productData.rating || 0)),
+        reviewCount: Math.max(0, productData.reviewCount || 0),
+        images: Array.isArray(productData.images) ? productData.images : [],
+        sizes: Array.isArray(productData.sizes) ? productData.sizes : [],
+        colors: Array.isArray(productData.colors) ? productData.colors : [],
+        tags: Array.isArray(productData.tags) ? productData.tags : [],
         inStock: productData.inStock !== undefined ? productData.inStock : true,
         isFeatured: productData.isFeatured || false,
         isOnSale: productData.isOnSale || false,
