@@ -87,8 +87,8 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-              {Array.from({ length: 5 }).map((_, i) => (
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
                   <Skeleton className="h-48 md:h-64 rounded" />
                   <Skeleton className="h-3 w-3/4" />
@@ -120,8 +120,8 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-              {Array.from({ length: 5 }).map((_, i) => (
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
                   <Skeleton className="h-48 md:h-64 rounded" />
                   <Skeleton className="h-3 w-3/4" />
