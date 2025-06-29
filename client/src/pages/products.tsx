@@ -179,23 +179,25 @@ export default function Products() {
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* View Mode Toggle */}
-            <div className="hidden md:flex border rounded-lg">
+            {/* View Mode Toggle - Now visible on all devices */}
+            <div className="flex border rounded-lg">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
-                className="rounded-r-none"
+                className="rounded-r-none px-2 sm:px-3"
               >
-                <Grid className="w-4 h-4" />
+                <Grid className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline ml-1">Grid</span>
               </Button>
               <Button
                 variant={viewMode === 'list' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('list')}
-                className="rounded-l-none"
+                className="rounded-l-none px-2 sm:px-3"
               >
-                <List className="w-4 h-4" />
+                <List className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline ml-1">List</span>
               </Button>
             </div>
 
@@ -249,13 +251,13 @@ export default function Products() {
                 <p className="text-gray-500 text-sm">Try adjusting your filters or search terms</p>
               </div>
             ) : (
-              <div className={`grid gap-4 md:gap-6 ${
+              <div className={`${
                 viewMode === 'grid' 
-                  ? 'grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' 
-                  : 'grid-cols-1'
+                  ? 'grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6' 
+                  : 'flex flex-col space-y-4'
               }`}>
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} viewMode={viewMode} />
                 ))}
               </div>
             )}
