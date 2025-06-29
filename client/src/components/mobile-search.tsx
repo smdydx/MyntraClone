@@ -100,9 +100,9 @@ export default function MobileSearch({ isOpen, onClose }: MobileSearchProps) {
             <Button
               variant="ghost"
               onClick={onClose}
-              className="ml-2 sm:ml-3 px-2 sm:px-3 py-1 sm:py-2 text-sm sm:text-base text-gray-600 hover:text-gray-800"
+              className="ml-2 sm:ml-3 px-2 sm:px-3 py-1 sm:py-2 text-gray-600 hover:text-gray-800"
             >
-              Cancel
+              <X className="h-5 w-5" />
             </Button>
           </div>
 
