@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { X, Scale } from "lucide-react";
@@ -61,7 +60,7 @@ export function ProductComparison({ products }: ProductComparisonProps) {
                   </Button>
                 </DialogTitle>
               </DialogHeader>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {compareList.map((product) => (
                   <Card key={product._id} className="relative">
@@ -81,7 +80,7 @@ export function ProductComparison({ products }: ProductComparisonProps) {
                       />
                       <h3 className="font-semibold text-sm mb-2">{product.name}</h3>
                       <p className="text-xs text-gray-600 mb-2">{product.brand}</p>
-                      
+
                       <div className="space-y-2 text-xs">
                         <div className="flex items-center justify-between">
                           <span>Price:</span>
@@ -96,12 +95,12 @@ export function ProductComparison({ products }: ProductComparisonProps) {
                             )}
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between">
                           <span>Rating:</span>
                           <span>{product.rating}/5 ⭐</span>
                         </div>
-                        
+
                         <div>
                           <span className="block mb-1">Sizes:</span>
                           <div className="flex flex-wrap gap-1">
@@ -112,7 +111,7 @@ export function ProductComparison({ products }: ProductComparisonProps) {
                             ))}
                           </div>
                         </div>
-                        
+
                         <div>
                           <span className="block mb-1">Colors:</span>
                           <div className="flex flex-wrap gap-1">

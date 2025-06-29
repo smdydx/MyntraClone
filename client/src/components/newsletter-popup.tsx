@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Mail, Gift } from "lucide-react";
@@ -45,6 +45,10 @@ export default function NewsletterPopup() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-md p-0 overflow-hidden">
+        <DialogTitle className="sr-only">Newsletter Subscription</DialogTitle>
+        <DialogDescription className="sr-only">
+          Subscribe to our newsletter to get exclusive offers and updates.
+        </DialogDescription>
         <div className="relative bg-gradient-to-br from-hednor-gold to-yellow-400 p-6 text-center">
           <Button
             variant="ghost"
