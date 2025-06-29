@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     addToCart({
       productId: product.id,
       name: product.name,
@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const handleBuyNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     addToCart({
       productId: product.id,
       name: product.name,
