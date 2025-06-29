@@ -82,7 +82,7 @@ export default function MobileSearch({ isOpen, onClose }: MobileSearchProps) {
                 value={searchQuery}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 text-sm sm:text-base border-2 border-gray-300 rounded-lg focus:border-hednor-gold focus:ring-2 focus:ring-hednor-gold/20 bg-gray-50"
+                className="w-full pl-10 sm:pl-12 pr-12 py-2 sm:py-3 text-sm sm:text-base border-2 border-gray-300 rounded-lg focus:border-hednor-gold focus:ring-2 focus:ring-hednor-gold/20 bg-gray-50"
                 autoFocus
               />
               {searchQuery && (
@@ -91,7 +91,7 @@ export default function MobileSearch({ isOpen, onClose }: MobileSearchProps) {
                     setSearchQuery("");
                     setShowSuggestions(true);
                   }}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-16 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>

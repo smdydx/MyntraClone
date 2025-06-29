@@ -44,13 +44,13 @@ export default function Products() {
   const brands = Array.from(new Set(products.map(p => p.brand))).sort();
   const sizes = Array.from(new Set(products.flatMap(p => p.sizes || []))).sort();
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product) => {
     const price = parseFloat(product.salePrice || product.price);
     const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
-    const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+    const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand || '');
     const matchesSize = selectedSizes.length === 0 || (product.sizes && product.sizes.some(size => selectedSizes.includes(size)));
     const productCategoryId = product.categoryId || product.category?.id || product.category?._id;
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(productCategoryId?.toString() || '');
+    const matchesCategory = selectedCategories.length === 0 || (productCategoryId && selectedCategories.includes(productCategoryId.toString()));
 
     return matchesPrice && matchesBrand && matchesSize && matchesCategory;
   });
@@ -79,7 +79,7 @@ export default function Products() {
           {categories.map((category) => {
             const categoryId = category.id || category._id;
             if (!categoryId) return null;
-            
+
             return (
               <div key={categoryId} className="flex items-center space-x-2">
                 <Checkbox
