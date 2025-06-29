@@ -42,7 +42,9 @@ export default function Home() {
       <Header />
 
       {/* Hero Slider */}
-      <HeroSlider />
+      <div className="w-full overflow-hidden">
+        <HeroSlider />
+      </div>
 
       {/* Category Grid */}
       <section className="container mx-auto px-4 py-8 bg-gray-50">

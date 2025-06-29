@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogDescription,
   DialogTrigger,
@@ -47,6 +48,9 @@ export default function SizeGuide() {
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-bold">Size Guide</DialogTitle>
+          <DialogDescription>
+            Find your perfect fit with our comprehensive size chart
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="men" className="w-full">

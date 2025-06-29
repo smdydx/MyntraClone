@@ -72,8 +72,9 @@ export default function CartSlideout() {
                     src={item.image}
                     alt={item.name}
                     className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg flex-shrink-0"
+                    loading="lazy"
                   />
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 overflow-hidden">
                     <h4 className="font-medium text-sm sm:text-base line-clamp-2">{item.name}</h4>
                     <p className="text-xs text-gray-600 mb-1">{item.brand}</p>
                     {(item.size || item.color) && (

@@ -196,12 +196,12 @@ export default function Products() {
             {/* Mobile Filter */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="md:hidden">
+                <Button variant="outline" size="sm" className="md:hidden flex items-center">
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filter
+                  Filters
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[320px] max-w-[90vw]">
+              <SheetContent side="right" className="w-[280px] sm:w-[320px] max-w-[90vw] p-0">
                 <SheetHeader>
                   <SheetTitle className="text-left">Filters</SheetTitle>
                 </SheetHeader>

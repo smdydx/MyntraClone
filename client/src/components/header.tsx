@@ -1375,9 +1375,9 @@ export default function Header() {
           <div className="flex items-center justify-between">
             {/* Mobile Layout */}
             <div className="lg:hidden w-full">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between h-16">
                 {/* Left side - Search and Menu */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 flex-shrink-0">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -1521,16 +1521,18 @@ export default function Header() {
                 </div>
 
                 {/* Center - Logo */}
-                <Link href="/" className="flex items-center">
-                  <img
-                    src={hednorLogoPath}
-                    alt="Hednor"
-                    className="w-12 h-12 object-contain"
-                  />
-                </Link>
+                <div className="flex-1 flex justify-center">
+                  <Link href="/" className="flex items-center">
+                    <img
+                      src={hednorLogoPath}
+                      alt="Hednor"
+                      className="w-12 h-12 object-contain"
+                    />
+                  </Link>
+                </div>
 
                 {/* Right side - User Actions and Cart */}
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-1 flex-shrink-0">
                   {/* Profile/Login */}
                   {isAuthenticated && user ? (
                     <Link href="/profile">
