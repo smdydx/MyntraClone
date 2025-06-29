@@ -515,7 +515,7 @@ const navigation = [
     ],
   },
   {
-    name: "Home & Living",
+    name: "Home",
     href: "/products?category=home",
     submenu: [
       {
