@@ -174,15 +174,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/cart", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
+      const { productId, quantity, size, color } = req.body;
+
+      if (!productId) {
+        return res.status(400).json({ message: "Product ID is required" });
+      }
+
       const cartData = {
-        ...req.body,
+        productId,
+        quantity: quantity || 1,
+        size,
+        color,
         userId: req.user!.userId
       };
 
       const cartItem = await cartService.addToCart(cartData);
       res.json(cartItem);
     } catch (error) {
-      res.status(400).json({ message: "Invalid cart item data" });
+      console.error('Add to cart error:', error);
+      res.status(400).json({ message: error.message || "Failed to add item to cart" });
     }
   });
 
@@ -257,12 +267,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes for products
-  app.post("/api/admin/products", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.post("/api/admin/products", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const product = await productService.createProduct(req.body);
       res.status(201).json(product);
     } catch (error) {
-      res.status(400).json({ message: "Failed to add product" });
+      console.error('Product creation error:', error);
+      res.status(400).json({ message: "Failed to add product", error: error.message });
     }
   });
 
@@ -311,12 +322,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes for categories
-  app.post("/api/admin/categories", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  app.post("/api/admin/categories", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const category = await categoryService.createCategory(req.body);
       res.status(201).json(category);
     } catch (error) {
-      res.status(400).json({ message: "Failed to add category" });
+      console.error('Category creation error:', error);
+      res.status(400).json({ message: "Failed to add category", error: error.message });
     }
   });
 

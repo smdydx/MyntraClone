@@ -195,15 +195,40 @@ export class CartService {
   }
 
   async addToCart(cartData: Omit<CartItem, '_id' | 'createdAt'>): Promise<CartItem> {
-    const cartItem: CartItem = {
-      ...cartData,
-      userId: new ObjectId(cartData.userId),
-      productId: new ObjectId(cartData.productId),
-      createdAt: new Date()
-    };
+    try {
+      // Check if item already exists in cart
+      const existingItem = await this.collection.findOne({
+        userId: new ObjectId(cartData.userId),
+        productId: new ObjectId(cartData.productId),
+        size: cartData.size,
+        color: cartData.color
+      });
 
-    const result = await this.collection.insertOne(cartItem);
-    return { ...cartItem, _id: result.insertedId };
+      if (existingItem) {
+        // Update quantity instead of creating new item
+        const updatedQuantity = existingItem.quantity + (cartData.quantity || 1);
+        const result = await this.collection.findOneAndUpdate(
+          { _id: existingItem._id },
+          { $set: { quantity: updatedQuantity } },
+          { returnDocument: 'after' }
+        );
+        return result!;
+      }
+
+      const cartItem: CartItem = {
+        ...cartData,
+        userId: new ObjectId(cartData.userId),
+        productId: new ObjectId(cartData.productId),
+        quantity: cartData.quantity || 1,
+        createdAt: new Date()
+      };
+
+      const result = await this.collection.insertOne(cartItem);
+      return { ...cartItem, _id: result.insertedId };
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      throw error;
+    }
   }
 
   async updateCartItem(id: string, quantity: number): Promise<CartItem | null> {
@@ -279,13 +304,30 @@ export class CategoryService {
   }
 
   async createCategory(categoryData: Omit<Category, '_id' | 'createdAt'>): Promise<Category> {
-    const category: Category = {
-      ...categoryData,
-      createdAt: new Date()
-    };
+    try {
+      // Validate required fields
+      if (!categoryData.name || !categoryData.slug) {
+        throw new Error('Name and slug are required fields');
+      }
 
-    const result = await this.collection.insertOne(category);
-    return { ...category, _id: result.insertedId };
+      // Check if slug already exists
+      const existingCategory = await this.collection.findOne({ slug: categoryData.slug });
+      if (existingCategory) {
+        throw new Error('Category with this slug already exists');
+      }
+
+      const category: Category = {
+        ...categoryData,
+        isActive: categoryData.isActive !== undefined ? categoryData.isActive : true,
+        createdAt: new Date()
+      };
+
+      const result = await this.collection.insertOne(category);
+      return { ...category, _id: result.insertedId };
+    } catch (error) {
+      console.error('Category creation error:', error);
+      throw error;
+    }
   }
 
   async updateCategory(id: string, updateData: Partial<Category>): Promise<Category | null> {
@@ -346,14 +388,42 @@ export class ProductService {
   }
 
   async createProduct(productData: Omit<Product, '_id' | 'createdAt'>): Promise<Product> {
-    const product: Product = {
-      ...productData,
-      categoryId: new ObjectId(productData.categoryId),
-      createdAt: new Date()
-    };
+    try {
+      // Validate required fields
+      if (!productData.name || !productData.brand || !productData.price) {
+        throw new Error('Name, brand, and price are required fields');
+      }
 
-    const result = await this.collection.insertOne(product);
-    return { ...product, _id: result.insertedId };
+      // Check if slug already exists
+      const existingProduct = await this.collection.findOne({ slug: productData.slug });
+      if (existingProduct) {
+        throw new Error('Product with this slug already exists');
+      }
+
+      const product: Product = {
+        ...productData,
+        categoryId: new ObjectId(productData.categoryId),
+        price: parseFloat(productData.price.toString()),
+        salePrice: productData.salePrice ? parseFloat(productData.salePrice.toString()) : undefined,
+        stockQuantity: productData.stockQuantity || 0,
+        rating: productData.rating || 0,
+        reviewCount: productData.reviewCount || 0,
+        images: productData.images || [],
+        sizes: productData.sizes || [],
+        colors: productData.colors || [],
+        tags: productData.tags || [],
+        inStock: productData.inStock !== undefined ? productData.inStock : true,
+        isFeatured: productData.isFeatured || false,
+        isOnSale: productData.isOnSale || false,
+        createdAt: new Date()
+      };
+
+      const result = await this.collection.insertOne(product);
+      return { ...product, _id: result.insertedId };
+    } catch (error) {
+      console.error('Product creation error:', error);
+      throw error;
+    }
   }
 
   async updateProduct(id: string, updateData: Partial<Product>): Promise<Product | null> {
