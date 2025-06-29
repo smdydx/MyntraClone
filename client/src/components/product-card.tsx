@@ -34,6 +34,42 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      salePrice: product.salePrice || undefined,
+      image: product.images?.[0] || "",
+      quantity: 1,
+    });
+
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      salePrice: product.salePrice || undefined,
+      image: product.images?.[0] || "",
+      quantity: 1,
+    });
+    setLocation('/checkout');
+  };
+
   const formatPrice = (price: string) => {
     return `₹${parseFloat(price).toLocaleString('en-IN')}`;
   };
@@ -57,18 +93,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link href={`/products/${product.slug}`}>
-      <div className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+    <div className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden w-full max-w-sm mx-auto">
+      <Link href={`/products/${product.slug}`}>
         <div className="relative overflow-hidden bg-gray-50">
           <img
             src={product.images?.[0] || ""}
             alt={product.name}
-            className="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
 
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col space-y-1">
+          <div className="absolute top-2 left-2 flex flex-col space-y-1">
             {product.isOnSale && product.salePrice && (
               <Badge className="bg-red-500 text-white text-xs px-2 py-1 font-medium">
                 {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
@@ -80,7 +116,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-3 right-3 w-7 h-7 bg-white/90 hover:bg-white shadow-sm"
+            className="absolute top-2 right-2 w-8 h-8 bg-white/90 hover:bg-white shadow-sm"
             onClick={handleWishlistToggle}
           >
             <Heart 
@@ -93,66 +129,67 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Button>
         </div>
 
-        <div className="p-3">
+        <div className="p-3 sm:p-4">
           <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
             {product.brand}
           </p>
-          <h3 className="font-normal text-sm text-gray-800 mb-2 line-clamp-1">
+          <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
             {product.name}
           </h3>
 
           <div className="flex items-baseline space-x-2 mb-2">
             {product.salePrice ? (
               <>
-                <span className="font-bold text-sm text-gray-900">
+                <span className="font-bold text-sm sm:text-base text-gray-900">
                   {formatPrice(product.salePrice)}
                 </span>
-                <span className="text-xs text-gray-400 line-through">
+                <span className="text-xs sm:text-sm text-gray-400 line-through">
                   {formatPrice(product.price)}
                 </span>
               </>
             ) : (
-              <span className="font-bold text-sm text-gray-900">
+              <span className="font-bold text-sm sm:text-base text-gray-900">
                 {formatPrice(product.price)}
               </span>
             )}
           </div>
 
-          <div className="flex items-center">
-            <div className="flex items-center bg-green-600 text-white text-xs px-1.5 py-0.5 rounded mr-2">
+          <div className="flex items-center mb-3">
+            <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
               <span className="font-medium">{product.rating || "4.0"}</span>
-              <Star className="w-2.5 h-2.5 ml-0.5 fill-current" />
+              <Star className="w-3 h-3 ml-1 fill-current" />
             </div>
             <span className="text-xs text-gray-400">
               ({product.reviewCount?.toLocaleString() || "1.2k"})
             </span>
           </div>
         </div>
-        <div className="p-3">
-              <div className="grid grid-cols-2 gap-2">
-                <Button 
-                  onClick={() => addToCart(product)}
-                  variant="outline"
-                  className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-semibold transition-all duration-300"
-                  disabled={!product.inStock}
-                >
-                  <ShoppingCart className="w-4 h-4 mr-1" />
-                  {!product.inStock ? 'Out of Stock' : 'Add Cart'}
-                </Button>
-                <Button 
-                  onClick={() => {
-                    addToCart(product);
-                    setLocation('/checkout');
-                  }}
-                  className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold transition-all duration-300"
-                  disabled={!product.inStock}
-                >
-                  <CreditCard className="w-4 h-4 mr-1" />
-                  Buy Now
-                </Button>
-              </div>
-            </div>
+      </Link>
+
+      {/* Action Buttons */}
+      <div className="px-3 pb-3 sm:px-4 sm:pb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <Button 
+            onClick={handleAddToCart}
+            variant="outline"
+            size="sm"
+            className="w-full border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium transition-all duration-300 text-xs sm:text-sm py-2"
+            disabled={!product.inStock}
+          >
+            <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+            {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+          </Button>
+          <Button 
+            onClick={handleBuyNow}
+            size="sm"
+            className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-medium transition-all duration-300 text-xs sm:text-sm py-2"
+            disabled={!product.inStock}
+          >
+            <CreditCard className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+            Buy Now
+          </Button>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
