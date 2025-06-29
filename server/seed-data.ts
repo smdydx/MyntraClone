@@ -466,6 +466,127 @@ export async function seedProducts() {
         tags: ["skincare", "beauty", "routine", "dermatologist-tested"],
         isFeatured: true,
         isOnSale: true
+      },
+
+      // Additional Men's Products
+      // 11. Men's Polo Shirt
+      {
+        name: "Classic Polo Shirt",
+        slug: "classic-polo-shirt",
+        description: "Timeless polo shirt made from premium pique cotton. Features ribbed collar and cuffs with three-button placket. Perfect for casual and smart-casual occasions.",
+        brand: "Hednor Polo",
+        categoryId: menCategory._id,
+        price: 1799,
+        salePrice: 1399,
+        images: [
+          "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=400",
+          "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400"
+        ],
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        colors: ["Navy Blue", "White", "Maroon", "Forest Green", "Black"],
+        inStock: true,
+        stockQuantity: 95,
+        rating: 4.4,
+        reviewCount: 876,
+        tags: ["polo", "casual", "cotton", "classic"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 12. Men's Hoodie
+      {
+        name: "Premium Cotton Hoodie",
+        slug: "premium-cotton-hoodie",
+        description: "Comfortable fleece-lined hoodie with adjustable drawstring hood and kangaroo pocket. Made from 80% cotton and 20% polyester blend for warmth and comfort.",
+        brand: "Hednor Comfort",
+        categoryId: menCategory._id,
+        price: 2799,
+        salePrice: 2199,
+        images: [
+          "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",
+          "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=400"
+        ],
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        colors: ["Charcoal Grey", "Navy Blue", "Black", "Olive Green"],
+        inStock: true,
+        stockQuantity: 67,
+        rating: 4.7,
+        reviewCount: 1234,
+        tags: ["hoodie", "comfortable", "casual", "winter"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 13. Men's Chinos
+      {
+        name: "Slim Fit Chino Pants",
+        slug: "slim-fit-chino-pants",
+        description: "Versatile chino pants in slim fit with stretch cotton fabric. Perfect for both casual and semi-formal occasions. Features classic five-pocket styling.",
+        brand: "Hednor Classics",
+        categoryId: menCategory._id,
+        price: 2299,
+        salePrice: 1799,
+        images: [
+          "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400",
+          "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400"
+        ],
+        sizes: ["28", "30", "32", "34", "36", "38"],
+        colors: ["Khaki", "Navy Blue", "Charcoal", "Olive Green", "Stone"],
+        inStock: true,
+        stockQuantity: 78,
+        rating: 4.5,
+        reviewCount: 1567,
+        tags: ["chinos", "slim-fit", "versatile", "smart-casual"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 14. Men's Jacket
+      {
+        name: "Bomber Jacket",
+        slug: "bomber-jacket",
+        description: "Classic bomber jacket with ribbed collar, cuffs, and hem. Made from premium polyester with quilted lining. Perfect for layering in cool weather.",
+        brand: "Hednor Outerwear",
+        categoryId: menCategory._id,
+        price: 4499,
+        salePrice: 3599,
+        images: [
+          "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400",
+          "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"
+        ],
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        colors: ["Black", "Navy Blue", "Olive Green", "Burgundy"],
+        inStock: true,
+        stockQuantity: 45,
+        rating: 4.6,
+        reviewCount: 987,
+        tags: ["jacket", "bomber", "outerwear", "trendy"],
+        isFeatured: true,
+        isOnSale: true
+      },
+
+      // 15. Men's Watch
+      {
+        name: "Classic Analog Watch",
+        slug: "classic-analog-watch",
+        description: "Elegant analog watch with stainless steel case and leather strap. Water-resistant with date display. Perfect accessory for formal and casual wear.",
+        brand: "Hednor Timepieces",
+        categoryId: menCategory._id,
+        price: 3999,
+        salePrice: 3199,
+        images: [
+          "https://images.unsplash.com/photo-1524805444973-bf390e5d5dc8?w=400",
+          "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=400"
+        ],
+        sizes: ["One Size"],
+        colors: ["Black Leather", "Brown Leather", "Silver Steel", "Gold Steel"],
+        inStock: true,
+        stockQuantity: 56,
+        rating: 4.8,
+        reviewCount: 654,
+        tags: ["watch", "analog", "classic", "accessory"],
+        isFeatured: true,
+        isOnSale: true
       }
       
     ];
