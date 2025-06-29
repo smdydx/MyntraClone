@@ -1621,39 +1621,38 @@ export default function Header() {
                       }}
                     >
                       <div className="p-6 lg:p-8">
-                        {/* Default grid layout for all categories */}
-                        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
-                          {(() => {
-                            const categoryGroups: {
-                              [key: string]: typeof item.submenu;
-                            } = {};
-                            let currentCategory = "General";
+                        {/* Special layout for Home & Living */}
+                        {item.name === "Home & Living" ? (
+                          <div className="space-y-6">
+                            {(() => {
+                              const categoryGroups: {
+                                [key: string]: typeof item.submenu;
+                              } = {};
+                              let currentCategory = "General";
 
-                            item.submenu.forEach((subItem) => {
-                              if (subItem.isCategory) {
-                                currentCategory = subItem.name;
-                                categoryGroups[currentCategory] = [];
-                              } else {
-                                if (!categoryGroups[currentCategory]) {
+                              item.submenu.forEach((subItem) => {
+                                if (subItem.isCategory) {
+                                  currentCategory = subItem.name;
                                   categoryGroups[currentCategory] = [];
+                                } else {
+                                  if (!categoryGroups[currentCategory]) {
+                                    categoryGroups[currentCategory] = [];
+                                  }
+                                  categoryGroups[currentCategory].push(subItem);
                                 }
-                                categoryGroups[currentCategory].push(subItem);
-                              }
-                            });
+                              });
 
-                            return Object.entries(categoryGroups)
-                              .slice(0, 5)
-                              .map(([categoryName, items]) => (
-                                <div key={categoryName} className="space-y-4">
-                                  <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide">
+                              return Object.entries(categoryGroups).map(([categoryName, items]) => (
+                                <div key={categoryName} className="space-y-3">
+                                  <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide border-b border-hednor-gold/30 pb-2">
                                     {categoryName}
                                   </h3>
-                                  <div className="space-y-2">
-                                    {items.slice(0, 8).map((subItem) => (
+                                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                                    {items.map((subItem) => (
                                       <Link
                                         key={`${categoryName}-${subItem.name}`}
                                         href={subItem.href}
-                                        className="block text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium"
+                                        className="text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium whitespace-nowrap"
                                       >
                                         {subItem.name}
                                       </Link>
@@ -1661,8 +1660,52 @@ export default function Header() {
                                   </div>
                                 </div>
                               ));
-                          })()}
-                        </div>
+                            })()}
+                          </div>
+                        ) : (
+                          /* Default grid layout for other categories */
+                          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8 max-h-80 overflow-y-auto">
+                            {(() => {
+                              const categoryGroups: {
+                                [key: string]: typeof item.submenu;
+                              } = {};
+                              let currentCategory = "General";
+
+                              item.submenu.forEach((subItem) => {
+                                if (subItem.isCategory) {
+                                  currentCategory = subItem.name;
+                                  categoryGroups[currentCategory] = [];
+                                } else {
+                                  if (!categoryGroups[currentCategory]) {
+                                    categoryGroups[currentCategory] = [];
+                                  }
+                                  categoryGroups[currentCategory].push(subItem);
+                                }
+                              });
+
+                              return Object.entries(categoryGroups)
+                                .slice(0, 5)
+                                .map(([categoryName, items]) => (
+                                  <div key={categoryName} className="space-y-4">
+                                    <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide">
+                                      {categoryName}
+                                    </h3>
+                                    <div className="space-y-2">
+                                      {items.slice(0, 8).map((subItem) => (
+                                        <Link
+                                          key={`${categoryName}-${subItem.name}`}
+                                          href={subItem.href}
+                                          className="block text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium"
+                                        >
+                                          {subItem.name}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ));
+                            })()}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
