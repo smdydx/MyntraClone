@@ -214,6 +214,135 @@ export default function Checkout() {
     }
   };
 
+  const handleGPayPayment = async () => {
+    try {
+      setIsProcessing(true);
+
+      const response = await fetch("/api/payment/gpay/initiate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          orderData
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        clearCart();
+        toast({
+          title: "Google Pay Payment Initiated",
+          description: data.message
+        });
+        setLocation(`/order-confirmation/${data.orderId}`);
+      } else {
+        toast({
+          title: "Payment Failed",
+          description: "Google Pay payment failed. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Payment Failed",
+        description: "Failed to initiate Google Pay payment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePhonePePayment = async () => {
+    try {
+      setIsProcessing(true);
+
+      const response = await fetch("/api/payment/phonepe/initiate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          orderData
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        clearCart();
+        toast({
+          title: "PhonePe Payment Initiated",
+          description: data.message
+        });
+        setLocation(`/order-confirmation/${data.orderId}`);
+      } else {
+        toast({
+          title: "Payment Failed",
+          description: "PhonePe payment failed. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Payment Failed",
+        description: "Failed to initiate PhonePe payment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePaytmPayment = async () => {
+    try {
+      setIsProcessing(true);
+
+      const response = await fetch("/api/payment/paytm/initiate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          orderData
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        clearCart();
+        toast({
+          title: "Paytm Payment Initiated",
+          description: data.message
+        });
+        setLocation(`/order-confirmation/${data.orderId}`);
+      } else {
+        toast({
+          title: "Payment Failed",
+          description: "Paytm payment failed. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Payment Failed",
+        description: "Failed to initiate Paytm payment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleUPIPayment = async () => {
     try {
       setIsProcessing(true);
@@ -312,6 +441,15 @@ export default function Checkout() {
     switch (paymentMethod) {
       case "razorpay":
         handleRazorpayPayment();
+        break;
+      case "gpay":
+        handleGPayPayment();
+        break;
+      case "phonepe":
+        handlePhonePePayment();
+        break;
+      case "paytm":
+        handlePaytmPayment();
         break;
       case "upi":
         if (!upiId) {
@@ -459,6 +597,51 @@ export default function Checkout() {
                         </Label>
                       </div>
                       <Badge variant="secondary">Secure</Badge>
+                    </div>
+
+                    {/* GPay */}
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                      <RadioGroupItem value="gpay" id="gpay" />
+                      <div className="flex-1">
+                        <Label htmlFor="gpay" className="flex items-center cursor-pointer">
+                          <Wallet className="w-5 h-5 mr-2 text-blue-600" />
+                          <div>
+                            <div className="font-medium">Google Pay</div>
+                            <div className="text-sm text-gray-500">Pay with Google Pay</div>
+                          </div>
+                        </Label>
+                      </div>
+                      <Badge variant="secondary">Secure</Badge>
+                    </div>
+
+                    {/* PhonePe */}
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                      <RadioGroupItem value="phonepe" id="phonepe" />
+                      <div className="flex-1">
+                        <Label htmlFor="phonepe" className="flex items-center cursor-pointer">
+                          <Smartphone className="w-5 h-5 mr-2 text-purple-600" />
+                          <div>
+                            <div className="font-medium">PhonePe</div>
+                            <div className="text-sm text-gray-500">Pay with PhonePe</div>
+                          </div>
+                        </Label>
+                      </div>
+                      <Badge variant="secondary">Fast</Badge>
+                    </div>
+
+                    {/* Paytm */}
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                      <RadioGroupItem value="paytm" id="paytm" />
+                      <div className="flex-1">
+                        <Label htmlFor="paytm" className="flex items-center cursor-pointer">
+                          <Wallet className="w-5 h-5 mr-2 text-blue-500" />
+                          <div>
+                            <div className="font-medium">Paytm</div>
+                            <div className="text-sm text-gray-500">Pay with Paytm Wallet</div>
+                          </div>
+                        </Label>
+                      </div>
+                      <Badge variant="secondary">Instant</Badge>
                     </div>
 
                     {/* UPI */}

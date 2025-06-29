@@ -1,4 +1,4 @@
-import { Heart, Star, ShoppingBag, Eye } from "lucide-react";
+import { ShoppingCart, Heart, Star, Eye, ArrowUpDown, CreditCard } from "lucide-react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useStore();
+  const { addToWishlist, removeFromWishlist, isInWishlist, addToCart } = useStore();
   const inWishlist = isInWishlist(product.id);
   const { toast } = useToast();
+  const { setLocation } = useStore();
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -127,6 +128,30 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
         </div>
+        <div className="p-3">
+              <div className="grid grid-cols-2 gap-2">
+                <Button 
+                  onClick={() => addToCart(product)}
+                  variant="outline"
+                  className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-semibold transition-all duration-300"
+                  disabled={!product.inStock}
+                >
+                  <ShoppingCart className="w-4 h-4 mr-1" />
+                  {!product.inStock ? 'Out of Stock' : 'Add Cart'}
+                </Button>
+                <Button 
+                  onClick={() => {
+                    addToCart(product);
+                    setLocation('/checkout');
+                  }}
+                  className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold transition-all duration-300"
+                  disabled={!product.inStock}
+                >
+                  <CreditCard className="w-4 h-4 mr-1" />
+                  Buy Now
+                </Button>
+              </div>
+            </div>
       </div>
     </Link>
   );

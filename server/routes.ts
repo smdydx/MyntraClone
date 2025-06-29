@@ -280,7 +280,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/products/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      
+
       // Validate ObjectId
       if (!id || id.length !== 24) {
         return res.status(400).json({ message: "Invalid product ID" });
@@ -300,7 +300,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/products/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      
+
       // Validate ObjectId
       if (!id || id.length !== 24) {
         return res.status(400).json({ message: "Invalid product ID" });
@@ -349,7 +349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/categories/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      
+
       // Validate ObjectId
       if (!id || id.length !== 24) {
         return res.status(400).json({ message: "Invalid category ID" });
@@ -369,7 +369,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/categories/:id", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      
+
       // Validate ObjectId
       if (!id || id.length !== 24) {
         return res.status(400).json({ message: "Invalid category ID" });
@@ -481,7 +481,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For now, we'll return a mock response
       const { fileName, fileType } = req.body;
       const mockUrl = `https://example.com/uploads/${fileName}`;
-      
+
       res.json({ 
         success: true, 
         url: mockUrl, 
@@ -500,7 +500,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get banners from site settings
       const settings = await siteSettingsService.getSettings();
       const banners = [];
-      
+
       if (settings.heroVideo) {
         banners.push({
           id: "hero",
@@ -511,7 +511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           createdAt: new Date().toISOString()
         });
       }
-      
+
       res.json(banners);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch banners" });
@@ -521,7 +521,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/banners", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const { type, title, url, active = true } = req.body;
-      
+
       // Mock banner creation - replace with actual database operation
       const newBanner = {
         id: Date.now().toString(),
@@ -531,7 +531,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         active,
         createdAt: new Date().toISOString()
       };
-      
+
       res.status(201).json({ message: "Banner created successfully", banner: newBanner });
     } catch (error) {
       res.status(500).json({ message: "Failed to create banner" });
@@ -542,14 +542,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const updateData = req.body;
-      
+
       // Mock banner update - replace with actual database operation
       const updatedBanner = {
         id,
         ...updateData,
         updatedAt: new Date().toISOString()
       };
-      
+
       res.json({ message: "Banner updated successfully", banner: updatedBanner });
     } catch (error) {
       res.status(500).json({ message: "Failed to update banner" });
@@ -559,7 +559,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/banners/:id", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      
+
       // Mock banner deletion - replace with actual database operation
       res.json({ message: "Banner deleted successfully" });
     } catch (error) {
@@ -584,16 +584,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const totalUsers = await userService.getUserCount();
       const allOrders = await orderService.getAllOrders();
       const totalProducts = await productService.getProductCount();
-      
+
       const totalOrders = allOrders.length;
       const totalRevenue = allOrders.reduce((sum, order) => sum + (order.finalAmount || 0), 0);
-      
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const ordersToday = allOrders.filter(order => new Date(order.createdAt) >= today);
       const newOrdersToday = ordersToday.length;
       const revenueToday = ordersToday.reduce((sum, order) => sum + (order.finalAmount || 0), 0);
-      
+
       const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
       const conversionRate = totalUsers > 0 ? (totalOrders / totalUsers) * 100 : 0;
 
@@ -667,7 +667,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Get sections configuration from site settings
       const settings = await siteSettingsService.getSettings();
-      
+
       const homepageSections = settings.homepageSections || {
         dealsSection: {
           title: "Deals for You",
@@ -699,7 +699,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           order: 5
         }
       };
-      
+
       res.json(homepageSections);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch homepage sections" });
@@ -709,7 +709,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/homepage-sections", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
       const sectionsConfig = req.body;
-      
+
       // In real implementation, save to database
       // For now, just return success
       res.json({ 
@@ -727,9 +727,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { sectionType } = req.params;
       const { limit = 6 } = req.query;
-      
+
       let filterConditions = {};
-      
+
       switch (sectionType) {
         case 'deals':
           filterConditions = { $or: [{ isOnSale: true }, { salePrice: { $exists: true, $ne: null } }] };
@@ -752,7 +752,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...filterConditions,
         limit: parseInt(limit as string)
       });
-      
+
       res.json(products);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch section products" });
@@ -954,6 +954,138 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     } catch (error) {
       res.status(500).json({ message: "Payment confirmation failed" });
+    }
+  });
+
+  // Google Pay Payment
+  app.post("/api/payment/gpay/initiate", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { amount, orderData } = req.body;
+
+      if (!amount) {
+        return res.status(400).json({ message: "Amount is required" });
+      }
+
+      // Create order first
+      const order = await orderService.createOrder({
+        ...orderData,
+        userId: req.user!.userId,
+        paymentMethod: "googlepay",
+        paymentStatus: "pending"
+      });
+
+      // Simulate Google Pay payment processing
+      const paymentId = `gpay_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      await paymentService.createPayment({
+        orderId: order.orderId,
+        userId: req.user!.userId,
+        amount,
+        paymentMethod: "googlepay",
+        status: "completed",
+        transactionId: paymentId
+      });
+
+      // Update order status
+      await orderService.updateOrderStatus(order.orderId, "confirmed");
+
+      res.json({
+        success: true,
+        orderId: order.orderId,
+        paymentId,
+        message: "Google Pay payment processed successfully"
+      });
+    } catch (error) {
+      console.error("Google Pay payment error:", error);
+      res.status(500).json({ message: "Failed to process Google Pay payment" });
+    }
+  });
+
+  // PhonePe Payment
+  app.post("/api/payment/phonepe/initiate", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { amount, orderData } = req.body;
+
+      if (!amount) {
+        return res.status(400).json({ message: "Amount is required" });
+      }
+
+      // Create order first
+      const order = await orderService.createOrder({
+        ...orderData,
+        userId: req.user!.userId,
+        paymentMethod: "phonepe",
+        paymentStatus: "pending"
+      });
+
+      // Simulate PhonePe payment processing
+      const paymentId = `phonepe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      await paymentService.createPayment({
+        orderId: order.orderId,
+        userId: req.user!.userId,
+        amount,
+        paymentMethod: "phonepe",
+        status: "completed",
+        transactionId: paymentId
+      });
+
+      // Update order status
+      await orderService.updateOrderStatus(order.orderId, "confirmed");
+
+      res.json({
+        success: true,
+        orderId: order.orderId,
+        paymentId,
+        message: "PhonePe payment processed successfully"
+      });
+    } catch (error) {
+      console.error("PhonePe payment error:", error);
+      res.status(500).json({ message: "Failed to process PhonePe payment" });
+    }
+  });
+
+  // Paytm Payment
+  app.post("/api/payment/paytm/initiate", authenticateToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { amount, orderData } = req.body;
+
+      if (!amount) {
+        return res.status(400).json({ message: "Amount is required" });
+      }
+
+      // Create order first
+      const order = await orderService.createOrder({
+        ...orderData,
+        userId: req.user!.userId,
+        paymentMethod: "paytm",
+        paymentStatus: "pending"
+      });
+
+      // Simulate Paytm payment processing
+      const paymentId = `paytm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      await paymentService.createPayment({
+        orderId: order.orderId,
+        userId: req.user!.userId,
+        amount,
+        paymentMethod: "paytm",
+        status: "completed",
+        transactionId: paymentId
+      });
+
+      // Update order status
+      await orderService.updateOrderStatus(order.orderId, "confirmed");
+
+      res.json({
+        success: true,
+        orderId: order.orderId,
+        paymentId,
+        message: "Paytm payment processed successfully"
+      });
+    } catch (error) {
+      console.error("Paytm payment error:", error);
+      res.status(500).json({ message: "Failed to process Paytm payment" });
     }
   });
 
