@@ -33,7 +33,7 @@ export default function Products() {
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products", { 
-      categoryId: categoryParam ? categories.find(c => c.slug === categoryParam)?.id : undefined,
+      categoryId: categoryParam ? (categories.find(c => c.slug === categoryParam)?.id || categories.find(c => c.slug === categoryParam)?._id) : undefined,
       search: searchParam,
       featured: featuredParam === 'true',
       onSale: onSaleParam === 'true'
@@ -49,7 +49,8 @@ export default function Products() {
     const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
     const matchesSize = selectedSizes.length === 0 || (product.sizes && product.sizes.some(size => selectedSizes.includes(size)));
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.categoryId?.toString() || '');
+    const productCategoryId = product.categoryId || product.category?.id || product.category?._id;
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(productCategoryId?.toString() || '');
 
     return matchesPrice && matchesBrand && matchesSize && matchesCategory;
   });
@@ -75,25 +76,30 @@ export default function Products() {
       <div>
         <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Categories</h3>
         <div className="space-y-1 md:space-y-2">
-          {categories.map((category) => (
-            <div key={category.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`category-${category.id}`}
-                checked={selectedCategories.includes(category.id.toString())}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedCategories([...selectedCategories, category.id.toString()]);
-                  } else {
-                    setSelectedCategories(selectedCategories.filter(c => c !== category.id.toString()));
-                  }
-                }}
-                className="h-4 w-4"
-              />
-              <Label htmlFor={`category-${category.id}`} className="text-xs md:text-sm cursor-pointer">
-                {category.name}
-              </Label>
-            </div>
-          ))}
+          {categories.map((category) => {
+            const categoryId = category.id || category._id;
+            if (!categoryId) return null;
+            
+            return (
+              <div key={categoryId} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`category-${categoryId}`}
+                  checked={selectedCategories.includes(categoryId.toString())}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelectedCategories([...selectedCategories, categoryId.toString()]);
+                    } else {
+                      setSelectedCategories(selectedCategories.filter(c => c !== categoryId.toString()));
+                    }
+                  }}
+                  className="h-4 w-4"
+                />
+                <Label htmlFor={`category-${categoryId}`} className="text-xs md:text-sm cursor-pointer">
+                  {category.name}
+                </Label>
+              </div>
+            );
+          })}
         </div>
       </div>
 
