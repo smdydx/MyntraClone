@@ -1525,7 +1525,7 @@ export default function Header() {
 
                 {/* Center - Logo */}
                 <div className="flex-1 flex justify-center">
-                  <Link href="/" className="flex items-center">
+                  <Link href="/" className="flex items-center ml-4">
                     <img
                       src={hednorLogoPath}
                       alt="Hednor"
@@ -1593,7 +1593,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center justify-between w-full">
               {/* Logo */}
               
-              <Link href="/" className="flex items-center mr-8">
+              <Link href="/" className="flex items-center mr-8 ml-4">
                 <img
                   src={hednorLogoPath}
                   alt="Hednor"
