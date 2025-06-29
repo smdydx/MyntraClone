@@ -1377,17 +1377,8 @@ export default function Header() {
             {/* Mobile Layout */}
             <div className="lg:hidden w-full">
               <div className="flex items-center justify-between h-16">
-                {/* Left side - Search and Menu */}
+                {/* Left side - Menu and Search */}
                 <div className="flex items-center space-x-2 flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white hover:text-hednor-gold p-2"
-                    onClick={() => setMobileSearchOpen(true)}
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-
                   <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                     <SheetTrigger asChild>
                       <Button
@@ -1398,6 +1389,15 @@ export default function Header() {
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:text-hednor-gold p-2"
+                    onClick={() => setMobileSearchOpen(true)}
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
                     <SheetContent
                       side="left"
                       className="w-[280px] sm:w-[320px] p-0"
