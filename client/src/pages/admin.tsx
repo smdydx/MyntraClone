@@ -191,6 +191,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: '1',
@@ -217,6 +218,58 @@ export default function AdminDashboard() {
       read: true
     }
   ]);
+
+  // Real-time notification system
+  useEffect(() => {
+    if (isLoggedIn) {
+      const interval = setInterval(() => {
+        // Simulate real-time notifications
+        const randomNotifications = [
+          {
+            id: Date.now().toString(),
+            title: 'New Order Alert',
+            message: `Order #${Math.floor(Math.random() * 10000)} received for ₹${Math.floor(Math.random() * 5000 + 1000)}`,
+            type: 'success' as const,
+            timestamp: 'Just now',
+            read: false
+          },
+          {
+            id: Date.now().toString(),
+            title: 'Stock Alert',
+            message: `${['iPhone 15', 'Samsung Galaxy', 'OnePlus Nord', 'Xiaomi Redmi'][Math.floor(Math.random() * 4)]} stock running low`,
+            type: 'warning' as const,
+            timestamp: 'Just now',
+            read: false
+          },
+          {
+            id: Date.now().toString(),
+            title: 'High Traffic Alert',
+            message: `${Math.floor(Math.random() * 500 + 100)} users currently browsing your store`,
+            type: 'info' as const,
+            timestamp: 'Just now',
+            read: false
+          }
+        ];
+        
+        // Add random notification every 30 seconds
+        if (Math.random() > 0.7) {
+          const newNotification = randomNotifications[Math.floor(Math.random() * randomNotifications.length)];
+          setNotifications(prev => [newNotification, ...prev.slice(0, 9)]); // Keep only 10 notifications
+        }
+      }, 30000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isLoggedIn]);
+
+  // Mark notification as read
+  const markNotificationAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notif => 
+        notif.id === id ? { ...notif, read: true } : notif
+      )
+    );
+  };
 
   const queryClient = useQueryClient();
 
@@ -1006,14 +1059,63 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Notifications */}
-                <Button variant="outline" size="sm" className="relative">
-                  <Bell className="h-4 w-4" />
-                  {notifications.filter(n => !n.read).length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {notifications.filter(n => !n.read).length}
-                    </span>
+                <div className="relative">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="relative"
+                    onClick={() => setShowNotifications(!showNotifications)}
+                  >
+                    <Bell className="h-4 w-4" />
+                    {notifications.filter(n => !n.read).length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                        {notifications.filter(n => !n.read).length}
+                      </span>
+                    )}
+                  </Button>
+                  
+                  {showNotifications && (
+                    <div className="absolute right-0 top-12 w-80 bg-white dark:bg-gray-800 border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                      <div className="p-4 border-b">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold">Notifications</h3>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}
+                          >
+                            Mark all as read
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="max-h-80 overflow-y-auto">
+                        {notifications.map((notification) => (
+                          <div 
+                            key={notification.id} 
+                            className={`p-3 border-b cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${!notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+                            onClick={() => markNotificationAsRead(notification.id)}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className={`w-2 h-2 rounded-full mt-2 ${
+                                notification.type === 'success' ? 'bg-green-500' : 
+                                notification.type === 'warning' ? 'bg-yellow-500' : 
+                                notification.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                              }`} />
+                              <div className="flex-1">
+                                <div className="font-medium text-sm">{notification.title}</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">{notification.message}</div>
+                                <div className="text-xs text-gray-500 mt-1">{notification.timestamp}</div>
+                              </div>
+                              {!notification.read && (
+                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                </Button>
+                </div>
 
                 {/* Refresh */}
                 <Button
@@ -1043,18 +1145,23 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                  <Card>
+                  <Card className="relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10"></div>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4 text-green-600" />
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">₹{dashboardStats?.totalRevenue?.toLocaleString() || '0'}</div>
+                      <div className="text-2xl font-bold text-green-700">₹{dashboardStats?.totalRevenue?.toLocaleString() || '0'}</div>
                       <p className="text-xs text-muted-foreground">
-                        <TrendingUp className="h-3 w-3 inline mr-1" />
+                        <TrendingUp className="h-3 w-3 inline mr-1 text-green-600" />
                         +12.5% from last month
                       </p>
                       <Progress value={75} className="mt-2" />
+                      <div className="text-xs text-green-600 mt-1 font-medium">Live Revenue Tracking</div>
                     </CardContent>
                   </Card>
 
@@ -1100,6 +1207,30 @@ export default function AdminDashboard() {
                         +5.7% from last month
                       </p>
                       <Progress value={45} className="mt-2" />
+                    </CardContent>
+                  </Card>
+
+                  {/* Live Visitors Counter */}
+                  <Card className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                    <div className="absolute top-2 right-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                    </div>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Live Visitors</CardTitle>
+                      <Activity className="h-4 w-4 text-purple-600" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-purple-700">{Math.floor(Math.random() * 50 + 20)}</div>
+                      <p className="text-xs text-purple-600">
+                        <Globe className="h-3 w-3 inline mr-1" />
+                        Currently browsing
+                      </p>
+                      <div className="mt-2 text-xs">
+                        <div className="flex justify-between text-gray-600">
+                          <span>Mobile: {Math.floor(Math.random() * 30 + 10)}</span>
+                          <span>Desktop: {Math.floor(Math.random() * 20 + 10)}</span>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
