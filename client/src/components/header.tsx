@@ -1377,7 +1377,7 @@ export default function Header() {
             {/* Mobile Layout */}
             <div className="lg:hidden w-full">
               <div className="flex items-center justify-between h-16">
-                {/* Left side - Search and Shopping Bag */}
+                {/* Left side - Search and Menu */}
                 <div className="flex items-center space-x-2 flex-shrink-0">
                   <Button
                     variant="ghost"
@@ -1387,23 +1387,6 @@ export default function Header() {
                   >
                     <Search className="h-5 w-5" />
                   </Button>
-
-                  {/* Cart */}
-                  <div className="relative">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:text-hednor-gold p-2"
-                      onClick={() => setCartOpen(true)}
-                    >
-                      <ShoppingBag className="h-5 w-5" />
-                    </Button>
-                    {cartCount > 0 && (
-                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
-                        {cartCount}
-                      </Badge>
-                    )}
-                  </div>
 
                   <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                     <SheetTrigger asChild>
@@ -1551,7 +1534,7 @@ export default function Header() {
                   </Link>
                 </div>
 
-                {/* Right side - User Actions and Menu */}
+                {/* Right side - User Actions and Cart */}
                 <div className="flex items-center space-x-1 flex-shrink-0">
                   {/* Profile/Login */}
                   {isAuthenticated && user ? (
@@ -1582,6 +1565,23 @@ export default function Header() {
                     {wishlistItems.length > 0 && (
                       <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
                         {wishlistItems.length}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* Cart */}
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:text-hednor-gold p-2"
+                      onClick={() => setCartOpen(true)}
+                    >
+                      <ShoppingBag className="h-5 w-5" />
+                    </Button>
+                    {cartCount > 0 && (
+                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
+                        {cartCount}
                       </Badge>
                     )}
                   </div>
