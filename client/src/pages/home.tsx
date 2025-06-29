@@ -19,7 +19,7 @@ import FloatingActionButtons from "@/components/floating-action-buttons";
 import { NotificationManager } from "@/components/notification-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Star, Clock, Zap, Heart } from "lucide-react";
+import { ArrowRight, Star, Clock, Zap, Heart, ShoppingCart } from "lucide-react";
 
 export default function Home() {
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
@@ -153,26 +153,29 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+            <div className="space-y-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <Skeleton className="h-40 sm:h-48 md:h-56 lg:h-64 rounded" />
-                  <Skeleton className="h-3 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
-                  <Skeleton className="h-3 w-1/4" />
+                <div key={i} className="flex bg-white border border-gray-100 rounded-lg overflow-hidden">
+                  <Skeleton className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48" />
+                  <div className="flex-1 p-4 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                    <Skeleton className="h-3 w-1/4" />
+                    <Skeleton className="h-8 w-32" />
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+            <div className="space-y-4">
               {products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
-                <div key={product._id || product.id} className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
-                  <Link href={`/products/${product.slug}`}>
-                    <div className="relative overflow-hidden bg-gray-50">
+                <div key={product._id || product.id} className="flex bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+                  <Link href={`/products/${product.slug}`} className="flex w-full">
+                    <div className="relative overflow-hidden bg-gray-50 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex-shrink-0">
                       <img
                         src={product.images?.[0] || ""}
                         alt={product.name}
-                        className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
                       {product.isOnSale && product.salePrice && (
@@ -183,37 +186,73 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    <div className="p-3 sm:p-4">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
-                        {product.brand}
-                      </p>
-                      <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-baseline space-x-2 mb-2">
-                        {product.salePrice ? (
-                          <>
-                            <span className="font-bold text-sm sm:text-base text-gray-900">
-                              ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
-                            </span>
-                            <span className="text-xs sm:text-sm text-gray-400 line-through">
-                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="font-bold text-sm sm:text-base text-gray-900">
-                            ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                          </span>
-                        )}
+                    
+                    <div className="flex-1 p-4 flex flex-col justify-between">
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                          {product.brand}
+                        </p>
+                        <h3 className="font-medium text-sm sm:text-base md:text-lg text-gray-800 mb-2 line-clamp-2 leading-tight">
+                          {product.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
+                          {product.description}
+                        </p>
                       </div>
-                      <div className="flex items-center">
-                        <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
-                          <span className="font-medium">{product.rating || "4.0"}</span>
-                          <Star className="w-3 h-3 ml-1 fill-current" />
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="flex items-baseline space-x-2 mb-2">
+                            {product.salePrice ? (
+                              <>
+                                <span className="font-bold text-base sm:text-lg text-gray-900">
+                                  ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
+                                </span>
+                                <span className="text-sm text-gray-400 line-through">
+                                  ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="font-bold text-base sm:text-lg text-gray-900">
+                                ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center">
+                            <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
+                              <span className="font-medium">{product.rating || "4.0"}</span>
+                              <Star className="w-3 h-3 ml-1 fill-current" />
+                            </div>
+                            <span className="text-xs text-gray-400">
+                              ({product.reviewCount?.toLocaleString() || "1.2k"})
+                            </span>
+                          </div>
                         </div>
-                        <span className="text-xs text-gray-400">
-                          ({product.reviewCount?.toLocaleString() || "1.2k"})
-                        </span>
+                        
+                        <div className="hidden sm:flex items-center space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <Heart className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            size="sm"
+                            className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <ShoppingCart className="w-4 h-4 mr-1" />
+                            Add to Cart
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -237,26 +276,29 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+            <div className="space-y-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <Skeleton className="h-40 sm:h-48 md:h-56 lg:h-64 rounded" />
-                  <Skeleton className="h-3 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
-                  <Skeleton className="h-3 w-1/4" />
+                <div key={i} className="flex bg-white border border-gray-100 rounded-lg overflow-hidden">
+                  <Skeleton className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48" />
+                  <div className="flex-1 p-4 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                    <Skeleton className="h-3 w-1/4" />
+                    <Skeleton className="h-8 w-32" />
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+            <div className="space-y-4">
               {products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
-                <div key={product._id || product.id} className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
-                  <Link href={`/products/${product.slug}`}>
-                    <div className="relative overflow-hidden bg-gray-50">
+                <div key={product._id || product.id} className="flex bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+                  <Link href={`/products/${product.slug}`} className="flex w-full">
+                    <div className="relative overflow-hidden bg-gray-50 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex-shrink-0">
                       <img
                         src={product.images?.[0] || ""}
                         alt={product.name}
-                        className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
                       {product.isOnSale && product.salePrice && (
@@ -267,37 +309,73 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    <div className="p-3 sm:p-4">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
-                        {product.brand}
-                      </p>
-                      <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-baseline space-x-2 mb-2">
-                        {product.salePrice ? (
-                          <>
-                            <span className="font-bold text-sm sm:text-base text-gray-900">
-                              ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
-                            </span>
-                            <span className="text-xs sm:text-sm text-gray-400 line-through">
-                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="font-bold text-sm sm:text-base text-gray-900">
-                            ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                          </span>
-                        )}
+                    
+                    <div className="flex-1 p-4 flex flex-col justify-between">
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                          {product.brand}
+                        </p>
+                        <h3 className="font-medium text-sm sm:text-base md:text-lg text-gray-800 mb-2 line-clamp-2 leading-tight">
+                          {product.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
+                          {product.description}
+                        </p>
                       </div>
-                      <div className="flex items-center">
-                        <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
-                          <span className="font-medium">{product.rating || "4.0"}</span>
-                          <Star className="w-3 h-3 ml-1 fill-current" />
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="flex items-baseline space-x-2 mb-2">
+                            {product.salePrice ? (
+                              <>
+                                <span className="font-bold text-base sm:text-lg text-gray-900">
+                                  ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
+                                </span>
+                                <span className="text-sm text-gray-400 line-through">
+                                  ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="font-bold text-base sm:text-lg text-gray-900">
+                                ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center">
+                            <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
+                              <span className="font-medium">{product.rating || "4.0"}</span>
+                              <Star className="w-3 h-3 ml-1 fill-current" />
+                            </div>
+                            <span className="text-xs text-gray-400">
+                              ({product.reviewCount?.toLocaleString() || "1.2k"})
+                            </span>
+                          </div>
                         </div>
-                        <span className="text-xs text-gray-400">
-                          ({product.reviewCount?.toLocaleString() || "1.2k"})
-                        </span>
+                        
+                        <div className="hidden sm:flex items-center space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <Heart className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            size="sm"
+                            className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <ShoppingCart className="w-4 h-4 mr-1" />
+                            Add to Cart
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </Link>
