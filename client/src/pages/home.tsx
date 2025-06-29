@@ -153,10 +153,10 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="h-32 sm:h-40 md:h-48 lg:h-56 rounded" />
+                  <Skeleton className="h-40 sm:h-48 md:h-56 lg:h-64 rounded" />
                   <Skeleton className="h-3 w-3/4" />
                   <Skeleton className="h-3 w-1/2" />
                   <Skeleton className="h-3 w-1/4" />
@@ -164,9 +164,60 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
-                <ProductCard key={product._id || product.id} product={product} />
+                <div key={product._id || product.id} className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+                  <Link href={`/products/${product.slug}`}>
+                    <div className="relative overflow-hidden bg-gray-50">
+                      <img
+                        src={product.images?.[0] || ""}
+                        alt={product.name}
+                        className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      {product.isOnSale && product.salePrice && (
+                        <div className="absolute top-2 left-2">
+                          <Badge className="bg-red-500 text-white text-xs px-2 py-1 font-medium">
+                            {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                        {product.brand}
+                      </p>
+                      <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-baseline space-x-2 mb-2">
+                        {product.salePrice ? (
+                          <>
+                            <span className="font-bold text-sm sm:text-base text-gray-900">
+                              ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs sm:text-sm text-gray-400 line-through">
+                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-bold text-sm sm:text-base text-gray-900">
+                            ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center">
+                        <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
+                          <span className="font-medium">{product.rating || "4.0"}</span>
+                          <Star className="w-3 h-3 ml-1 fill-current" />
+                        </div>
+                        <span className="text-xs text-gray-400">
+                          ({product.reviewCount?.toLocaleString() || "1.2k"})
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
@@ -186,10 +237,10 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="h-32 sm:h-40 md:h-48 lg:h-56 rounded" />
+                  <Skeleton className="h-40 sm:h-48 md:h-56 lg:h-64 rounded" />
                   <Skeleton className="h-3 w-3/4" />
                   <Skeleton className="h-3 w-1/2" />
                   <Skeleton className="h-3 w-1/4" />
@@ -197,9 +248,60 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
-                <ProductCard key={product._id || product.id} product={product} />
+                <div key={product._id || product.id} className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+                  <Link href={`/products/${product.slug}`}>
+                    <div className="relative overflow-hidden bg-gray-50">
+                      <img
+                        src={product.images?.[0] || ""}
+                        alt={product.name}
+                        className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      {product.isOnSale && product.salePrice && (
+                        <div className="absolute top-2 left-2">
+                          <Badge className="bg-red-500 text-white text-xs px-2 py-1 font-medium">
+                            {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                        {product.brand}
+                      </p>
+                      <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-baseline space-x-2 mb-2">
+                        {product.salePrice ? (
+                          <>
+                            <span className="font-bold text-sm sm:text-base text-gray-900">
+                              ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs sm:text-sm text-gray-400 line-through">
+                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-bold text-sm sm:text-base text-gray-900">
+                            ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center">
+                        <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
+                          <span className="font-medium">{product.rating || "4.0"}</span>
+                          <Star className="w-3 h-3 ml-1 fill-current" />
+                        </div>
+                        <span className="text-xs text-gray-400">
+                          ({product.reviewCount?.toLocaleString() || "1.2k"})
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
@@ -219,10 +321,10 @@ export default function Home() {
           </div>
 
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="h-32 sm:h-40 md:h-48 lg:h-56 rounded" />
+                  <Skeleton className="h-40 sm:h-48 md:h-56 lg:h-64 rounded" />
                   <Skeleton className="h-3 w-3/4" />
                   <Skeleton className="h-3 w-1/2" />
                   <Skeleton className="h-3 w-1/4" />
@@ -230,7 +332,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
               {products.filter(p => {
                 const clothingCategories = categories.filter(cat => 
                   cat.name.toLowerCase().includes('clothing') || 
@@ -240,7 +342,58 @@ export default function Home() {
                 ).map(cat => cat.id.toString());
                 return clothingCategories.includes(p.categoryId?.toString() || '') && (p.isOnSale || p.salePrice);
               }).slice(0, 6).map((product) => (
-                <ProductCard key={product._id || product.id} product={product} />
+                <div key={product._id || product.id} className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
+                  <Link href={`/products/${product.slug}`}>
+                    <div className="relative overflow-hidden bg-gray-50">
+                      <img
+                        src={product.images?.[0] || ""}
+                        alt={product.name}
+                        className="w-full h-40 sm:h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      {product.isOnSale && product.salePrice && (
+                        <div className="absolute top-2 left-2">
+                          <Badge className="bg-red-500 text-white text-xs px-2 py-1 font-medium">
+                            {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                        {product.brand}
+                      </p>
+                      <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-baseline space-x-2 mb-2">
+                        {product.salePrice ? (
+                          <>
+                            <span className="font-bold text-sm sm:text-base text-gray-900">
+                              ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs sm:text-sm text-gray-400 line-through">
+                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-bold text-sm sm:text-base text-gray-900">
+                            ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center">
+                        <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
+                          <span className="font-medium">{product.rating || "4.0"}</span>
+                          <Star className="w-3 h-3 ml-1 fill-current" />
+                        </div>
+                        <span className="text-xs text-gray-400">
+                          ({product.reviewCount?.toLocaleString() || "1.2k"})
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
