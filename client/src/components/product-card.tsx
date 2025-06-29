@@ -1,5 +1,5 @@
 import { ShoppingCart, Heart, Star, Eye, ArrowUpDown, CreditCard } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
@@ -14,7 +14,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist, addToCart } = useStore();
   const inWishlist = isInWishlist(product.id);
   const { toast } = useToast();
-  const { setLocation } = useStore();
+  const [, setLocation] = useLocation();
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
