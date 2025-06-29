@@ -292,6 +292,34 @@
     animation: glow 1.5s ease-in-out infinite alternate;
   }
 
+  /* Responsive Product Card Buttons */
+  @media (min-width: 1024px) {
+    .product-card button {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .product-card button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .product-card button {
+      padding: 10px 20px;
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .product-card button {
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+  }
+
   @keyframes glow {
     from { box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
     to { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8), 0 0 30px rgba(245, 158, 11, 0.4); }
