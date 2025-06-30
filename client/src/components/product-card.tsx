@@ -222,22 +222,22 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
             onClick={handleAddToCart}
             variant="outline"
             size="sm"
-            className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium transition-all duration-300 py-2 px-3 text-xs sm:text-sm flex-1 min-h-[36px] flex items-center justify-center"
+            className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium transition-all duration-300 py-2 px-2 text-[10px] xs:text-xs sm:text-sm flex-1 min-h-[32px] flex items-center justify-center"
             disabled={!product.inStock}
           >
-            <ShoppingCart className="mr-1 w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-            <span className="truncate">
+            <ShoppingCart className="mr-1 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis">
               {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
             </span>
           </Button>
           <Button 
             onClick={handleBuyNow}
             size="sm"
-            className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 hover:shadow-md font-medium transition-all duration-300 py-2 px-3 text-xs sm:text-sm flex-1 min-h-[36px] flex items-center justify-center"
+            className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 hover:shadow-md font-medium transition-all duration-300 py-2 px-2 text-[10px] xs:text-xs sm:text-sm flex-1 min-h-[32px] flex items-center justify-center"
             disabled={!product.inStock}
           >
-            <CreditCard className="mr-1 w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-            <span className="truncate">Buy Now</span>
+            <CreditCard className="mr-1 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis">Buy Now</span>
           </Button>
         </div>
       </div>
