@@ -1757,62 +1757,66 @@ export default function Header() {
               </div>
 
               {/* User Actions */}
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                {/* Profile */}
                 {isAuthenticated && user ? (
-                  
-<div className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2">
+                  <Link href="/profile">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="text-xs font-medium">Profile</span>
+                    </Button>
+                  </Link>
+                ) : (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setLocation("/profile")}
-                    className="text-white hover:text-hednor-gold flex items-center space-x-1"
+                    onClick={() => setIsAuthModalOpen(true)}
+                    className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
                   >
                     <User className="h-4 w-4" />
                     <span className="text-xs font-medium">Profile</span>
                   </Button>
-                </div>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setAuthModalOpen(true)}
-                  className="flex items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative border border-transparent hover:bg-transparent p-2 space-x-1"
-                >
-                  <User className="h-4 w-4" />
-                  <span className="text-xs font-medium">Profile</span>
-                </Button>
-              )}
+                )}
 
-                <div className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
+                {/* Wishlist */}
+                <div className="relative">
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setLocation("/profile")}
-                    className="text-white hover:text-hednor-gold flex items-center space-x-1"
+                    className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
                   >
                     <Heart className="h-4 w-4" />
                     <span className="text-xs font-medium">Wishlist</span>
                   </Button>
                   {wishlistItems.length > 0 && (
-                    <Badge className="absolute top-0 right-0 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
+                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
                       {wishlistItems.length}
                     </Badge>
                   )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center text-white hover:text-hednor-gold hover:border-hednor-gold cursor-pointer transition-colors relative border border-transparent hover:bg-transparent p-2 space-x-1"
-                  onClick={() => setCartOpen(true)}
-                >
-                  <ShoppingBag className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium">Bag</span>
+
+                {/* Bag */}
+                <div className="relative">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setCartOpen(true)}
+                    className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
+                  >
+                    <ShoppingBag className="h-4 w-4" />
+                    <span className="text-xs font-medium">Bag</span>
+                  </Button>
                   {cartCount > 0 && (
-                    <Badge className="absolute top-0 right-0 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
+                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
                       {cartCount}
                     </Badge>
                   )}
-                </Button>
+                </div>
               </div>
             </div>
           </div>
