@@ -119,19 +119,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Products
+  // Get all products with optional filtering
   app.get("/api/products", async (req, res) => {
     try {
-      const { categoryId, featured, onSale, search } = req.query;
-      const filters = {
-        categoryId: categoryId as string,
-        featured: featured === "true",
-        onSale: onSale === "true",
-        search: search as string
-      };
+      const { category, brand, minPrice, maxPrice, inStock, featured, sale, search, sortBy, page = 1, limit = 20 } = req.query;
 
-      const products = await productService.getProducts(filters);
-      res.json(products);
+      const filter: any = {};
+
+      if (category) filter.category = category;
+      if (brand) filter.brand = brand;
+      if (inStock === 'true') filter.inStock = true;
+      if (featured === 'true') filter.isFeatured = true;
+      if (sale === 'true') filter.isOnSale = true;
+
+      if (minPrice || maxPrice) {
+        filter.price = {};
+        if (minPrice) filter.price.$gte = parseFloat(minPrice as string);
+        if (maxPrice) filter.price.$lte = parseFloat(maxPrice as string);
+      }
+
+      if (search) {
+        filter.$or = [
+          { name: { $regex: search, $options: 'i' } },
+          { brand: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } }
+        ];
+      }
+
+      let sortOption: any = {};
+      switch (sortBy) {
+        case 'price-low-high':
+          sortOption = { price: 1 };
+          break;
+        case 'price-high-low':
+          sortOption = { price: -1 };
+          break;
+        case 'rating':
+          sortOption = { rating: -1 };
+          break;
+        case 'newest':
+          sortOption = { createdAt: -1 };
+          break;
+        default:
+          sortOption = { createdAt: -1 };
+      }
+
+      const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
+
+      // Use aggregation to ensure unique products
+      const products = await db.collection("products").aggregate([
+        { $match: filter },
+        { $group: { 
+          _id: "$slug", 
+          doc: { $first: "$$ROOT" } 
+        }},
+        { $replaceRoot: { newRoot: "$doc" } },
+        { $sort: sortOption },
+        { $skip: skip },
+        { $limit: parseInt(limit as string) }
+      ]).toArray();
+
+      const total = await db.collection("products").distinct("slug", filter).then(slugs => slugs.length);
+
+      res.json({
+        products,
+        pagination: {
+          page: parseInt(page as string),
+          limit: parseInt(limit as string),
+          total,
+          pages: Math.ceil(total / parseInt(limit as string))
+        }
+      });
     } catch (error) {
+      console.error("Error fetching products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });

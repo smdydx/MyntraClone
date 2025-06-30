@@ -41,6 +41,15 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
     e.preventDefault();
     e.stopPropagation();
 
+    // Prevent multiple rapid clicks
+    const button = e.currentTarget as HTMLButtonElement;
+    if (button.disabled) return;
+    
+    button.disabled = true;
+    setTimeout(() => {
+      button.disabled = false;
+    }, 1000);
+
     addToCart({
       productId: product.id,
       name: product.name,
@@ -72,6 +81,15 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
       return;
     }
 
+    // Prevent multiple rapid clicks
+    const button = e.currentTarget as HTMLButtonElement;
+    if (button.disabled) return;
+    
+    button.disabled = true;
+    setTimeout(() => {
+      button.disabled = false;
+    }, 2000);
+
     addToCart({
       productId: product.id,
       name: product.name,
@@ -90,7 +108,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
     // Small delay to ensure cart is updated before redirect
     setTimeout(() => {
       setLocation("/checkout");
-    }, 500);
+    }, 1000);
   };
 
   const formatPrice = (price: string) => {

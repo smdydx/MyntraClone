@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -51,28 +50,34 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       // Cart
       cartItems: [],
-      addToCart: (item) => {
-        const existingItem = get().cartItems.find(
-          (cartItem) => 
-            cartItem.productId === item.productId && 
-            cartItem.size === item.size && 
-            cartItem.color === item.color
-        );
+      addToCart: (item) => 
+    set((state) => {
+      // Create unique key for cart item based on product, size, and color
+      const itemKey = `${item.productId}-${item.size || 'no-size'}-${item.color || 'no-color'}`;
 
-        if (existingItem) {
-          set((state) => ({
-            cartItems: state.cartItems.map((cartItem) =>
-              cartItem.id === existingItem.id
-                ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-                : cartItem
-            ),
-          }));
-        } else {
-          set((state) => ({
-            cartItems: [...state.cartItems, { ...item, id: Date.now() }],
-          }));
+      const existingItem = state.cartItems.find(
+        (cartItem) => {
+          const cartItemKey = `${cartItem.productId}-${cartItem.size || 'no-size'}-${cartItem.color || 'no-color'}`;
+          return cartItemKey === itemKey;
         }
-      },
+      );
+
+      if (existingItem) {
+        return {
+          cartItems: state.cartItems.map((cartItem) =>
+            cartItem.id === existingItem.id
+              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+              : cartItem
+          ),
+        };
+      }
+
+      // Generate unique ID based on timestamp and random number
+      const newId = Date.now() + Math.floor(Math.random() * 1000);
+      return {
+        cartItems: [...state.cartItems, { ...item, id: newId }],
+      };
+    }),
       removeFromCart: (id) => {
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item.id !== id),
@@ -102,17 +107,22 @@ export const useStore = create<StoreState>()(
 
       // Wishlist
       wishlistItems: [],
-      addToWishlist: (item) => {
-        const existingItem = get().wishlistItems.find(
-          (wishlistItem) => wishlistItem.productId === item.productId
-        );
+      addToWishlist: (item) =>
+    set((state) => {
+      const existingItem = state.wishlistItems.find(
+        (wishlistItem) => wishlistItem.productId === item.productId
+      );
 
-        if (!existingItem) {
-          set((state) => ({
-            wishlistItems: [...state.wishlistItems, { ...item, id: Date.now() }],
-          }));
-        }
-      },
+      if (existingItem) {
+        return state; // Don't add duplicate
+      }
+
+      // Generate unique ID based on timestamp and random number
+      const newId = Date.now() + Math.floor(Math.random() * 1000);
+      return {
+        wishlistItems: [...state.wishlistItems, { ...item, id: newId }],
+      };
+    }),
       removeFromWishlist: (productId) => {
         set((state) => ({
           wishlistItems: state.wishlistItems.filter((item) => item.productId !== productId),

@@ -67,7 +67,7 @@ export default function CartSlideout() {
             {/* Scrollable Items Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div key={`cart-item-${item.id}-${item.productId}`} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <img
                     src={item.image}
                     alt={item.name}
