@@ -256,13 +256,24 @@
     z-index: 1;
   }
 
-  .product-card:hover::before {
-    left: 100%;
+  /* Mobile optimized hover effects */
+  @media (min-width: 1024px) {
+    .product-card:hover::before {
+      left: 100%;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
   }
 
-  .product-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  /* Touch device optimizations */
+  @media (max-width: 1023px) {
+    .product-card:active {
+      transform: scale(0.98);
+      transition: transform 0.1s;
+    }
   }
 
   /* Glowing Button Effect */
@@ -351,6 +362,56 @@
   @keyframes typing {
     from { width: 0; }
     to { width: 100%; }
+  }
+
+  /* Responsive Grid Utilities */
+  .grid-responsive {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 475px) {
+    .grid-responsive {
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .grid-responsive {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .grid-responsive {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-responsive {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .grid-responsive {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  /* Touch Target Improvements */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Mobile Footer Fixes */

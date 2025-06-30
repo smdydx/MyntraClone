@@ -1375,15 +1375,15 @@ export default function Header() {
           <div className="flex items-center justify-between">
             {/* Mobile Layout */}
             <div className="lg:hidden w-full">
-              <div className="flex items-center justify-between h-16">
+              <div className="flex items-center justify-between h-14 sm:h-16">
                 {/* Left side - Menu and Search */}
-                <div className="flex items-center space-x-2 flex-shrink-0">
+                <div className="flex items-center space-x-1 flex-shrink-0">
                   <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                     <SheetTrigger asChild>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-white hover:text-hednor-gold p-2"
+                        className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       >
                         <Menu className="h-5 w-5" />
                       </Button>
@@ -1392,7 +1392,7 @@ export default function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-white hover:text-hednor-gold p-2"
+                    className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                     onClick={() => setMobileSearchOpen(true)}
                   >
                     <Search className="h-5 w-5" />
@@ -1523,26 +1523,30 @@ export default function Header() {
                 </div>
 
                 {/* Center - Logo */}
-                <div className="flex-1 flex justify-center">
-                  <Link href="/" className="flex items-center ml-4">
+                <div className="flex-1 flex justify-center px-2">
+                  <Link href="/" className="flex items-center">
                     <img
                       src={hednorLogoPath}
                       alt="Hednor"
-                      className="w-16 h-16 object-contain"
+                      className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                     />
                   </Link>
                 </div>
 
                 {/* Right side - User Actions and Cart */}
-                <div className="flex items-center space-x-1 flex-shrink-0">
+                <div className="flex items-center space-x-0.5 sm:space-x-1 flex-shrink-0">
                   {/* Wishlist */}
                   <div className="relative">
-                    <Button variant="ghost" size="sm" className="text-white hover:text-hednor-gold p-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    >
                       <Heart className="h-5 w-5" />
                     </Button>
                     {wishlistItems.length > 0 && (
-                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
-                        {wishlistItems.length}
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 text-[9px] sm:text-[10px] min-w-[16px] sm:min-w-[20px]">
+                        {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
                       </Badge>
                     )}
                   </div>
@@ -1552,14 +1556,14 @@ export default function Header() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white hover:text-hednor-gold p-2"
+                      className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       onClick={() => setCartOpen(true)}
                     >
                       <ShoppingBag className="h-5 w-5" />
                     </Button>
                     {cartCount > 0 && (
-                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
-                        {cartCount}
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 text-[9px] sm:text-[10px] min-w-[16px] sm:min-w-[20px]">
+                        {cartCount > 99 ? '99+' : cartCount}
                       </Badge>
                     )}
                   </div>

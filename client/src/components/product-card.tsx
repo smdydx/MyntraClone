@@ -16,6 +16,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
   const inWishlist = isInWishlist(product.id);
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+  const [imageLoaded, setImageLoaded] = React.useState(false);
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -130,7 +131,11 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 : 'w-full h-40 sm:h-48 md:h-56'
             }`}
             loading="lazy"
+            onLoad={() => setImageLoaded(true)}
           />
+          {!imageLoaded && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+            )}
 
           {/* Badges */}
           <div className="absolute top-2 left-2 flex flex-col space-y-1">
