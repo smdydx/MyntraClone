@@ -11,10 +11,10 @@ export default function FloatingCartIcon() {
   }
 
   return (
-    <div className="fixed bottom-32 right-4 z-50 bg-hednor-gold text-hednor-dark hover:bg-yellow-500 rounded-full w-14 h-14 shadow-lg transition-all duration-300 transform hover:scale-110 md:hidden">
+    <div className="fixed bottom-32 right-4 z-50 md:hidden">
       <Button
         size="lg"
-        className="rounded-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 shadow-lg w-14 h-14 p-0 relative"
+        className="rounded-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 shadow-lg w-14 h-14 p-0 relative transition-all duration-300 transform hover:scale-110"
         onClick={() => setCartOpen(true)}
       >
         <ShoppingBag className="h-6 w-6" />
