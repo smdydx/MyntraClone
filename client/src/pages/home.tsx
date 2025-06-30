@@ -531,6 +531,9 @@ export default function Home() {
       {/* Recently Viewed */}
       <RecentlyViewed />
 
+      {/* Footer */}
+      <Footer />
+
       {/* Floating Cart Icon */}
       <FloatingCartIcon />
 
