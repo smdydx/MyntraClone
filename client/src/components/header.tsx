@@ -1783,7 +1783,7 @@ export default function Header() {
                     <span className="text-xs mt-1 font-medium">Profile</span>
                   </Button>
                 )}
-                
+
                 <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
                   <Button
                     variant="ghost"
