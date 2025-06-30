@@ -1535,27 +1535,6 @@ export default function Header() {
 
                 {/* Right side - User Actions and Cart */}
                 <div className="flex items-center space-x-1 flex-shrink-0">
-                  {/* Profile/Login */}
-                  {isAuthenticated && user ? (
-                    <Link href="/profile">
-                      <Button variant="ghost" size="sm" className="text-white hover:text-hednor-gold p-2">
-                        <User className="h-5 w-5" />
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:text-hednor-gold p-2"
-                      onClick={() => {
-                        setIsLogin(true);
-                        setIsAuthModalOpen(true);
-                      }}
-                    >
-                      <User className="h-5 w-5" />
-                    </Button>
-                  )}
-
                   {/* Wishlist */}
                   <div className="relative">
                     <Button variant="ghost" size="sm" className="text-white hover:text-hednor-gold p-2">
