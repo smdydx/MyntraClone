@@ -765,10 +765,10 @@ export default function AdminDashboard() {
     }
   };
 
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = Array.isArray(products) ? products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.brand.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) : [];
 
   const handleProductImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
