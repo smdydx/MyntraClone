@@ -35,6 +35,7 @@ export default function Profile() {
     email: "",
     phone: "",
   });
+ const [activeTab, setActiveTab] = useState("orders");
 
   // Fetch real orders from API
   const { data: userOrders = [], isLoading: ordersLoading } = useQuery({
@@ -42,7 +43,7 @@ export default function Profile() {
     queryFn: async () => {
       const token = localStorage.getItem('token');
       if (!token) return [];
-      
+
       const response = await fetch('/api/orders', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -70,7 +71,7 @@ export default function Profile() {
 
   const handleSaveProfile = async () => {
     if (!user) return;
-    
+
     setIsLoading(true);
     try {
       const token = useAuthStore.getState().token;
@@ -195,7 +196,7 @@ export default function Profile() {
           </Card>
 
           {/* Main Content Tabs */}
-          <Tabs defaultValue="orders" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-4 h-auto">
               <TabsTrigger value="orders" className="flex flex-col sm:flex-row items-center justify-center sm:space-x-2 p-2 sm:p-3 text-xs sm:text-sm">
                 <Package className="w-3 h-3 sm:w-4 sm:h-4 mb-1 sm:mb-0" />

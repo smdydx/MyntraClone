@@ -1504,9 +1504,22 @@ export default function Header() {
                                 </Button>
                               </>
                             )}
-                            <div className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4">
+                            
+                            <div 
+                              className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setLocation('/profile');
+                              }}
+                            >
                               <Heart className="h-4 w-4" />
-                              <span>Wishlist ({wishlistItems.length})</span>
+                              <span>Wishlist 
+                                {wishlistItems.length > 0 && (
+                                  <Badge className="ml-2 bg-red-500 text-white text-xs">
+                                    {wishlistItems.length}
+                                  </Badge>
+                                )}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1541,6 +1554,7 @@ export default function Header() {
                       variant="ghost" 
                       size="sm" 
                       className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                      onClick={() => setLocation('/profile')}
                     >
                       <Heart className="h-5 w-5" />
                     </Button>
@@ -1744,8 +1758,14 @@ export default function Header() {
                   </Button>
                 )}
 
-                <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
-                  <Heart className="h-5 w-5" />
+                
+                  
+```python
+
+                  <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
+                  <Button variant="ghost" size="sm" onClick={() => setLocation('/profile')} className="text-white hover:text-hednor-gold">
+                    <Heart className="h-5 w-5" />
+                  </Button>
                   <span className="text-xs mt-1 font-medium">
                     Wishlist
                   </span>
