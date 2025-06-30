@@ -36,11 +36,13 @@ export default function CartSlideout() {
       >
         {/* Fixed Header */}
         <SheetHeader className="px-4 py-4 border-b border-gray-200 bg-white">
-          <SheetTitle className="flex items-center justify-between text-lg font-semibold">
-            <span>Shopping Bag</span>
-            <Badge variant="secondary" className="bg-hednor-gold text-hednor-dark">{cartCount} items</Badge>
-          </SheetTitle>
-          <SheetDescription className="text-sm text-gray-600">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <SheetTitle className="text-lg font-semibold">Shopping Bag</SheetTitle>
+              <Badge variant="secondary" className="bg-hednor-gold text-hednor-dark">{cartCount} items</Badge>
+            </div>
+          </div>
+          <SheetDescription className="text-sm text-gray-600 mt-2">
             View and manage items in your shopping bag
           </SheetDescription>
         </SheetHeader>
