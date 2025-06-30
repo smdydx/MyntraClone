@@ -16,10 +16,6 @@ import { useStore } from "@/lib/store";
 import { useAuthStore } from "@/lib/auth-store";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-
-
-
-// Real orders from API
 import { useQuery } from "@tanstack/react-query";
 
 export default function Profile() {
