@@ -215,43 +215,29 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
       <div className={`px-3 pb-3 sm:px-4 sm:pb-4 ${viewMode === 'list' ? 'flex-shrink-0' : ''}`}>
         <div className={`gap-2 ${
           viewMode === 'list' 
-            ? 'flex flex-col sm:flex-row sm:w-40 md:w-48 lg:w-52 xl:w-56' 
-            : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2'
+            ? 'flex flex-col xs:flex-row' 
+            : 'flex flex-col xs:flex-row sm:grid sm:grid-cols-2'
         }`}>
           <Button 
             onClick={handleAddToCart}
             variant="outline"
             size="sm"
-            className={`border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium transition-all duration-300 py-2 px-3 ${
-              viewMode === 'list' 
-                ? 'text-xs sm:text-sm md:text-sm lg:text-sm xl:text-base flex-1' 
-                : 'w-full text-xs sm:text-sm md:text-sm lg:text-xs xl:text-sm 2xl:text-base'
-            }`}
+            className="border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark font-medium transition-all duration-300 py-2 px-3 text-xs sm:text-sm flex-1 min-h-[36px] flex items-center justify-center"
             disabled={!product.inStock}
           >
-            <ShoppingCart className={`mr-1 ${
-              viewMode === 'list' 
-                ? 'w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4' 
-                : 'w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-3 lg:h-3 xl:w-4 xl:h-4'
-            }`} />
-            {!product.inStock ? 'Out of Stock' : viewMode === 'list' ? 'Add to Cart' : 'Add to Cart'}
+            <ShoppingCart className="mr-1 w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="truncate">
+              {!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+            </span>
           </Button>
           <Button 
             onClick={handleBuyNow}
             size="sm"
-            className={`bg-hednor-gold text-hednor-dark hover:bg-yellow-500 hover:shadow-md font-medium transition-all duration-300 py-2 px-3 ${
-              viewMode === 'list' 
-                ? 'text-xs sm:text-sm md:text-sm lg:text-sm xl:text-base flex-1' 
-                : 'w-full text-xs sm:text-sm md:text-sm lg:text-xs xl:text-sm 2xl:text-base'
-            }`}
+            className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 hover:shadow-md font-medium transition-all duration-300 py-2 px-3 text-xs sm:text-sm flex-1 min-h-[36px] flex items-center justify-center"
             disabled={!product.inStock}
           >
-            <CreditCard className={`mr-1 ${
-              viewMode === 'list' 
-                ? 'w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4' 
-                : 'w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-3 lg:h-3 xl:w-4 xl:h-4'
-            }`} />
-            Buy Now
+            <CreditCard className="mr-1 w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="truncate">Buy Now</span>
           </Button>
         </div>
       </div>
