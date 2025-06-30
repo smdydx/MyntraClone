@@ -1528,7 +1528,7 @@ export default function Header() {
                               className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
                               onClick={() => {
                                 setIsMobileMenuOpen(false);
-                                setLocation("/profile");
+                                setLocation("/wishlist");
                               }}
                             >
                               <Heart className="h-4 w-4" />
@@ -1600,7 +1600,7 @@ export default function Header() {
                       variant="ghost"
                       size="sm"
                       className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      onClick={() => setLocation("/profile")}
+                      onClick={() => setLocation("/wishlist")}
                     >
                       <Heart className="h-5 w-5" />
                     </Button>

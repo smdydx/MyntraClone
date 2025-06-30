@@ -8,6 +8,7 @@ import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import Checkout from "@/pages/checkout";
 import Profile from "@/pages/profile";
+import Wishlist from "@/pages/wishlist";
 import Admin from "@/pages/admin";
 import About from "@/pages/about";
 import Contact from "./pages/contact";
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/products/:slug" component={ProductDetail} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/profile" component={Profile} />
+      <Route path="/wishlist" component={Wishlist} />
       <Route path="/admin" component={Admin} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
