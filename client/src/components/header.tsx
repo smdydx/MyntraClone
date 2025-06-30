@@ -1,8 +1,23 @@
 import { useState } from "react";
-import { Search, Heart, ShoppingBag, Menu, X, User, ChevronRight, ChevronDown } from "lucide-react";
+import {
+  Search,
+  Heart,
+  ShoppingBag,
+  Menu,
+  X,
+  User,
+  ChevronRight,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "wouter";
 import { useStore } from "@/lib/store";
@@ -925,7 +940,8 @@ const navigation = [
         name: "Hair Straightener",
         href: "/products?category=beauty&subcategory=hair-straightener",
       },
-      {        name: "HairDryer",
+      {
+        name: "HairDryer",
         href: "/products?category=/products?category=beauty&subcategory=hair-dryer",
       },
       {
@@ -1344,12 +1360,7 @@ export default function Header() {
   );
   const [isLogin, setIsLogin] = useState(true);
 
-  const {
-    cartCount,
-    isCartOpen,
-    setCartOpen,
-    wishlistItems,
-  } = useStore();
+  const { cartCount, isCartOpen, setCartOpen, wishlistItems } = useStore();
 
   const [isMobileSearchOpen, setMobileSearchOpen] = useState(false);
 
@@ -1364,7 +1375,10 @@ export default function Header() {
 
   return (
     <>
-      <header className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700" style={{ backgroundColor: 'rgb(200, 201, 152)' }}>
+      <header
+        className="shadow-sm sticky top-0 z-40 border-b border-gray-700 dark:border-gray-700"
+        style={{ backgroundColor: "rgb(200, 201, 152)" }}
+      >
         {/* Top Banner */}
         <div className="bg-hednor-gold text-hednor-dark text-center py-2 text-sm font-medium">
           <span>Free Shipping on Orders Above ₹1999 | Use Code: FREESHIP</span>
@@ -1378,7 +1392,10 @@ export default function Header() {
               <div className="flex items-center justify-between h-14 sm:h-16">
                 {/* Left side - Menu and Search */}
                 <div className="flex items-center space-x-1 flex-shrink-0">
-                  <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                  <Sheet
+                    open={isMobileMenuOpen}
+                    onOpenChange={setIsMobileMenuOpen}
+                  >
                     <SheetTrigger asChild>
                       <Button
                         variant="ghost"
@@ -1389,14 +1406,14 @@ export default function Header() {
                       </Button>
                     </SheetTrigger>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                    onClick={() => setMobileSearchOpen(true)}
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                      onClick={() => setMobileSearchOpen(true)}
+                    >
+                      <Search className="h-5 w-5" />
+                    </Button>
                     <SheetContent
                       side="left"
                       className="w-[280px] sm:w-[320px] p-0"
@@ -1456,7 +1473,9 @@ export default function Header() {
                                               ? "font-semibold text-hednor-gold hover:bg-hednor-gold/10"
                                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                                           }`}
-                                          onClick={() => setIsMobileMenuOpen(false)}
+                                          onClick={() =>
+                                            setIsMobileMenuOpen(false)
+                                          }
                                         >
                                           {subItem.name}
                                         </Link>
@@ -1504,16 +1523,17 @@ export default function Header() {
                                 </Button>
                               </>
                             )}
-                            
-                            <div 
+
+                            <div
                               className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
                               onClick={() => {
                                 setIsMobileMenuOpen(false);
-                                setLocation('/profile');
+                                setLocation("/profile");
                               }}
                             >
                               <Heart className="h-4 w-4" />
-                              <span>Wishlist 
+                              <span>
+                                Wishlist
                                 {wishlistItems.length > 0 && (
                                   <Badge className="ml-2 bg-red-500 text-white text-xs">
                                     {wishlistItems.length}
@@ -1541,7 +1561,7 @@ export default function Header() {
                     <img
                       src={hednorLogoPath}
                       alt="Hednor"
-                      className="w-20 h-20 sm:w-32 sm:h-32 object-contain"
+                      className="w-20 h-20 sm:w-20 sm:h-20 object-contain"
                     />
                   </Link>
                 </div>
@@ -1550,17 +1570,19 @@ export default function Header() {
                 <div className="flex items-center space-x-0.5 sm:space-x-1 flex-shrink-0">
                   {/* Wishlist */}
                   <div className="relative">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      onClick={() => setLocation('/profile')}
+                      onClick={() => setLocation("/profile")}
                     >
                       <Heart className="h-5 w-5" />
                     </Button>
                     {wishlistItems.length > 0 && (
                       <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 text-[9px] sm:text-[10px] min-w-[16px] sm:min-w-[20px]">
-                        {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
+                        {wishlistItems.length > 99
+                          ? "99+"
+                          : wishlistItems.length}
                       </Badge>
                     )}
                   </div>
@@ -1577,7 +1599,7 @@ export default function Header() {
                     </Button>
                     {cartCount > 0 && (
                       <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 text-[9px] sm:text-[10px] min-w-[16px] sm:min-w-[20px]">
-                        {cartCount > 99 ? '99+' : cartCount}
+                        {cartCount > 99 ? "99+" : cartCount}
                       </Badge>
                     )}
                   </div>
@@ -1639,24 +1661,26 @@ export default function Header() {
                                 }
                               });
 
-                              return Object.entries(categoryGroups).map(([categoryName, items]) => (
-                                <div key={categoryName} className="space-y-3">
-                                  <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide border-b border-hednor-gold/30 pb-2">
-                                    {categoryName}
-                                  </h3>
-                                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                                    {items.map((subItem) => (
-                                      <Link
-                                        key={`${categoryName}-${subItem.name}`}
-                                        href={subItem.href}
-                                        className="text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium whitespace-nowrap"
-                                      >
-                                        {subItem.name}
-                                      </Link>
-                                    ))}
+                              return Object.entries(categoryGroups).map(
+                                ([categoryName, items]) => (
+                                  <div key={categoryName} className="space-y-3">
+                                    <h3 className="font-bold text-hednor-gold text-sm uppercase tracking-wide border-b border-hednor-gold/30 pb-2">
+                                      {categoryName}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-x-6 gap-y-2">
+                                      {items.map((subItem) => (
+                                        <Link
+                                          key={`${categoryName}-${subItem.name}`}
+                                          href={subItem.href}
+                                          className="text-sm text-gray-700 dark:text-gray-300 hover:text-hednor-gold dark:hover:text-hednor-gold transition-colors hover:font-medium whitespace-nowrap"
+                                        >
+                                          {subItem.name}
+                                        </Link>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
-                              ));
+                                ),
+                              );
                             })()}
                           </div>
                         ) : (
@@ -1734,7 +1758,11 @@ export default function Header() {
               <div className="flex items-center space-x-4">
                 {isAuthenticated && user ? (
                   <Link href="/profile">
-                    <Button variant="ghost" size="sm" className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 hover:bg-transparent"
+                    >
                       <User className="h-5 w-5" />
                       <span className="text-xs mt-1 font-medium">
                         {user.firstName}
@@ -1752,30 +1780,26 @@ export default function Header() {
                     }}
                   >
                     <User className="h-5 w-5" />
-                    <span className="text-xs mt-1 font-medium">
-                      Profile
-                    </span>
+                    <span className="text-xs mt-1 font-medium">Profile</span>
                   </Button>
                 )}
-
-                
-                  
-```python
-
-                  <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
-                  <Button variant="ghost" size="sm" onClick={() => setLocation('/profile')} className="text-white hover:text-hednor-gold">
+                ```python
+                <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setLocation("/profile")}
+                    className="text-white hover:text-hednor-gold"
+                  >
                     <Heart className="h-5 w-5" />
                   </Button>
-                  <span className="text-xs mt-1 font-medium">
-                    Wishlist
-                  </span>
+                  <span className="text-xs mt-1 font-medium">Wishlist</span>
                   {wishlistItems.length > 0 && (
                     <Badge className="absolute top-0 right-0 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
                       {wishlistItems.length}
                     </Badge>
                   )}
                 </div>
-
                 <Button
                   variant="ghost"
                   size="sm"
@@ -1783,9 +1807,7 @@ export default function Header() {
                   onClick={() => setCartOpen(true)}
                 >
                   <ShoppingBag className="h-5 w-5" />
-                  <span className="text-xs mt-1 font-medium">
-                    Bag
-                  </span>
+                  <span className="text-xs mt-1 font-medium">Bag</span>
                   {cartCount > 0 && (
                     <Badge className="absolute top-0 right-0 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
                       {cartCount}
@@ -1802,9 +1824,9 @@ export default function Header() {
       <CartSlideout />
 
       {/* Mobile Search */}
-      <MobileSearch 
-        isOpen={isMobileSearchOpen} 
-        onClose={() => setMobileSearchOpen(false)} 
+      <MobileSearch
+        isOpen={isMobileSearchOpen}
+        onClose={() => setMobileSearchOpen(false)}
       />
 
       {/* Auth Modal */}
