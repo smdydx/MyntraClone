@@ -27,20 +27,24 @@ export default function Home() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
+  const { data: featuredProductsResponse, isLoading: productsLoading } = useQuery({
     queryKey: ["/api/products", { featured: true }],
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  const { data: saleProducts = [] } = useQuery<Product[]>({
+  const { data: saleProductsResponse } = useQuery({
     queryKey: ["/api/products", { onSale: true }],
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  const { data: products = [] } = useQuery<Product[]>({
+  const { data: productsResponse } = useQuery({
     queryKey: ["/api/products"],
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  const featuredProducts = featuredProductsResponse?.products || [];
+  const saleProducts = saleProductsResponse?.products || [];
+  const products = productsResponse?.products || [];
 
   return (
     <div className="min-h-screen bg-white">
