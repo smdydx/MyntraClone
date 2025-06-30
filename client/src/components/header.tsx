@@ -1615,7 +1615,7 @@ export default function Header() {
                 <img
                   src={hednorLogoPath}
                   alt="Hednor"
-                  className="w-24 h-24 md:w-28 md:h-28 object-contain"
+                  className="w-20 h-20 md:w-28 md:h-28 object-contain"
                 />
               </Link>
 
@@ -1783,7 +1783,7 @@ export default function Header() {
                     <span className="text-xs mt-1 font-medium">Profile</span>
                   </Button>
                 )}
-                ```python
+                
                 <div className="flex flex-col items-center text-white hover:text-hednor-gold cursor-pointer transition-colors relative p-2">
                   <Button
                     variant="ghost"
