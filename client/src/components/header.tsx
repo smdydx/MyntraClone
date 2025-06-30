@@ -1587,7 +1587,7 @@ export default function Header() {
                     )}
                   </div>
 
-                  {/* Cart */}
+                  
                   <div className="relative">
                     <Button
                       variant="ghost"
@@ -1595,13 +1595,15 @@ export default function Header() {
                       className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       onClick={() => setCartOpen(true)}
                     >
-                      <ShoppingBag className="h-5 w-5" />
+                      <div className="relative">
+                        <ShoppingBag className="h-5 w-5" />
+                        {cartCount > 0 && (
+                          <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[9px] min-w-[16px]">
+                            {cartCount > 99 ? "99+" : cartCount}
+                          </Badge>
+                        )}
+                      </div>
                     </Button>
-                    {cartCount > 0 && (
-                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 text-[9px] sm:text-[10px] min-w-[16px] sm:min-w-[20px]">
-                        {cartCount > 99 ? "99+" : cartCount}
-                      </Badge>
-                    )}
                   </div>
                 </div>
               </div>

@@ -295,7 +295,10 @@ export default function Profile() {
             <TabsContent value="wishlist" className="mt-4 sm:mt-6">
               <Card>
                 <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-lg sm:text-xl">My Wishlist ({wishlistItems.length} items)</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-red-500" />
+                    My Wishlist ({wishlistItems.length} items)
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6">
                   {wishlistItems.length === 0 ? (
@@ -303,24 +306,37 @@ export default function Profile() {
                       <Heart className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-gray-400" />
                       <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Your wishlist is empty</h3>
                       <p className="text-gray-500 text-sm mb-4 px-4">Save items you love for later</p>
-                      <Button className="text-sm">Start Shopping</Button>
+                      <Button 
+                        className="text-sm bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                        onClick={() => setLocation('/')}
+                      >
+                        Start Shopping
+                      </Button>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                       {wishlistItems.map((item) => (
-                        <div key={item.id} className="relative">
-                          <div className="group cursor-pointer bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow">
-                            <div className="relative overflow-hidden rounded-t-lg">
+                        <div key={`${item.productId}-${item.id}`} className="relative group">
+                          <div className="bg-white rounded-lg border hover:shadow-lg transition-all duration-300 overflow-hidden">
+                            <div 
+                              className="relative overflow-hidden cursor-pointer"
+                              onClick={() => setLocation(`/product/${item.productId}`)}
+                            >
                               <img
-                                src={item.image}
+                                src={item.image || "/placeholder-image.jpg"}
                                 alt={item.name}
-                                className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = "/placeholder-image.jpg";
+                                }}
                               />
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-white/80 hover:bg-white w-6 h-6 sm:w-8 sm:h-8"
-                                onClick={() => {
+                                className="absolute top-2 right-2 bg-white/90 hover:bg-white shadow-sm w-8 h-8"
+                                onClick={(e) => {
+                                  e.stopPropagation();
                                   removeFromWishlist(item.productId);
                                   toast({
                                     title: "Removed from wishlist",
@@ -328,32 +344,46 @@ export default function Profile() {
                                   });
                                 }}
                               >
-                                <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-sale-red fill-sale-red" />
+                                <Heart className="w-4 h-4 text-red-500 fill-red-500" />
                               </Button>
                             </div>
-                            <div className="p-2 sm:p-3">
-                              <h3 className="font-medium text-xs sm:text-sm text-gray-800 mb-1 line-clamp-2">
-                                {item.brand}
-                              </h3>
-                              <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                                {item.name}
-                              </p>
-                              <div className="flex items-center space-x-1 sm:space-x-2">
-                                {item.salePrice ? (
-                                  <>
-                                    <span className="font-semibold text-hednor-dark text-xs sm:text-sm">
-                                      ₹{parseFloat(item.salePrice).toLocaleString('en-IN')}
-                                    </span>
-                                    <span className="text-xs text-gray-500 line-through">
+                            <div className="p-3 sm:p-4">
+                              <div className="mb-2">
+                                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
+                                  {item.brand}
+                                </p>
+                                <h3 className="font-medium text-sm text-gray-800 line-clamp-2 mb-2">
+                                  {item.name}
+                                </h3>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  {item.salePrice ? (
+                                    <>
+                                      <span className="font-semibold text-hednor-dark text-sm">
+                                        ₹{parseFloat(item.salePrice).toLocaleString('en-IN')}
+                                      </span>
+                                      <span className="text-xs text-gray-500 line-through">
+                                        ₹{parseFloat(item.price).toLocaleString('en-IN')}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <span className="font-semibold text-hednor-dark text-sm">
                                       ₹{parseFloat(item.price).toLocaleString('en-IN')}
                                     </span>
-                                  </>
-                                ) : (
-                                  <span className="font-semibold text-hednor-dark text-xs sm:text-sm">
-                                    ₹{parseFloat(item.price).toLocaleString('en-IN')}
-                                  </span>
-                                )}
+                                  )}
+                                </div>
                               </div>
+                              <Button
+                                size="sm"
+                                className="w-full mt-3 bg-hednor-gold text-hednor-dark hover:bg-yellow-500 text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLocation(`/product/${item.productId}`);
+                                }}
+                              >
+                                View Product
+                              </Button>
                             </div>
                           </div>
                         </div>
