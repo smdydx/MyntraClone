@@ -532,7 +532,9 @@ export default function Home() {
       <RecentlyViewed />
 
       {/* Footer */}
-      <Footer />
+      <div className="-mt-8">
+        <Footer />
+      </div>
 
       {/* Floating Cart Icon */}
       <FloatingCartIcon />
