@@ -2619,9 +2619,9 @@ export default function AdminDashboard() {
 
                             {/* Top Picks Preview */}
                             <div>
-                              <h4 className="font-medium mb-3 text-gray-900">Related Top Picks ({products.filter(p => p.rating >= 4.0).length} products)</h4>
+                              <h4 className="font-medium mb-3 text-gray-900">Related Top Picks ({Array.isArray(products) ? products.filter(p => p.rating >= 4.0).length : 0} products)</h4>
                               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                                {products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
+                                {Array.isArray(products) ? products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
                                   <div key={product._id} className="border rounded-lg p-2">
                                     <img 
                                       src={product.images[0]} 
@@ -2631,15 +2631,15 @@ export default function AdminDashboard() {
                                     <p className="text-xs font-medium truncate">{product.name}</p>
                                     <p className="text-xs text-gray-500">★ {product.rating}</p>
                                   </div>
-                                ))}
+                                )) : []}
                               </div>
                             </div>
 
                             {/* Must-Have Items Preview */}
                             <div>
-                              <h4 className="font-medium mb-3 text-gray-900">Must-Have Items ({products.filter(p => p.reviewCount >= 500 || p.isFeatured).length} products)</h4>
+                              <h4 className="font-medium mb-3 text-gray-900">Must-Have Items ({Array.isArray(products) ? products.filter(p => p.reviewCount >= 500 || p.isFeatured).length : 0} products)</h4>
                               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                                {products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
+                                {Array.isArray(products) ? products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
                                   <div key={product._id} className="border rounded-lg p-2">
                                     <img 
                                       src={product.images[0]} 
@@ -2652,7 +2652,7 @@ export default function AdminDashboard() {
                                       {product.reviewCount >= 500 && <span className="text-xs text-gray-500">({product.reviewCount})</span>}
                                     </div>
                                   </div>
-                                ))}
+                                )) : []}
                               </div>
                             </div>
                           </div>
