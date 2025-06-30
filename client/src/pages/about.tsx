@@ -1,9 +1,9 @@
-
 import { ArrowLeft, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_1750949407940.png";
+import Footer from "@/components/Footer"; // Assuming Footer component is in "@/components/Footer"
 
 export default function About() {
   return (
@@ -147,6 +147,9 @@ export default function About() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

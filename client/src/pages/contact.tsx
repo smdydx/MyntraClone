@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ArrowLeft, MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Link } from "wouter";
+import Footer from "@/components/footer";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
@@ -96,7 +96,7 @@ export default function Contact() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
@@ -156,7 +156,7 @@ export default function Contact() {
                     <p className="text-gray-600">123 Fashion Street<br />Mumbai, Maharashtra 400001<br />India</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <Phone className="h-5 w-5 text-hednor-gold mr-3 mt-1" />
                   <div>
@@ -165,7 +165,7 @@ export default function Contact() {
                     <p className="text-sm text-gray-500">24/7 Customer Support</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <Mail className="h-5 w-5 text-hednor-gold mr-3 mt-1" />
                   <div>
@@ -174,7 +174,7 @@ export default function Contact() {
                     <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <Clock className="h-5 w-5 text-hednor-gold mr-3 mt-1" />
                   <div>
@@ -222,6 +222,7 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

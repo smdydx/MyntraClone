@@ -1,8 +1,8 @@
-
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
+import Footer from "@/components/footer"; // Assuming Footer is in "@/components/footer"
 
 export default function Privacy() {
   return (
@@ -83,6 +83,9 @@ export default function Privacy() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
