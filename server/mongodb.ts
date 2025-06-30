@@ -501,8 +501,26 @@ export class ProductService {
     return result.deletedCount === 1;
   }
 
-  async getProductCount(): Promise<number> {
-    return await this.collection.countDocuments();
+  async getProducts(filter = {}, options: any = {}) {
+    let query = this.collection.find(filter);
+
+    if (options.sort) {
+      query = query.sort(options.sort);
+    }
+
+    if (options.skip) {
+      query = query.skip(options.skip);
+    }
+
+    if (options.limit) {
+      query = query.limit(options.limit);
+    }
+
+    return await query.toArray();
+  }
+
+  async getProductCount(filter = {}) {
+    return await this.collection.countDocuments(filter);
   }
 }
 

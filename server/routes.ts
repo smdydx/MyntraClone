@@ -166,20 +166,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
 
-      // Use aggregation to ensure unique products
-      const products = await db.collection("products").aggregate([
-        { $match: filter },
-        { $group: { 
-          _id: "$slug", 
-          doc: { $first: "$$ROOT" } 
-        }},
-        { $replaceRoot: { newRoot: "$doc" } },
-        { $sort: sortOption },
-        { $skip: skip },
-        { $limit: parseInt(limit as string) }
-      ]).toArray();
+      // Use productService to get products with aggregation
+      const products = await productService.getProducts(filter, {
+        sort: sortOption,
+        skip: skip,
+        limit: parseInt(limit as string)
+      });
 
-      const total = await db.collection("products").distinct("slug", filter).then(slugs => slugs.length);
+      const total = await productService.getProductCount(filter);
 
       res.json({
         products,
