@@ -1956,7 +1956,7 @@ export default function AdminDashboard() {
                               </TableCell>
                               <TableCell className="hidden lg:table-cell">
                                 <div className="text-sm text-gray-600">
-                                  {products.filter(p => p.categoryId === category._id).length} products
+                                  {Array.isArray(products) ? products.filter(p => p.categoryId === category._id).length : 0} products
                                 </div>
                               </TableCell>
                               <TableCell className="hidden xl:table-cell">
