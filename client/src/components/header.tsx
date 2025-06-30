@@ -1813,14 +1813,15 @@ export default function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setLocation("/profile")}
+                    onClick={() => setLocation("/wishlist")}
                     className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
                   >
                     <Heart className="h-4 w-4" />
                     <span className="text-xs font-medium">Wishlist</span>
                   </Button>
                   {wishlistItems.length > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
+                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">{wishlistItems.length}</Badge>
+                  )}in-w-[20px]">
                       {wishlistItems.length}
                     </Badge>
                   )}
