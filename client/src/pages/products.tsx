@@ -31,7 +31,7 @@ export default function Products() {
     queryKey: ["/api/categories"],
   });
 
-  const { data: products = [], isLoading } = useQuery<Product[]>({
+  const { data: productsResponse, isLoading } = useQuery({
     queryKey: ["/api/products", { 
       categoryId: categoryParam ? (categories.find(c => c.slug === categoryParam)?.id || categories.find(c => c.slug === categoryParam)?._id) : undefined,
       search: searchParam,
@@ -41,6 +41,7 @@ export default function Products() {
     enabled: !categoryParam || categories.length > 0,
   });
 
+  const products = productsResponse?.products || [];
   const brands = Array.from(new Set(products.map(p => p.brand))).sort();
   const sizes = Array.from(new Set(products.flatMap(p => p.sizes || []))).sort();
 
