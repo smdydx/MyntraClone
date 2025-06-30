@@ -392,7 +392,7 @@ export default function AdminDashboard() {
 
   // Calculate real sales data from orders
   const salesData: SalesData[] = React.useMemo(() => {
-    if (!orders.length) return [];
+    if (!Array.isArray(orders) || !orders.length) return [];
     
     const monthlyData = orders.reduce((acc, order) => {
       const month = new Date(order.createdAt).toLocaleDateString('en', { month: 'short' });
@@ -426,7 +426,7 @@ export default function AdminDashboard() {
 
   // Calculate top products from real order data
   const topProducts = React.useMemo(() => {
-    if (!orders.length) return [];
+    if (!Array.isArray(orders) || !orders.length) return [];
     
     const productSales = orders.reduce((acc, order) => {
       order.items?.forEach((item: any) => {
@@ -454,7 +454,7 @@ export default function AdminDashboard() {
 
   // Calculate sale products for homepage preview
   const saleProducts = React.useMemo(() => {
-    return products.filter(p => p.isOnSale || p.salePrice);
+    return Array.isArray(products) ? products.filter(p => p.isOnSale || p.salePrice) : [];
   }, [products]);
 
   // Product mutations
