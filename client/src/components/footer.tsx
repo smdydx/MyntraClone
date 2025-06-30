@@ -4,7 +4,7 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 
 export default function Footer() {
   return (
-    <footer className="pt-12 pb-6" style={{ backgroundColor: 'rgb(112 113 35 / 50%)' }}>
+    <footer className="pt-12 pb-8 mt-8" style={{ backgroundColor: 'rgb(112 113 35 / 50%)' }}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-8">
           {/* Company Info */}
