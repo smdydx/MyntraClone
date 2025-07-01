@@ -666,26 +666,11 @@ export default function ProductDetail() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <ReviewSection />
+      
 
       {/* Promo Banner */}
 
       <Footer />
     </div>
-  );
-}
-
-// Create a dummy ReviewsSection component
-function ReviewSection() {
-  return (
-    <section className="bg-gray-100 py-8">
-      <div className="container mx-auto px-4">
-        <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide mb-6">
-          Customer Reviews
-        </h2>
-        <p>This is a placeholder for the reviews section.</p>
-      </div>
-    </section>
   );
 }
