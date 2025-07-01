@@ -1384,7 +1384,10 @@ export default function AdminDashboard() {
             {activeTab === "products" && (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <h2 className="text-2xl font-bold">Products</h2>
+                  <div>
+                    <h2 className="text-2xl font-bold">Products Management</h2>
+                    <p className="text-gray-600 dark:text-gray-300">Manage all your store products ({Array.isArray(products) ? products.length : 0} total)</p>
+                  </div>
                   <Dialog open={isAddingProduct} onOpenChange={setIsAddingProduct}>
                     <DialogTrigger asChild>
                       <Button>
@@ -1647,77 +1650,206 @@ export default function AdminDashboard() {
                   </Dialog>
                 </div>
 
+                {/* Product Statistics */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <Package className="h-5 w-5 text-blue-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Total Products</p>
+                          <p className="text-2xl font-bold">{Array.isArray(products) ? products.length : 0}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">In Stock</p>
+                          <p className="text-2xl font-bold">{Array.isArray(products) ? products.filter(p => p.inStock && p.stockQuantity > 0).length : 0}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-5 w-5 text-yellow-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Featured</p>
+                          <p className="text-2xl font-bold">{Array.isArray(products) ? products.filter(p => p.isFeatured).length : 0}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5 text-red-600" />
+                        <div>
+                          <p className="text-sm text-gray-600">Low Stock</p>
+                          <p className="text-2xl font-bold">{Array.isArray(products) ? products.filter(p => p.stockQuantity < 10).length : 0}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Products Table */}
                 <Card>
+                  <CardHeader>
+                    <CardTitle>All Products</CardTitle>
+                    <CardDescription>
+                      Complete list of all products in your store. Click on any product to view details.
+                    </CardDescription>
+                  </CardHeader>
                   <CardContent>
+                    {/* Search and Filter */}
+                    <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                        <Input
+                          placeholder="Search products by name or brand..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-[200px]">
+                          <SelectValue placeholder="Filter by status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Products</SelectItem>
+                          <SelectItem value="inStock">In Stock</SelectItem>
+                          <SelectItem value="outOfStock">Out of Stock</SelectItem>
+                          <SelectItem value="featured">Featured</SelectItem>
+                          <SelectItem value="onSale">On Sale</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     <div className="overflow-x-auto">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead className="hidden sm:table-cell">Brand</TableHead>
+                            <TableHead className="w-[100px]">Image</TableHead>
+                            <TableHead>Product Details</TableHead>
                             <TableHead>Price</TableHead>
                             <TableHead className="hidden md:table-cell">Stock</TableHead>
                             <TableHead className="hidden lg:table-cell">Status</TableHead>
-                            <TableHead>Actions</TableHead>
+                            <TableHead className="hidden xl:table-cell">Created</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {filteredProducts.map((product) => (
-                            <TableRow key={product._id}>
+                          {filteredProducts.length === 0 ? (
+                            <TableRow>
+                              <TableCell colSpan={7} className="text-center py-8">
+                                <div className="flex flex-col items-center gap-2">
+                                  <Package className="h-12 w-12 text-gray-400" />
+                                  <p className="text-gray-500">No products found</p>
+                                  <p className="text-sm text-gray-400">Try adjusting your search or filters</p>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            filteredProducts.map((product) => (
+                            <TableRow key={product._id} className="hover:bg-gray-50">
                               <TableCell>
-                                <div className="flex items-center gap-3">
+                                <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                                   <img 
                                     src={product.images[0]} 
                                     alt={product.name}
-                                    className="w-10 h-10 rounded object-cover"
+                                    className="w-full h-full object-cover"
                                   />
-                                  <div>
-                                    <div className="font-medium">{product.name}</div>
-                                    <div className="text-sm text-gray-500 sm:hidden">{product.brand}</div>
-                                  </div>
                                 </div>
                               </TableCell>
-                              <TableCell className="hidden sm:table-cell">{product.brand}</TableCell>
                               <TableCell>
                                 <div>
-                                  <div className="font-medium">₹{product.price}</div>
-                                  {product.salePrice && (
-                                    <div className="text-sm text-red-600">₹{product.salePrice}</div>
+                                  <div className="font-medium text-gray-900 mb-1">{product.name}</div>
+                                  <div className="text-sm text-gray-500">{product.brand}</div>
+                                  <div className="text-xs text-gray-400 mt-1">SKU: {product._id.slice(-8)}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div>
+                                  {product.salePrice && Number(product.salePrice) < Number(product.price) ? (
+                                    <div>
+                                      <div className="font-semibold text-green-600">₹{Number(product.salePrice).toLocaleString()}</div>
+                                      <div className="text-sm text-gray-500 line-through">₹{Number(product.price).toLocaleString()}</div>
+                                      <Badge className="bg-red-100 text-red-700 text-xs mt-1">
+                                        {Math.round(((Number(product.price) - Number(product.salePrice)) / Number(product.price)) * 100)}% OFF
+                                      </Badge>
+                                    </div>
+                                  ) : (
+                                    <div className="font-semibold">₹{Number(product.price).toLocaleString()}</div>
                                   )}
                                 </div>
                               </TableCell>
                               <TableCell className="hidden md:table-cell">
-                                <div className={`text-sm ${product.stockQuantity < 10 ? 'text-red-600' : 'text-green-600'}`}>
-                                  {product.stockQuantity}
+                                <div className={`inline-flex items-center gap-2 ${product.stockQuantity < 10 ? 'text-red-600' : product.stockQuantity < 50 ? 'text-orange-600' : 'text-green-600'}`}>
+                                  <div className={`w-2 h-2 rounded-full ${product.stockQuantity < 10 ? 'bg-red-500' : product.stockQuantity < 50 ? 'bg-orange-500' : 'bg-green-500'}`}></div>
+                                  <span className="font-medium">{product.stockQuantity}</span>
                                 </div>
                               </TableCell>
                               <TableCell className="hidden lg:table-cell">
                                 <div className="flex gap-1 flex-wrap">
-                                  {product.isFeatured && <Badge variant="secondary">Featured</Badge>}
-                                  {product.isOnSale && <Badge variant="destructive">Sale</Badge>}
-                                  {!product.inStock && <Badge variant="outline">Out of Stock</Badge>}
+                                  {product.inStock ? (
+                                    <Badge className="bg-green-100 text-green-700">In Stock</Badge>
+                                  ) : (
+                                    <Badge variant="destructive">Out of Stock</Badge>
+                                  )}
+                                  {product.isFeatured && <Badge className="bg-blue-100 text-blue-700">Featured</Badge>}
+                                  {product.isOnSale && <Badge className="bg-orange-100 text-orange-700">Sale</Badge>}
                                 </div>
                               </TableCell>
-                              <TableCell>
-                                <div className="flex gap-2">
+                              <TableCell className="hidden xl:table-cell">
+                                <div className="text-sm text-gray-500">
+                                  {new Date(product.createdAt).toLocaleDateString('en-IN')}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex gap-1 justify-end">
                                   <Button
                                     variant="ghost"
                                     size="sm"
+                                    className="h-8 w-8 p-0"
+                                    onClick={() => window.open(`/product/${product._id}`, '_blank')}
+                                    title="View Product"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 p-0"
                                     onClick={() => setEditingProduct(product)}
+                                    title="Edit Product"
                                   >
                                     <Edit className="h-4 w-4" />
                                   </Button>
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => deleteProductMutation.mutate(product._id)}
+                                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                                    onClick={() => {
+                                      if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
+                                        deleteProductMutation.mutate(product._id);
+                                      }
+                                    }}
+                                    title="Delete Product"
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </div>
                               </TableCell>
                             </TableRow>
-                          ))}
+                          ))
+                          )}
                         </TableBody>
                       </Table>
                     </div>

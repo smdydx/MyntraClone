@@ -118,10 +118,10 @@ export default function HeroSlider() {
               style={{ backgroundImage: `url(${slide.backgroundImage})` }}
             />
           )}
-          
+
           {/* Dark overlay for better text readability */}
           <div className="absolute inset-0 bg-black/30" />
-          
+
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="max-w-xl text-white">
               <h2 className="text-xs md:text-sm font-medium mb-2 opacity-90 text-hednor-gold">
@@ -156,7 +156,7 @@ export default function HeroSlider() {
       >
         <ChevronLeft className="h-6 w-6" />
       </Button>
-      
+
       <Button
         variant="ghost"
         size="icon"
@@ -184,13 +184,13 @@ export default function HeroSlider() {
             {index === currentSlide && (
               <div className="absolute inset-0 rounded-full bg-hednor-gold animate-pulse" />
             )}
-            
+
             {/* Hover effect ring */}
             <div className={cn(
               "absolute inset-0 rounded-full border-2 border-transparent transition-all duration-300",
               index !== currentSlide && "group-hover:border-white/40 group-hover:scale-125"
             )} />
-            
+
             {/* Progress indicator for current slide */}
             {index === currentSlide && (
               <div className="absolute inset-0 rounded-full overflow-hidden">
@@ -206,14 +206,6 @@ export default function HeroSlider() {
           </button>
         ))}
       </div>
-      
-      {/* Add CSS for slide progress animation */}
-      <style jsx>{`
-        @keyframes slideProgress {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
-      `}</style>
     </div>
   );
 }

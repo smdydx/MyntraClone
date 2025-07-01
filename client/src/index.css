@@ -392,6 +392,23 @@
     transition: opacity 0.3s;
   }
 
+  /* Myntra-style animations */
+  @keyframes slideProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  /* Myntra-style hover effects */
+  .myntra-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .myntra-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
   .glow-button:hover::before {
     opacity: 1;
     animation: glow 1.5s ease-in-out infinite alternate;

@@ -44,6 +44,7 @@ interface StoreState {
   addToWishlist: (item: Omit<WishlistItem, 'id'>) => void;
   removeFromWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
+  updateCartItemQuantity: (productId: string, quantity: number) => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -93,20 +94,19 @@ export const useStore = create<StoreState>()(
       },
 
       removeFromCart: (productId) => {
-        const { cartItems } = get();
-        const newCartItems = cartItems.filter((item) => item.productId !== productId);
+        set((state) => ({
+          cartItems: state.cartItems.filter(item => item.productId !== productId)
+        }));
+      },
 
-        const newCartCount = newCartItems.reduce((total, item) => total + item.quantity, 0);
-        const newCartTotal = newCartItems.reduce((total, item) => {
-          const price = item.salePrice ? parseFloat(item.salePrice) : parseFloat(item.price);
-          return total + (price * item.quantity);
-        }, 0);
-
-        set({
-          cartItems: newCartItems,
-          cartCount: newCartCount,
-          cartTotal: newCartTotal,
-        });
+      updateCartItemQuantity: (productId: string, quantity: number) => {
+        set((state) => ({
+          cartItems: state.cartItems.map(item => 
+            item.productId === productId 
+              ? { ...item, quantity: Math.max(0, quantity) }
+              : item
+          ).filter(item => item.quantity > 0)
+        }));
       },
 
       updateCartQuantity: (productId, quantity) => {
