@@ -1,23 +1,15 @@
-
 import React, { useState } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  useToast,
-  Flex,
-  Spacer,
-  Box,
-  Text
-} from '@chakra-ui/react';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 import { useMutation } from '@tanstack/react-query';
 
 interface AuthModalProps {
@@ -29,7 +21,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const toast = useToast();
+  const { toast } = useToast();
 
   const loginMutation = useMutation({
     mutationFn: async ({ username, password }: { username: string; password: string }) => {
@@ -40,12 +32,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Login failed');
       }
-      
+
       return response.json();
     },
     onSuccess: (data) => {
@@ -53,9 +45,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       toast({
         title: 'Login Successful',
         description: 'You have successfully logged in.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       onClose();
       window.location.reload();
@@ -64,9 +53,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       toast({
         title: 'Login Error',
         description: error.message,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+        variant: 'destructive',
       });
     },
   });
@@ -80,12 +67,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Registration failed');
       }
-      
+
       return response.json();
     },
     onSuccess: (data) => {
@@ -93,9 +80,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       toast({
         title: 'Registration Successful',
         description: 'You have successfully registered.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
       });
       onClose();
       window.location.reload();
@@ -104,9 +88,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       toast({
         title: 'Registration Error',
         description: error.message,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+        variant: 'destructive',
       });
     },
   });
@@ -128,58 +110,53 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{isLogin ? 'Login' : 'Register'}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <form onSubmit={handleSubmit}>
-            <FormControl>
-              <FormLabel>Username</FormLabel>
-              <Input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </FormControl>
-            <Button
-              isLoading={isLogin ? loginMutation.isPending : registerMutation.isPending}
-              mt={4}
-              colorScheme="blue"
-              type="submit"
-              width="100%"
-            >
-              {isLogin ? 'Login' : 'Register'}
-            </Button>
-          </form>
-        </ModalBody>
-
-        <ModalFooter>
-          <Flex>
-            <Box>
-              <Text>
-                {isLogin ? "Don't have an account?" : "Already have an account?"}
-              </Text>
-            </Box>
-            <Spacer />
-            <Button colorScheme="gray" onClick={toggleAuthMode}>
-              {isLogin ? 'Register' : 'Login'}
-            </Button>
-          </Flex>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{isLogin ? 'Login' : 'Register'}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button
+            disabled={isLogin ? loginMutation.isPending : registerMutation.isPending}
+            type="submit"
+            className="w-full"
+          >
+            {isLogin ? 
+              (loginMutation.isPending ? 'Logging in...' : 'Login') : 
+              (registerMutation.isPending ? 'Registering...' : 'Register')
+            }
+          </Button>
+        </form>
+        <DialogFooter className="flex justify-between items-center">
+          <p className="text-sm text-muted-foreground">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}
+          </p>
+          <Button variant="outline" onClick={toggleAuthMode}>
+            {isLogin ? 'Register' : 'Login'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
