@@ -414,7 +414,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 xs:gap-3 md:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
               {products.filter(p => {
                 const clothingCategories = categories.filter(cat => 
                   cat.name.toLowerCase().includes('clothing') || 

@@ -5,8 +5,8 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 export default function Footer() {
   return (
     <footer className="pt-8 pb-16 mt-8 w-full clear-both" style={{ backgroundColor: 'rgb(112 113 35 / 50%)' }}>
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-6">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-6">
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -65,14 +65,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-300 pt-4 pb-4 flex flex-col md:flex-row items-center justify-between">
-          <p className="text-gray-600 text-sm mb-3 md:mb-0 text-center md:text-left">
+        <div className="border-t border-gray-300 pt-6 pb-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+          <p className="text-gray-600 text-sm text-center md:text-left">
             © 2025 Hednor. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center space-x-4 md:space-x-6 text-sm">
-            <Link href="/privacy" className="text-gray-600 hover:text-hednor-gold transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-gray-600 hover:text-hednor-gold transition-colors">Terms of Service</Link>
-            <Link href="/cookies" className="text-gray-600 hover:text-hednor-gold transition-colors">Cookie Policy</Link>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm">
+            <Link href="/privacy" className="text-gray-600 hover:text-hednor-gold transition-colors whitespace-nowrap">Privacy Policy</Link>
+            <Link href="/terms" className="text-gray-600 hover:text-hednor-gold transition-colors whitespace-nowrap">Terms of Service</Link>
+            <Link href="/cookies" className="text-gray-600 hover:text-hednor-gold transition-colors whitespace-nowrap">Cookie Policy</Link>
           </div>
         </div>
       </div>

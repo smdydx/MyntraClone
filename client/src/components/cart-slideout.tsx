@@ -11,7 +11,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose, cartItems 
   const safeCartItems = cartItems || [];
   
   return (
-    <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-md transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div className={`fixed top-0 right-0 h-full w-80 sm:w-96 bg-white shadow-md transform transition-transform duration-300 z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
       <div className="p-4">
         <h2 className="text-lg font-semibold mb-4">Shopping Cart</h2>
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">

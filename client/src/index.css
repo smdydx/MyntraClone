@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll on mobile */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Fix for small screens */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Mobile text sizes */
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  
+  /* Mobile button sizes */
+  .min-w-\[44px\] {
+    min-width: 40px;
+  }
+  
+  .min-h-\[44px\] {
+    min-height: 40px;
+  }
+}
+
+/* Prevent layout shifts */
+* {
+  box-sizing: border-box;
+}
+
+/* Better touch targets for mobile */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Fix for header overlapping content */
+.header-spacer {
+  height: 120px;
+}
+
+@media (max-width: 1024px) {
+  .header-spacer {
+    height: 100px;
+  }
+}
+
 @layer utilities {
   .line-clamp-2 {
     display: -webkit-box;
