@@ -36,12 +36,12 @@ interface StoreState {
 
   // Actions
   addToCart: (item: Omit<CartItem, 'id'>) => void;
-  removeFromCart: (id: string) => void;
-  updateCartItemQuantity: (id: string, quantity: number) => void;
+  removeFromCart: (id: number) => void;
+  updateCartItemQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
 
   addToWishlist: (item: Omit<WishlistItem, 'id'>) => void;
-  removeFromWishlist: (productId: string) => void;
+  removeFromWishlist: (productId: number) => void;
   clearWishlist: () => void;
 
   // UI State
@@ -91,11 +91,10 @@ export const useStore = create<StoreState>()(
             cartItems: [...state.cartItems, { ...item, id: newId }],
           };
         }),
-      removeFromCart: (id) => {
+      removeFromCart: (id) =>
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item.id !== id),
-        }));
-      },
+        })),
       updateCartItemQuantity: (id, quantity) => {
         if (quantity <= 0) {
           get().removeFromCart(id);
