@@ -206,18 +206,18 @@ export default function Home() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="flex items-baseline space-x-2 mb-2">
+                          <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
                             {product.salePrice ? (
                               <>
-                                <span className="font-bold text-base sm:text-lg text-gray-900">
+                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
                                   ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
                                 </span>
-                                <span className="text-sm text-gray-400 line-through">
+                                <span className="text-xs sm:text-sm text-gray-400 line-through">
                                   ₹{parseFloat(product.price).toLocaleString('en-IN')}
                                 </span>
                               </>
                             ) : (
-                              <span className="font-bold text-base sm:text-lg text-gray-900">
+                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
                                 ₹{parseFloat(product.price).toLocaleString('en-IN')}
                               </span>
                             )}
@@ -329,18 +329,18 @@ export default function Home() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="flex items-baseline space-x-2 mb-2">
+                          <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
                             {product.salePrice ? (
                               <>
-                                <span className="font-bold text-base sm:text-lg text-gray-900">
+                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
                                   ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
                                 </span>
-                                <span className="text-sm text-gray-400 line-through">
+                                <span className="text-xs sm:text-sm text-gray-400 line-through">
                                   ₹{parseFloat(product.price).toLocaleString('en-IN')}
                                 </span>
                               </>
                             ) : (
-                              <span className="font-bold text-base sm:text-lg text-gray-900">
+                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
                                 ₹{parseFloat(product.price).toLocaleString('en-IN')}
                               </span>
                             )}
@@ -448,7 +448,7 @@ export default function Home() {
                       <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
                         {product.name}
                       </h3>
-                      <div className="flex items-baseline space-x-2 mb-2">
+                      <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
                         {product.salePrice ? (
                           <>
                             <span className="font-bold text-sm sm:text-base text-gray-900">
