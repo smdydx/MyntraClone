@@ -13,8 +13,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onQuickView }: ProductCardProps) {
-  const { addToCart, toggleWishlist, wishlist } = useStore();
-  const isInWishlist = wishlist.some(item => item.productId === product._id);
+  const { addToCart, addToWishlist, removeFromWishlist, wishlistItems } = useStore();
+  const isInWishlist = wishlistItems.some(item => item.productId === product._id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,7 +22,9 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
     addToCart({
       productId: product._id,
       name: product.name,
-      price: product.salePrice || product.price,
+      brand: product.brand,
+      price: product.salePrice?.toString() || product.price.toString(),
+      salePrice: product.salePrice?.toString(),
       image: product.images[0],
       quantity: 1,
       size: product.sizes?.[0],
@@ -33,13 +35,18 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleWishlist({
-      productId: product._id,
-      name: product.name,
-      price: product.salePrice || product.price,
-      image: product.images[0],
-      brand: product.brand
-    });
+    if (isInWishlist) {
+      removeFromWishlist(product._id);
+    } else {
+      addToWishlist({
+        productId: product._id,
+        name: product.name,
+        brand: product.brand,
+        price: product.salePrice?.toString() || product.price.toString(),
+        salePrice: product.salePrice?.toString(),
+        image: product.images[0]
+      });
+    }
   };
 
   const handleQuickView = (e: React.MouseEvent) => {
