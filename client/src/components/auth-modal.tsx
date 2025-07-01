@@ -1,116 +1,155 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from 'react';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  useToast,
+  Flex,
+  Spacer,
+  Box,
+  Text
+} from '@chakra-ui/react';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER, REGISTER_USER } from '../graphql/mutations';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const toast = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [loginUser, { loading: loginLoading }] = useMutation(LOGIN_USER, {
+    onCompleted(data) {
+      localStorage.setItem('token', data.login.token);
+      toast({
+        title: 'Login Successful',
+        description: 'You have successfully logged in.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose();
+      window.location.reload(); // Refresh the page to update the user context
+    },
+    onError(error) {
+      toast({
+        title: 'Login Error',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const [registerUser, { loading: registerLoading }] = useMutation(REGISTER_USER, {
+    onCompleted(data) {
+      localStorage.setItem('token', data.register.token);
+      toast({
+        title: 'Registration Successful',
+        description: 'You have successfully registered.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose();
+      window.location.reload(); // Refresh the page to update the user context
+    },
+    onError(error) {
+      toast({
+        title: 'Registration Error',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add login logic here
-    console.log("Login:", { email, password });
-    onClose();
+
+    if (isLogin) {
+      loginUser({ variables: { username, password } });
+    } else {
+      registerUser({ variables: { username, password } });
+    }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Add signup logic here
-    console.log("Signup:", { name, email, password });
-    onClose();
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setUsername('');
+    setPassword('');
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Welcome</DialogTitle>
-        </DialogHeader>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{isLogin ? 'Login' : 'Register'}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <form onSubmit={handleSubmit}>
+            <FormControl>
+              <FormLabel>Username</FormLabel>
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </FormControl>
+            <Button
+              isLoading={isLogin ? loginLoading : registerLoading}
+              mt={4}
+              colorScheme="blue"
+              type="submit"
+              width="100%"
+            >
+              {isLogin ? 'Login' : 'Register'}
+            </Button>
+          </form>
+        </ModalBody>
 
-        <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="login" className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="login-email">Email</Label>
-                <Input
-                  id="login-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="login-password">Password</Label>
-                <Input
-                  id="login-password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-            </form>
-          </TabsContent>
-
-          <TabsContent value="signup" className="space-y-4">
-            <form onSubmit={handleSignup} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="signup-name">Name</Label>
-                <Input
-                  id="signup-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
-                <Input
-                  id="signup-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Sign Up
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
-      </DialogContent>
-    </Dialog>
+        <ModalFooter>
+          <Flex>
+            <Box>
+              <Text>
+                {isLogin ? "Don't have an account?" : "Already have an account?"}
+              </Text>
+            </Box>
+            <Spacer />
+            <Button colorScheme="gray" onClick={toggleAuthMode}>
+              {isLogin ? 'Register' : 'Login'}
+            </Button>
+          </Flex>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
-}
-export { AuthModal };
+};
+
 export default AuthModal;

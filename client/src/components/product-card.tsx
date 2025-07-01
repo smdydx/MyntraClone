@@ -67,7 +67,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           )}
 
           {/* Sale Badge */}
-          {product.salePrice && product.salePrice < product.price && (
+          {product.salePrice && Number(product.salePrice) < Number(product.price) && (
             <Badge className="absolute top-2 left-2 bg-red-500 text-white">
               Sale
             </Badge>
@@ -144,18 +144,18 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
 
           {/* Price */}
           <div className="flex items-center gap-2">
-            {product.salePrice && product.salePrice < product.price ? (
+            {product.salePrice && Number(product.salePrice) < Number(product.price) ? (
               <>
                 <span className="font-semibold text-hednor-gold">
-                  ${product.salePrice.toFixed(2)}
+                  ${Number(product.salePrice).toFixed(2)}
                 </span>
                 <span className="text-sm text-gray-500 line-through">
-                  ${product.price.toFixed(2)}
+                  ${Number(product.price).toFixed(2)}
                 </span>
               </>
             ) : (
               <span className="font-semibold text-gray-900">
-                ${product.price.toFixed(2)}
+                ${Number(product.price).toFixed(2)}
               </span>
             )}
           </div>
@@ -164,5 +164,5 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
     </Card>
   );
 }
+
 export { ProductCard };
-export default ProductCard;
