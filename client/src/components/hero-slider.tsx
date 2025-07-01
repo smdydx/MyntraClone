@@ -166,21 +166,54 @@ export default function HeroSlider() {
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
+      {/* Enhanced Dots Indicator */}
+      <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-1 md:space-x-2 pagination-dot-container rounded-full px-2 md:px-3 py-1.5 md:py-2">
         {heroSlides.map((_, index) => (
           <button
             key={index}
             className={cn(
-              "w-3 h-3 rounded-full transition-all duration-300",
+              "relative rounded-full transition-all duration-500 ease-out hover:scale-110 group touch-manipulation",
               index === currentSlide
-                ? "bg-white w-8"
-                : "bg-white/50 hover:bg-white/75"
+                ? "w-6 md:w-8 h-2.5 md:h-3 bg-hednor-gold shadow-lg shadow-hednor-gold/50 pagination-dot-active"
+                : "w-2.5 md:w-3 h-2.5 md:h-3 bg-white/60 hover:bg-white/80 hover:shadow-md"
             )}
             onClick={() => goToSlide(index)}
-          />
+            aria-label={`Go to slide ${index + 1}`}
+          >
+            {/* Active slide indicator with glow effect */}
+            {index === currentSlide && (
+              <div className="absolute inset-0 rounded-full bg-hednor-gold animate-pulse" />
+            )}
+            
+            {/* Hover effect ring */}
+            <div className={cn(
+              "absolute inset-0 rounded-full border-2 border-transparent transition-all duration-300",
+              index !== currentSlide && "group-hover:border-white/40 group-hover:scale-125"
+            )} />
+            
+            {/* Progress indicator for current slide */}
+            {index === currentSlide && (
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-yellow-400 to-hednor-gold rounded-full transition-all duration-500"
+                  style={{
+                    width: isAutoPlaying ? '100%' : '100%',
+                    animation: isAutoPlaying ? 'slideProgress 5s linear infinite' : 'none'
+                  }}
+                />
+              </div>
+            )}
+          </button>
         ))}
       </div>
+      
+      {/* Add CSS for slide progress animation */}
+      <style jsx>{`
+        @keyframes slideProgress {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 }

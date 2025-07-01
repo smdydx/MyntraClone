@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Enhanced pagination dots animations */
+@keyframes slideProgress {
+  0% { 
+    width: 0%; 
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    width: 100%; 
+    opacity: 0.9;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Custom pagination dot styles */
+.pagination-dot-active {
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.pagination-dot-container {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pagination-dot-container:hover {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 /* Mobile responsive fixes */
 @media (max-width: 768px) {
   /* Prevent horizontal scroll on mobile */
