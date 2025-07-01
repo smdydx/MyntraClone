@@ -27,18 +27,22 @@ interface WishlistItem {
 interface StoreState {
   // Cart
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, 'id'>) => void;
-  removeFromCart: (id: number) => void;
-  updateCartQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void;
-  cartTotal: number;
   cartCount: number;
+  cartTotal: number;
 
   // Wishlist
   wishlistItems: WishlistItem[];
+  wishlistCount: number;
+
+  // Actions
+  addToCart: (item: Omit<CartItem, 'id'>) => void;
+  removeFromCart: (id: string) => void;
+  updateCartItemQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
+
   addToWishlist: (item: Omit<WishlistItem, 'id'>) => void;
-  removeFromWishlist: (productId: number) => void;
-  isInWishlist: (productId: number) => boolean;
+  removeFromWishlist: (productId: string) => void;
+  clearWishlist: () => void;
 
   // UI State
   isCartOpen: boolean;
@@ -48,8 +52,14 @@ interface StoreState {
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
-      // Cart
+      // Cart state
       cartItems: [],
+      cartCount: 0,
+      cartTotal: 0,
+
+      // Wishlist state
+      wishlistItems: [],
+      wishlistCount: 0,
       addToCart: (item) => 
     set((state) => {
       // Create unique key for cart item based on product, size, and color
