@@ -6,7 +6,10 @@ interface CartSlideoutProps {
   cartItems: any[]; // Replace 'any' with the actual type of your cart items
 }
 
-const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose, cartItems }) => {
+const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose, cartItems = [] }) => {
+  // Ensure cartItems is always an array
+  const safeCartItems = cartItems || [];
+  
   return (
     <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-md transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
       <div className="p-4">
@@ -15,11 +18,11 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose, cartItems 
           Close
         </button>
 
-        {cartItems.length === 0 ? (
+        {safeCartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
           <ul>
-            {cartItems.map((item, index) => (
+            {safeCartItems.map((item, index) => (
               <li key={index} className="mb-2">
                 {item.name} - ${item.price}
               </li>
