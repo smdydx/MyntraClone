@@ -13,13 +13,13 @@ interface CartSlideoutProps {
 }
 
 const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
-  const { cartItems = [], removeFromCart, updateCartItemQuantity, cartTotal, cartCount } = useStore();
+  const { cartItems = [], removeFromCart, updateCartQuantity, cartTotal, cartCount } = useStore();
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeFromCart(productId);
     } else {
-      updateCartItemQuantity(productId, newQuantity);
+      updateCartQuantity(productId, newQuantity);
     }
   };
 
@@ -46,15 +46,15 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
       )}
 
       {/* Cart Slideout */}
-      <div className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl transform transition-transform duration-300 z-50 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-gray-50">
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-gray-50">
           <div className="flex items-center space-x-2">
-            <ShoppingBag className="w-5 h-5 text-hednor-gold" />
-            <h2 className="text-lg font-semibold text-gray-900">Shopping Bag</h2>
+            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-hednor-gold" />
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">Shopping Bag</h2>
             {cartCount > 0 && (
-              <Badge variant="secondary" className="bg-hednor-gold text-hednor-dark">
+              <Badge variant="secondary" className="bg-hednor-gold text-hednor-dark text-xs">
                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
               </Badge>
             )}
@@ -86,12 +86,12 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
               </Button>
             </div>
           ) : (
-            <div className="p-4 space-y-4">
+            <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
               {cartItems.map((item) => (
-                <div key={item.productId} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex space-x-3">
+                <div key={item.productId} className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+                  <div className="flex space-x-2 sm:space-x-3">
                     {/* Product Image */}
-                    <div className="relative w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -100,13 +100,13 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Product Details */}
-                    <div className="flex-1 space-y-2">
+                    <div className="flex-1 space-y-1 sm:space-y-2">
                       <div className="flex justify-between items-start">
-                        <div>
+                        <div className="flex-1 pr-2">
                           <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
                             {item.brand}
                           </p>
-                          <h4 className="text-sm font-medium text-gray-900 line-clamp-2 leading-tight">
+                          <h4 className="text-xs sm:text-sm font-medium text-gray-900 line-clamp-2 leading-tight">
                             {item.name}
                           </h4>
                         </div>
@@ -114,7 +114,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeFromCart(item.productId)}
-                          className="h-6 w-6 p-0 text-gray-400 hover:text-red-500"
+                          className="h-6 w-6 p-0 text-gray-400 hover:text-red-500 flex-shrink-0"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -122,19 +122,19 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
 
                       {/* Size and Color */}
                       {(item.size || item.color) && (
-                        <div className="flex space-x-2 text-xs text-gray-600">
+                        <div className="flex flex-wrap gap-1 sm:gap-2 text-xs text-gray-600">
                           {item.size && <span>Size: {item.size}</span>}
                           {item.color && <span>Color: {item.color}</span>}
                         </div>
                       )}
 
                       {/* Price and Quantity */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-col">
-                          <div className="flex items-center space-x-2">
+                      <div className="flex items-end justify-between gap-2">
+                        <div className="flex flex-col flex-1">
+                          <div className="flex items-center flex-wrap gap-1">
                             {item.salePrice ? (
                               <>
-                                <span className="font-semibold text-gray-900">
+                                <span className="font-semibold text-gray-900 text-sm">
                                   {formatPrice(item.salePrice)}
                                 </span>
                                 <span className="text-xs text-gray-500 line-through">
@@ -145,7 +145,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
                                 </Badge>
                               </>
                             ) : (
-                              <span className="font-semibold text-gray-900">
+                              <span className="font-semibold text-gray-900 text-sm">
                                 {formatPrice(item.price)}
                               </span>
                             )}
@@ -153,24 +153,24 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Quantity Controls */}
-                        <div className="flex items-center space-x-2 border border-gray-300 rounded-lg">
+                        <div className="flex items-center space-x-1 border border-gray-300 rounded-md">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
                             disabled={item.quantity <= 1}
-                            className="h-7 w-7 p-0 hover:bg-gray-100"
+                            className="h-6 w-6 p-0 hover:bg-gray-100"
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
-                          <span className="text-sm font-medium px-2 min-w-[24px] text-center">
+                          <span className="text-sm font-medium px-1 min-w-[20px] text-center">
                             {item.quantity}
                           </span>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
-                            className="h-7 w-7 p-0 hover:bg-gray-100"
+                            className="h-6 w-6 p-0 hover:bg-gray-100"
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
@@ -196,7 +196,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
 
         {/* Footer - Only show when cart has items */}
         {cartItems.length > 0 && (
-          <div className="border-t bg-white p-4 space-y-4">
+          <div className="border-t bg-white p-3 sm:p-4 space-y-3 sm:space-y-4">
             {/* Price Summary */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -218,7 +218,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
             <div className="space-y-2">
               <Link href="/checkout" className="block w-full">
                 <Button 
-                  className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold py-3"
+                  className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold py-2.5 sm:py-3 text-sm sm:text-base"
                   onClick={onClose}
                 >
                   Proceed to Checkout
@@ -227,7 +227,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
               </Link>
               <Button 
                 variant="outline" 
-                className="w-full border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark"
+                className="w-full border-hednor-gold text-hednor-gold hover:bg-hednor-gold hover:text-hednor-dark py-2.5 sm:py-3 text-sm sm:text-base"
                 onClick={onClose}
               >
                 Continue Shopping
@@ -235,7 +235,7 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex justify-center space-x-4 text-xs text-gray-500 pt-2">
+            <div className="flex justify-center space-x-3 sm:space-x-4 text-xs text-gray-500 pt-1 sm:pt-2">
               <span className="flex items-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                 Secure Checkout
