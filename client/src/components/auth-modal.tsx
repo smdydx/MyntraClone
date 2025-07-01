@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   Modal,
@@ -17,8 +18,7 @@ import {
   Box,
   Text
 } from '@chakra-ui/react';
-import { useMutation } from '@apollo/client';
-import { LOGIN_USER, REGISTER_USER } from '../graphql/mutations';
+import { useMutation } from '@tanstack/react-query';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -31,9 +31,25 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState('');
   const toast = useToast();
 
-  const [loginUser, { loading: loginLoading }] = useMutation(LOGIN_USER, {
-    onCompleted(data) {
-      localStorage.setItem('token', data.login.token);
+  const loginMutation = useMutation({
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Login failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
       toast({
         title: 'Login Successful',
         description: 'You have successfully logged in.',
@@ -42,9 +58,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         isClosable: true,
       });
       onClose();
-      window.location.reload(); // Refresh the page to update the user context
+      window.location.reload();
     },
-    onError(error) {
+    onError: (error: Error) => {
       toast({
         title: 'Login Error',
         description: error.message,
@@ -55,9 +71,25 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     },
   });
 
-  const [registerUser, { loading: registerLoading }] = useMutation(REGISTER_USER, {
-    onCompleted(data) {
-      localStorage.setItem('token', data.register.token);
+  const registerMutation = useMutation({
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Registration failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
       toast({
         title: 'Registration Successful',
         description: 'You have successfully registered.',
@@ -66,9 +98,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         isClosable: true,
       });
       onClose();
-      window.location.reload(); // Refresh the page to update the user context
+      window.location.reload();
     },
-    onError(error) {
+    onError: (error: Error) => {
       toast({
         title: 'Registration Error',
         description: error.message,
@@ -79,14 +111,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     },
   });
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isLogin) {
-      loginUser({ variables: { username, password } });
+      loginMutation.mutate({ username, password });
     } else {
-      registerUser({ variables: { username, password } });
+      registerMutation.mutate({ username, password });
     }
   };
 
@@ -123,7 +154,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               />
             </FormControl>
             <Button
-              isLoading={isLogin ? loginLoading : registerLoading}
+              isLoading={isLogin ? loginMutation.isPending : registerMutation.isPending}
               mt={4}
               colorScheme="blue"
               type="submit"
