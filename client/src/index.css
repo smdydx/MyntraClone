@@ -50,23 +50,23 @@
   body {
     overflow-x: hidden;
   }
-  
+
   /* Fix for small screens */
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   /* Mobile text sizes */
   .text-sm {
     font-size: 0.875rem;
   }
-  
+
   /* Mobile button sizes */
   .min-w-\[44px\] {
     min-width: 40px;
   }
-  
+
   .min-h-\[44px\] {
     min-height: 40px;
   }
@@ -502,7 +502,7 @@
       font-size: 14px;
       font-weight: 500;
     }
-    
+
     .product-card button:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -614,7 +614,7 @@
       margin-bottom: 0 !important;
       padding-bottom: 80px !important;
     }
-    
+
     body {
       padding-bottom: 0;
     }

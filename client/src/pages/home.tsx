@@ -55,6 +55,16 @@ export default function Home() {
         <HeroSlider />
       </div>
 
+      {/* Offer Banner */}
+      <div className="bg-red-600 text-white py-3 px-4">
+        <div className="container mx-auto text-center">
+          <p className="text-sm md:text-base font-medium">
+            🔥 LIMITED TIME OFFER: Use Code "FREESHIP" for Free Shipping on Orders Above ₹1999! 
+            <span className="ml-2 font-bold">Shop Now & Save Big!</span>
+          </p>
+        </div>
+      </div>
+
       {/* Category Grid */}
       <section className="container mx-auto px-4 py-8 bg-gray-50">
         <h2 className="font-bold text-xl md:text-2xl text-center mb-6 text-gray-800 uppercase tracking-wide">

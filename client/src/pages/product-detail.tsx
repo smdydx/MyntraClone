@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
-import { Star, Heart, ShoppingBag, Plus, Minus, ArrowLeft, ZoomIn } from "lucide-react";
+import { Star, Heart, ShoppingBag, Plus, Minus, ArrowLeft, ZoomIn, Truck, Shield, RotateCcw, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -303,7 +303,7 @@ export default function ProductDetail() {
                   <h3 className="font-medium text-gray-900">Size</h3>
                   <SizeGuide />
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {product.sizes.map((size) => (
                     <button
                       key={size}
@@ -317,6 +317,12 @@ export default function ProductDetail() {
                       {size}
                     </button>
                   ))}
+                </div>
+                {/* Size Information */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <p className="text-xs text-yellow-800">
+                    <strong>Size Guide:</strong> Model is 5'8" wearing size M. For relaxed fit, choose one size up.
+                  </p>
                 </div>
               </div>
             )}
@@ -404,6 +410,40 @@ export default function ProductDetail() {
                 </span>
               )}
             </div>
+
+            {/* Delivery & Service Info */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <h3 className="font-semibold text-gray-900">Delivery & Services</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="flex items-center space-x-2">
+                  <Truck className="w-4 h-4 text-green-600" />
+                  <span>Free delivery above ₹1999</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RotateCcw className="w-4 h-4 text-blue-600" />
+                  <span>Easy 30-day returns</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Shield className="w-4 h-4 text-purple-600" />
+                  <span>100% authentic products</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Award className="w-4 h-4 text-yellow-600" />
+                  <span>Quality guaranteed</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Product Highlights */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Product Highlights</h3>
+              <ul className="space-y-1 text-sm text-gray-700">
+                <li>• Premium quality fabric</li>
+                <li>• Regular fit for comfortable wear</li>
+                <li>• Machine washable</li>
+                <li>• Suitable for all occasions</li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -452,60 +492,112 @@ export default function ProductDetail() {
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Existing Reviews */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Rating Summary */}
               <div className="bg-white p-6 rounded-lg">
-                <h3 className="font-semibold mb-4">Customer Reviews</h3>
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="flex">
-                    {renderStars(product.rating || "0")}
+                <h3 className="font-semibold mb-4">Ratings & Reviews</h3>
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-gray-900 mb-2">{product.rating || "4.2"}</div>
+                  <div className="flex justify-center mb-2">
+                    {renderStars(product.rating || "4.2")}
                   </div>
-                  <span className="text-lg font-semibold">{product.rating || "0"} out of 5</span>
-                  <span className="text-gray-600">({product.reviewCount?.toLocaleString() || 0} reviews)</span>
+                  <div className="text-sm text-gray-600">{product.reviewCount?.toLocaleString() || "1,234"} Reviews</div>
                 </div>
 
-                {/* Sample Reviews */}
-                <div className="space-y-4">
+                {/* Rating Breakdown */}
+                <div className="space-y-2">
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <div key={star} className="flex items-center space-x-3">
+                      <span className="text-sm w-6">{star}★</span>
+                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-green-500 h-2 rounded-full" 
+                          style={{ width: `${star === 5 ? 60 : star === 4 ? 25 : star === 3 ? 10 : star === 2 ? 3 : 2}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm text-gray-600 w-8">{star === 5 ? 60 : star === 4 ? 25 : star === 3 ? 10 : star === 2 ? 3 : 2}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Reviews List */}
+              <div className="bg-white p-6 rounded-lg">
+                <h3 className="font-semibold mb-4">Customer Reviews</h3>
+                <div className="space-y-6">
+                  {/* Review 1 */}
                   <div className="border-b border-gray-200 pb-4">
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="flex">
                         {Array.from({ length: 5 }, (_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < 5 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                            }`}
-                          />
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                         ))}
                       </div>
                       <span className="font-medium">Priya S.</span>
-                      <span className="text-sm text-gray-500">Verified Purchase</span>
+                      <Badge variant="outline" className="text-xs">Verified</Badge>
                     </div>
-                    <p className="text-gray-600 text-sm">
-                      "Excellent quality and perfect fit! Highly recommend this product."
+                    <p className="text-gray-600 text-sm mb-2">
+                      "Amazing quality! The fabric is soft and the fit is perfect. Definitely worth the price."
                     </p>
+                    <div className="text-xs text-gray-500">
+                      Size purchased: M • Color: Blue • 2 days ago
+                    </div>
+                    <div className="flex items-center space-x-4 mt-2 text-xs">
+                      <button className="text-green-600 hover:underline">👍 Helpful (12)</button>
+                      <button className="text-gray-500 hover:underline">👎 Not helpful (1)</button>
+                    </div>
                   </div>
 
+                  {/* Review 2 */}
                   <div className="border-b border-gray-200 pb-4">
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="flex">
                         {Array.from({ length: 5 }, (_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                            }`}
-                          />
+                          <Star key={i} className={`w-4 h-4 ${i < 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
                         ))}
                       </div>
                       <span className="font-medium">Rahul K.</span>
-                      <span className="text-sm text-gray-500">Verified Purchase</span>
+                      <Badge variant="outline" className="text-xs">Verified</Badge>
                     </div>
-                    <p className="text-gray-600 text-sm">
-                      "Good value for money. Fast delivery and nice packaging."
+                    <p className="text-gray-600 text-sm mb-2">
+                      "Good value for money. Fast delivery and nice packaging. The color is exactly as shown."
                     </p>
+                    <div className="text-xs text-gray-500">
+                      Size purchased: L • Color: Black • 5 days ago
+                    </div>
+                    <div className="flex items-center space-x-4 mt-2 text-xs">
+                      <button className="text-green-600 hover:underline">👍 Helpful (8)</button>
+                      <button className="text-gray-500 hover:underline">👎 Not helpful (0)</button>
+                    </div>
+                  </div>
+
+                  {/* Review 3 */}
+                  <div className="border-b border-gray-200 pb-4">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="flex">
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <Star key={i} className={`w-4 h-4 ${i < 3 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
+                        ))}
+                      </div>
+                      <span className="font-medium">Sneha M.</span>
+                      <Badge variant="outline" className="text-xs">Verified</Badge>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">
+                      "Decent quality but the size runs a bit small. Order one size up. Material is comfortable."
+                    </p>
+                    <div className="text-xs text-gray-500">
+                      Size purchased: S • Color: White • 1 week ago
+                    </div>
+                    <div className="flex items-center space-x-4 mt-2 text-xs">
+                      <button className="text-green-600 hover:underline">👍 Helpful (15)</button>
+                      <button className="text-gray-500 hover:underline">👎 Not helpful (2)</button>
+                    </div>
                   </div>
                 </div>
+
+                <Button variant="outline" className="w-full mt-4">
+                  View All Reviews
+                </Button>
               </div>
 
               {/* Review Form */}

@@ -166,46 +166,7 @@ export default function HeroSlider() {
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      {/* Enhanced Dots Indicator */}
-      <div className="absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-0.5 md:space-x-2 pagination-dot-container rounded-full px-1 md:px-3 py-0.5 md:py-2">
-        {heroSlides.map((_, index) => (
-          <button
-            key={index}
-            className={cn(
-              "relative rounded-full transition-all duration-500 ease-out hover:scale-110 group touch-manipulation",
-              index === currentSlide
-                ? "w-3 md:w-8 h-1 md:h-3 bg-hednor-gold shadow-lg shadow-hednor-gold/50 pagination-dot-active"
-                : "w-1 md:w-3 h-1 md:h-3 bg-white/60 hover:bg-white/80 hover:shadow-md"
-            )}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          >
-            {/* Active slide indicator with glow effect */}
-            {index === currentSlide && (
-              <div className="absolute inset-0 rounded-full bg-hednor-gold animate-pulse" />
-            )}
-
-            {/* Hover effect ring */}
-            <div className={cn(
-              "absolute inset-0 rounded-full border-2 border-transparent transition-all duration-300",
-              index !== currentSlide && "group-hover:border-white/40 group-hover:scale-125"
-            )} />
-
-            {/* Progress indicator for current slide */}
-            {index === currentSlide && (
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-yellow-400 to-hednor-gold rounded-full transition-all duration-500"
-                  style={{
-                    width: isAutoPlaying ? '100%' : '100%',
-                    animation: isAutoPlaying ? 'slideProgress 5s linear infinite' : 'none'
-                  }}
-                />
-              </div>
-            )}
-          </button>
-        ))}
-      </div>
+      
     </div>
   );
 }

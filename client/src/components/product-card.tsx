@@ -1,4 +1,3 @@
-
 import { Link } from "wouter";
 import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useStore } from "@/lib/store";
 import type { Product } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -16,6 +16,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, onQuickView, viewMode = 'grid' }: ProductCardProps) {
   const { addToCart, addToWishlist, removeFromWishlist, wishlistItems } = useStore();
   const isInWishlist = wishlistItems.some(item => item.productId === (product._id || product.id));
+  const { toast } = useToast();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -30,6 +31,11 @@ export default function ProductCard({ product, onQuickView, viewMode = 'grid' }:
       quantity: 1,
       size: product.sizes?.[0],
       color: product.colors?.[0]
+    });
+    toast({
+      title: "Added to Cart!",
+      description: `${product.name} has been added to your cart.`,
+      duration: 3000,
     });
   };
 
@@ -79,7 +85,7 @@ export default function ProductCard({ product, onQuickView, viewMode = 'grid' }:
                 loading="lazy"
               />
             )}
-            
+
             {discountPercentage > 0 && (
               <Badge className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1">
                 {discountPercentage}% OFF
@@ -101,7 +107,7 @@ export default function ProductCard({ product, onQuickView, viewMode = 'grid' }:
               <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
                 {product.brand}
               </p>
-              
+
               <h3 className="font-medium text-gray-800 line-clamp-2 hover:text-hednor-gold transition-colors">
                 {product.name}
               </h3>
