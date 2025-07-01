@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -36,13 +35,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <DialogHeader>
           <DialogTitle>Welcome</DialogTitle>
         </DialogHeader>
-        
+
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="login" className="space-y-4">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
@@ -70,7 +69,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </Button>
             </form>
           </TabsContent>
-          
+
           <TabsContent value="signup" className="space-y-4">
             <form onSubmit={handleSignup} className="space-y-4">
               <div className="space-y-2">
@@ -113,3 +112,5 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     </Dialog>
   );
 }
+export { AuthModal };
+export default AuthModal;

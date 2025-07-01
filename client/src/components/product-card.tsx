@@ -1,4 +1,3 @@
-
 import { Link } from "wouter";
 import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           )}
-          
+
           {/* Sale Badge */}
           {product.salePrice && product.salePrice < product.price && (
             <Badge className="absolute top-2 left-2 bg-red-500 text-white">
@@ -165,3 +164,5 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
     </Card>
   );
 }
+export { ProductCard };
+export default ProductCard;

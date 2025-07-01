@@ -147,9 +147,9 @@ export const useStore = create<StoreState>()(
       get cartCount() {
         return get().cartItems.reduce((count, item) => count + item.quantity, 0);
       },
-      }),
-      {
-        name: 'hednor-store',
+    }),
+    {
+      name: 'hednor-store',
         partialize: (state) => ({
           cartItems: state.cartItems,
           wishlistItems: state.wishlistItems,
