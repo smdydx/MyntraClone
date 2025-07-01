@@ -206,22 +206,26 @@ export default function Home() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
+                          <div className="flex flex-col space-y-1 mb-2">
                             {product.salePrice ? (
-                              <>
-                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
+                              <div className="space-y-1">
+                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900 block">
                                   ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
                                 </span>
-                                <span className="text-xs sm:text-sm text-gray-400 line-through">
-                                  ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                                </span>
-                              </>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-xs sm:text-sm text-gray-400 line-through">
+                                    ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                                  </span>
+                                  <Badge className="bg-green-600 text-white text-xs px-2 py-0.5">
+                                    {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                                  </Badge>
+                                </div>
+                              </div>
                             ) : (
-                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
+                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900 block">
                                 ₹{parseFloat(product.price).toLocaleString('en-IN')}
                               </span>
-                            )}
-                          </div>
+                            )}</div>
                           <div className="flex items-center">
                             <div className="flex items-center bg-green-600 text-white text-xs px-2 py-1 rounded mr-2">
                               <span className="font-medium">{product.rating || "4.0"}</span>
@@ -329,18 +333,23 @@ export default function Home() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
+                          <div className="flex flex-col space-y-1 mb-2">
                             {product.salePrice ? (
-                              <>
-                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
+                              <div className="space-y-1">
+                                <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900 block">
                                   ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
                                 </span>
-                                <span className="text-xs sm:text-sm text-gray-400 line-through">
-                                  ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                                </span>
-                              </>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-xs sm:text-sm text-gray-400 line-through">
+                                    ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                                  </span>
+                                  <Badge className="bg-green-600 text-white text-xs px-2 py-0.5">
+                                    {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                                  </Badge>
+                                </div>
+                              </div>
                             ) : (
-                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">
+                              <span className="font-bold text-sm sm:text-base lg:text-lg text-gray-900 block">
                                 ₹{parseFloat(product.price).toLocaleString('en-IN')}
                               </span>
                             )}
@@ -448,18 +457,23 @@ export default function Home() {
                       <h3 className="font-medium text-sm sm:text-base text-gray-800 mb-2 line-clamp-2 leading-tight">
                         {product.name}
                       </h3>
-                      <div className="flex flex-col xs:flex-row xs:items-baseline space-y-1 xs:space-y-0 xs:space-x-2 mb-2">
+                      <div className="flex flex-col space-y-1 mb-2">
                         {product.salePrice ? (
-                          <>
-                            <span className="font-bold text-sm sm:text-base text-gray-900">
+                          <div className="space-y-1">
+                            <span className="font-bold text-sm sm:text-base text-gray-900 block">
                               ₹{parseFloat(product.salePrice).toLocaleString('en-IN')}
                             </span>
-                            <span className="text-xs sm:text-sm text-gray-400 line-through">
-                              ₹{parseFloat(product.price).toLocaleString('en-IN')}
-                            </span>
-                          </>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs sm:text-sm text-gray-400 line-through">
+                                ₹{parseFloat(product.price).toLocaleString('en-IN')}
+                              </span>
+                              <Badge className="bg-green-600 text-white text-xs px-2 py-0.5">
+                                {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
+                              </Badge>
+                            </div>
+                          </div>
                         ) : (
-                          <span className="font-bold text-sm sm:text-base text-gray-900">
+                          <span className="font-bold text-sm sm:text-base text-gray-900 block">
                             ₹{parseFloat(product.price).toLocaleString('en-IN')}
                           </span>
                         )}

@@ -143,19 +143,24 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           </div>
 
           {/* Price */}
-          <div className="flex items-center gap-2">
+          <div className="space-y-1">
             {product.salePrice && Number(product.salePrice) < Number(product.price) ? (
-              <>
-                <span className="font-semibold text-hednor-gold">
-                  ${Number(product.salePrice).toFixed(2)}
+              <div className="space-y-1">
+                <span className="font-semibold text-hednor-gold text-base block">
+                  ₹{Number(product.salePrice).toLocaleString('en-IN')}
                 </span>
-                <span className="text-sm text-gray-500 line-through">
-                  ${Number(product.price).toFixed(2)}
-                </span>
-              </>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-500 line-through">
+                    ₹{Number(product.price).toLocaleString('en-IN')}
+                  </span>
+                  <Badge className="bg-red-500 text-white text-xs px-2 py-0.5">
+                    {Math.round(((Number(product.price) - Number(product.salePrice)) / Number(product.price)) * 100)}% OFF
+                  </Badge>
+                </div>
+              </div>
             ) : (
-              <span className="font-semibold text-gray-900">
-                ${Number(product.price).toFixed(2)}
+              <span className="font-semibold text-gray-900 text-base block">
+                ₹{Number(product.price).toLocaleString('en-IN')}
               </span>
             )}
           </div>
