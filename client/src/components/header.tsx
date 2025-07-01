@@ -1405,15 +1405,6 @@ export default function Header() {
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      onClick={() => setMobileSearchOpen(true)}
-                    >
-                      <Search className="h-5 w-5" />
-                    </Button>
                     <SheetContent
                       side="left"
                       className="w-[280px] sm:w-[320px] p-0"
@@ -1523,24 +1514,6 @@ export default function Header() {
                                 </Button>
                               </>
                             )}
-                            <div className="relative">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setLocation("/wishlist")}
-                                className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
-                              >
-                                <Heart className="h-4 w-4" />
-                                <span className="text-xs font-medium">
-                                  Wishlist
-                                </span>
-                              </Button>
-                              {wishlistItems.length > 0 && (
-                                <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
-                                  {wishlistItems.length}
-                                </Badge>
-                              )}
-                            </div>{" "}
                             <div
                               className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
                               onClick={() => {
@@ -1570,6 +1543,17 @@ export default function Header() {
                       </div>
                     </SheetContent>
                   </Sheet>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:text-hednor-gold p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    onClick={() => setMobileSearchOpen(true)}
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                    
+                  </Sheet>
                 </div>
 
                 {/* Center - Logo */}
@@ -1585,8 +1569,6 @@ export default function Header() {
 
                 {/* Right side - User Actions and Cart */}
                 <div className="flex items-center space-x-1 flex-shrink-0">
-                  
-
                   {/* Wishlist */}
                   <div className="relative">
                     <Button

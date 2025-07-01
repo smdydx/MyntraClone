@@ -47,6 +47,9 @@ interface StoreState {
   // UI State
   isCartOpen: boolean;
   setCartOpen: (open: boolean) => void;
+
+  get cartTotal(): number;
+  get cartCount(): number;
 }
 
 export const useStore = create<StoreState>()(
@@ -93,7 +96,7 @@ export const useStore = create<StoreState>()(
           cartItems: state.cartItems.filter((item) => item.id !== id),
         }));
       },
-      updateCartQuantity: (id, quantity) => {
+      updateCartItemQuantity: (id, quantity) => {
         if (quantity <= 0) {
           get().removeFromCart(id);
           return;
@@ -105,15 +108,6 @@ export const useStore = create<StoreState>()(
         }));
       },
       clearCart: () => set({ cartItems: [] }),
-      get cartTotal() {
-        return get().cartItems.reduce((total, item) => {
-          const price = item.salePrice ? parseFloat(item.salePrice) : parseFloat(item.price);
-          return total + price * item.quantity;
-        }, 0);
-      },
-      get cartCount() {
-        return get().cartItems.reduce((count, item) => count + item.quantity, 0);
-      },
 
       // Wishlist
       wishlistItems: [],
@@ -133,25 +127,29 @@ export const useStore = create<StoreState>()(
         wishlistItems: [...state.wishlistItems, { ...item, id: newId }],
       };
     }),
-      removeFromWishlist: (productId) => {
-        set((state) => ({
-          wishlistItems: state.wishlistItems.filter((item) => item.productId !== productId),
-        }));
-      },
-      isInWishlist: (productId) => {
-        return get().wishlistItems.some((item) => item.productId === productId);
-      },
+      removeFromWishlist: (productId) =>
+          set((state) => ({
+            wishlistItems: state.wishlistItems.filter(item => item.productId !== productId)
+          })),
 
-      // UI State
-      isCartOpen: false,
-      setCartOpen: (open) => set({ isCartOpen: open }),
-    }),
-    {
-      name: 'hednor-store',
-      partialize: (state) => ({
-        cartItems: state.cartItems,
-        wishlistItems: state.wishlistItems,
+        // Computed properties
+        get cartTotal() {
+          return get().cartItems.reduce((total, item) => {
+            const price = item.salePrice ? parseFloat(item.salePrice) : parseFloat(item.price);
+            return total + (price * item.quantity);
+          }, 0);
+        },
+        get cartCount() {
+          return get().cartItems.reduce((count, item) => count + item.quantity, 0);
+        },
       }),
-    }
+      {
+        name: 'hednor-store',
+        partialize: (state) => ({
+          cartItems: state.cartItems,
+          wishlistItems: state.wishlistItems,
+        }),
+      }
+    )
   )
 );
