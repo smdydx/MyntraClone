@@ -1360,7 +1360,8 @@ export default function Header() {
   );
   const [isLogin, setIsLogin] = useState(true);
 
-  const { cartCount, isCartOpen, setCartOpen, wishlistItems } = useStore();
+  const { isCartOpen, setCartOpen, wishlistItems } = useStore();
+  const { cartItems = [] } = useStore();
 
   const [isMobileSearchOpen, setMobileSearchOpen] = useState(false);
 
@@ -1596,11 +1597,7 @@ export default function Header() {
                     >
                       <div className="relative">
                         <ShoppingBag className="h-4 w-4" />
-                        {cartCount > 0 && (
-                          <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center p-0 text-[9px] min-w-[16px]">
-                            {cartCount > 99 ? "99+" : cartCount}
-                          </Badge>
-                        )}
+                        
                       </div>
                     </Button>
                   </div>
@@ -1810,11 +1807,7 @@ export default function Header() {
                     <ShoppingBag className="h-4 w-4" />
                     <span className="text-xs font-medium">Bag</span>
                   </Button>
-                  {cartCount > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-hednor-gold text-hednor-dark text-xs rounded-full w-5 h-5 flex items-center justify-center p-0 text-[10px] min-w-[20px]">
-                      {cartCount}
-                    </Badge>
-                  )}
+                  
                 </div>
               </div>
             </div>
@@ -1823,7 +1816,11 @@ export default function Header() {
       </header>
 
       {/* Cart Slideout */}
-      <CartSlideout />
+      <CartSlideout 
+        isOpen={isCartOpen} 
+        onClose={() => setCartOpen(false)} 
+        cartItems={Array.isArray(cartItems) ? cartItems : []}
+      />
 
       {/* Mobile Search */}
       <MobileSearch
