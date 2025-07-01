@@ -64,33 +64,33 @@ export const useStore = create<StoreState>()(
       wishlistItems: [],
       wishlistCount: 0,
       addToCart: (item) => 
-    set((state) => {
-      // Create unique key for cart item based on product, size, and color
-      const itemKey = `${item.productId}-${item.size || 'no-size'}-${item.color || 'no-color'}`;
+        set((state) => {
+          // Create unique key for cart item based on product, size, and color
+          const itemKey = `${item.productId}-${item.size || 'no-size'}-${item.color || 'no-color'}`;
 
-      const existingItem = state.cartItems.find(
-        (cartItem) => {
-          const cartItemKey = `${cartItem.productId}-${cartItem.size || 'no-size'}-${cartItem.color || 'no-color'}`;
-          return cartItemKey === itemKey;
-        }
-      );
+          const existingItem = state.cartItems.find(
+            (cartItem) => {
+              const cartItemKey = `${cartItem.productId}-${cartItem.size || 'no-size'}-${cartItem.color || 'no-color'}`;
+              return cartItemKey === itemKey;
+            }
+          );
 
-      if (existingItem) {
-        return {
-          cartItems: state.cartItems.map((cartItem) =>
-            cartItem.id === existingItem.id
-              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-              : cartItem
-          ),
-        };
-      }
+          if (existingItem) {
+            return {
+              cartItems: state.cartItems.map((cartItem) =>
+                cartItem.id === existingItem.id
+                  ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+                  : cartItem
+              ),
+            };
+          }
 
-      // Generate unique ID based on timestamp and random number
-      const newId = Date.now() + Math.floor(Math.random() * 1000);
-      return {
-        cartItems: [...state.cartItems, { ...item, id: newId }],
-      };
-    }),
+          // Generate unique ID based on timestamp and random number
+          const newId = Date.now() + Math.floor(Math.random() * 1000);
+          return {
+            cartItems: [...state.cartItems, { ...item, id: newId }],
+          };
+        }),
       removeFromCart: (id) => {
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item.id !== id),
@@ -112,36 +112,41 @@ export const useStore = create<StoreState>()(
       // Wishlist
       wishlistItems: [],
       addToWishlist: (item) =>
-    set((state) => {
-      const existingItem = state.wishlistItems.find(
-        (wishlistItem) => wishlistItem.productId === item.productId
-      );
+        set((state) => {
+          const existingItem = state.wishlistItems.find(
+            (wishlistItem) => wishlistItem.productId === item.productId
+          );
 
-      if (existingItem) {
-        return state; // Don't add duplicate
-      }
+          if (existingItem) {
+            return state; // Don't add duplicate
+          }
 
-      // Generate unique ID based on timestamp and random number
-      const newId = Date.now() + Math.floor(Math.random() * 1000);
-      return {
-        wishlistItems: [...state.wishlistItems, { ...item, id: newId }],
-      };
-    }),
+          // Generate unique ID based on timestamp and random number
+          const newId = Date.now() + Math.floor(Math.random() * 1000);
+          return {
+            wishlistItems: [...state.wishlistItems, { ...item, id: newId }],
+          };
+        }),
       removeFromWishlist: (productId) =>
-          set((state) => ({
-            wishlistItems: state.wishlistItems.filter(item => item.productId !== productId)
-          })),
+        set((state) => ({
+          wishlistItems: state.wishlistItems.filter(item => item.productId !== productId)
+        })),
+      clearWishlist: () => set({ wishlistItems: [] }),
 
-        // Computed properties
-        get cartTotal() {
-          return get().cartItems.reduce((total, item) => {
-            const price = item.salePrice ? parseFloat(item.salePrice) : parseFloat(item.price);
-            return total + (price * item.quantity);
-          }, 0);
-        },
-        get cartCount() {
-          return get().cartItems.reduce((count, item) => count + item.quantity, 0);
-        },
+      // UI State
+      isCartOpen: false,
+      setCartOpen: (open) => set({ isCartOpen: open }),
+
+      // Computed properties
+      get cartTotal() {
+        return get().cartItems.reduce((total, item) => {
+          const price = item.salePrice ? parseFloat(item.salePrice) : parseFloat(item.price);
+          return total + (price * item.quantity);
+        }, 0);
+      },
+      get cartCount() {
+        return get().cartItems.reduce((count, item) => count + item.quantity, 0);
+      },
       }),
       {
         name: 'hednor-store',
