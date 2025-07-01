@@ -86,7 +86,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <div className="relative h-[450px] md:h-[550px] lg:h-[650px] overflow-hidden">
+    <div className="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
@@ -123,19 +123,19 @@ export default function HeroSlider() {
           <div className="absolute inset-0 bg-black/30" />
           
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
-            <div className="max-w-2xl text-white">
-              <h2 className="text-sm md:text-base font-medium mb-2 opacity-90 text-hednor-gold">
+            <div className="max-w-xl text-white">
+              <h2 className="text-xs md:text-sm font-medium mb-2 opacity-90 text-hednor-gold">
                 {slide.subtitle}
               </h2>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
                 {slide.title}
               </h1>
-              <p className="text-base md:text-lg mb-6 opacity-90 max-w-xl">
+              <p className="text-sm md:text-base mb-4 opacity-90 max-w-md">
                 {slide.description}
               </p>
               <Button
-                size="lg"
-                className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold px-6 py-3 text-base transition-all transform hover:scale-105"
+                size="default"
+                className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold px-5 py-2 text-sm transition-all transform hover:scale-105"
                 onClick={() => {
                   window.location.href = slide.buttonLink;
                 }}
