@@ -334,11 +334,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin routes for products
   app.post("/api/admin/products", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
+      // Validate required fields
+      const { name, brand, price, categoryId } = req.body;
+      if (!name || !brand || !price || !categoryId) {
+        return res.status(400).json({ 
+          message: "Missing required fields: name, brand, price, and categoryId are required" 
+        });
+      }
+
+      // Ensure price is a valid number
+      if (isNaN(parseFloat(price))) {
+        return res.status(400).json({ message: "Price must be a valid number" });
+      }
+
       const product = await productService.createProduct(req.body);
-      res.status(201).json(product);
-    } catch (error) {
+      res.status(201).json({ message: "Product created successfully", product });
+    } catch (error: any) {
       console.error('Product creation error:', error);
-      res.status(400).json({ message: "Failed to add product", error: error.message });
+      res.status(400).json({ 
+        message: "Failed to add product", 
+        error: error.message || "Unknown error occurred"
+      });
     }
   });
 
@@ -348,17 +364,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Validate ObjectId
       if (!id || id.length !== 24) {
-        return res.status(400).json({ message: "Invalid product ID" });
+        return res.status(400).json({ message: "Invalid product ID format" });
+      }
+
+      // Validate price if provided
+      if (req.body.price && isNaN(parseFloat(req.body.price))) {
+        return res.status(400).json({ message: "Price must be a valid number" });
       }
 
       const product = await productService.updateProduct(id, req.body);
       if (!product) {
-        return res.status(404).json({ message: "Product not found" });
+        return res.status(404).json({ message: "Product not found or could not be updated" });
       }
-      res.json(product);
+      
+      res.json({ message: "Product updated successfully", product });
     } catch (error: any) {
       console.error('Product update error:', error);
-      res.status(400).json({ message: error.message || "Failed to update product" });
+      res.status(500).json({ 
+        message: error.message || "Failed to update product",
+        error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      });
     }
   });
 
