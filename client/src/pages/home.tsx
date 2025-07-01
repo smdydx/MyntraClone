@@ -190,7 +190,7 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="flex-1 p-4 flex flex-col justify-between">
                       <div>
                         <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
@@ -203,7 +203,7 @@ export default function Home() {
                           {product.description}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="flex items-baseline space-x-2 mb-2">
@@ -232,7 +232,7 @@ export default function Home() {
                             </span>
                           </div>
                         </div>
-                        
+
                         <div className="hidden sm:flex items-center space-x-2">
                           <Button 
                             size="sm" 
@@ -313,7 +313,7 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="flex-1 p-4 flex flex-col justify-between">
                       <div>
                         <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">
@@ -326,7 +326,7 @@ export default function Home() {
                           {product.description}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="flex items-baseline space-x-2 mb-2">
@@ -355,7 +355,7 @@ export default function Home() {
                             </span>
                           </div>
                         </div>
-                        
+
                         <div className="hidden sm:flex items-center space-x-2">
                           <Button 
                             size="sm" 
@@ -414,7 +414,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+            <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 xs:gap-3 md:gap-4 lg:gap-6">
               {products.filter(p => {
                 const clothingCategories = categories.filter(cat => 
                   cat.name.toLowerCase().includes('clothing') || 

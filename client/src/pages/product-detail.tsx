@@ -177,14 +177,14 @@ export default function ProductDetail() {
           <span className="text-gray-900">{product.name}</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
           {/* Product Images */}
-          <div className="space-y-4">
+          <div className="space-y-2 md:space-y-4">
             <div className="relative bg-white rounded-lg overflow-hidden">
               <img
                 src={product.images?.[selectedImageIndex] || ""}
                 alt={product.name}
-                className="w-full h-96 object-cover"
+                className="w-full h-64 xs:h-80 sm:h-96 md:h-[400px] lg:h-96 object-cover"
               />
               {product.isOnSale && product.salePrice && (
                 <Badge className="absolute top-4 left-4 bg-sale-red text-white">
@@ -194,12 +194,12 @@ export default function ProductDetail() {
             </div>
 
             {product.images && product.images.length > 1 && (
-              <div className="flex space-x-2 overflow-x-auto">
+              <div className="flex space-x-1 xs:space-x-2 overflow-x-auto pb-2">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden ${
+                    className={`flex-shrink-0 w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 rounded border-2 overflow-hidden ${
                       selectedImageIndex === index ? 'border-hednor-gold' : 'border-gray-200'
                     }`}
                   >
