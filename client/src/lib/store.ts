@@ -149,11 +149,10 @@ export const useStore = create<StoreState>()(
     }),
     {
       name: 'hednor-store',
-        partialize: (state) => ({
-          cartItems: state.cartItems,
-          wishlistItems: state.wishlistItems,
-        }),
-      }
-    )
+      partialize: (state) => ({
+        cartItems: state.cartItems,
+        wishlistItems: state.wishlistItems,
+      }),
+    }
   )
 );
