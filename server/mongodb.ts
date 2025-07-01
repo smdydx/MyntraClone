@@ -35,12 +35,11 @@ export async function connectToMongoDB() {
       return;
     }
 
-    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/hednor';
+    const uri = process.env.MONGODB_URI || MONGODB_URI;
     client = new MongoClient(uri, {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-      bufferMaxEntries: 0,
       retryWrites: true,
       retryReads: true
     });
