@@ -31,7 +31,7 @@ export default function Products() {
     queryKey: ["/api/categories"],
   });
 
-  const { data: productsResponse, isLoading } = useQuery({
+  const { data: productsResponse, isLoading, error } = useQuery({
     queryKey: ["/api/products", { 
       categoryId: categoryParam ? (categories.find(c => c.slug === categoryParam)?.id || categories.find(c => c.slug === categoryParam)?._id) : undefined,
       search: searchParam,
@@ -39,6 +39,8 @@ export default function Products() {
       onSale: onSaleParam === 'true'
     }],
     enabled: !categoryParam || categories.length > 0,
+    retry: 2,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const products = productsResponse?.products || [];

@@ -216,11 +216,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Cart
-  app.get("/api/cart", authenticateToken, async (req: AuthenticatedRequest, res) => {
+  // Cart - supports both logged in users and guest sessions
+  app.get("/api/cart", optionalAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const cartItems = await cartService.getCartItems(req.user!.userId);
-      res.json(cartItems);
+      const sessionId = req.headers['x-session-id'] as string;
+      
+      if (req.user) {
+        // Logged in user
+        const cartItems = await cartService.getCartItems(req.user.userId);
+        res.json(cartItems);
+      } else if (sessionId) {
+        // Guest user with session
+        const cartItems = await cartService.getGuestCartItems(sessionId);
+        res.json(cartItems);
+      } else {
+        res.json([]);
+      }
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch cart items" });
     }

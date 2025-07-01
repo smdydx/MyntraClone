@@ -476,43 +476,7 @@ export default function ProductDetail() {
       </div>
 
       {/* Related Products */}
-      <section className="bg-white py-8">
-        <div className="container mx-auto px-4">
-          <h2 className="font-bold text-xl md:text-2xl text-gray-800 uppercase tracking-wide mb-6">
-            You May Also Like
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-            {/* Related Product 1 */}
-            <div className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="relative overflow-hidden bg-gray-50">
-                <img
-                  src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=400&fit=crop"
-                  alt="Cotton Shirt"
-                  className="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-3 left-3">
-                  <div className="bg-red-500 text-white text-xs px-2 py-1 font-medium rounded">
-                    25% OFF
-                  </div>
-                </div>
-              </div>
-              <div className="p-3">
-                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">HEDNOR</p>
-                <h3 className="font-normal text-sm text-gray-800 mb-2 line-clamp-1">Premium Cotton Shirt</h3>
-                <div className="flex items-baseline space-x-2 mb-2">
-                  <span className="font-bold text-sm text-gray-900">₹1,499</span>
-                  <span className="text-xs text-gray-400 line-through">₹1,999</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="flex items-center bg-green-600 text-white text-xs px-1.5 py-0.5 rounded mr-2">
-                    <span className="font-medium">4.2</span>
-                    <Star className="w-2.5 h-2.5 ml-0.5 fill-current" />
-                  </div>
-                  <span className="text-xs text-gray-400">(892)</span>
-                </div>
-              </div>
-            </div>
+      <RelatedProducts categoryId={product.categoryId} currentProductId={product.id} />
 
             {/* Related Product 2 */}
             <div className="group cursor-pointer bg-white border border-gray-100 hover:shadow-lg transition-shadow">

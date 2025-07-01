@@ -30,24 +30,51 @@ export function verifyToken(token: string): { userId: string; email: string } {
 
 export async function connectToMongoDB() {
   try {
-    if (!client) {
-      client = new MongoClient(MONGODB_URI, {
-        serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 10000,
-        maxPoolSize: 10,
-        retryWrites: true,
-        w: "majority",
-      });
+    if (db) {
+      console.log('Already connected to MongoDB');
+      return;
     }
 
-    await client.connect();
-    db = client.db("hednor-ecommerce");
-    console.log("Connected to MongoDB");
+    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/hednor';
+    client = new MongoClient(uri, {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      bufferMaxEntries: 0,
+      retryWrites: true,
+      retryReads: true
+    });
 
-    // Create indexes for better performance
-    await createIndexes();
+    await client.connect();
+    db = client.db();
+
+    // Test the connection
+    await db.admin().ping();
+
+    console.log('Connected to MongoDB');
+
+    // Handle connection events
+    client.on('error', (error) => {
+      console.error('MongoDB connection error:', error);
+    });
+
+    client.on('close', () => {
+      console.log('MongoDB connection closed');
+      db = null;
+      client = null;
+    });
+
   } catch (error) {
-    console.error("MongoDB connection error:", error);
+    console.error('Failed to connect to MongoDB:', error);
+    db = null;
+    client = null;
+
+    // Retry connection after 5 seconds
+    setTimeout(() => {
+      console.log('Retrying MongoDB connection...');
+      connectToMongoDB();
+    }, 5000);
+
     throw error;
   }
 }
