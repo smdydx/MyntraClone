@@ -262,8 +262,9 @@ export async function seedProducts() {
         price: 2799,
         salePrice: 2199,
         images: [
-          "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
-          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400"
+          "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&h=800&fit=crop"
         ],
         sizes: ["XS", "S", "M", "L", "XL"],
         colors: ["Blue Floral", "Pink Floral", "Yellow Floral", "White Floral"],
@@ -406,8 +407,9 @@ export async function seedProducts() {
         price: 2499,
         salePrice: 1999,
         images: [
-          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
-          "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400"
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=600&h=800&fit=crop"
         ],
         sizes: ["5", "6", "7", "8", "9", "10"],
         colors: ["White", "Black", "Pink", "Navy Blue", "Red"],

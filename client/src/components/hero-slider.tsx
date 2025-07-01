@@ -31,7 +31,7 @@ const heroSlides = [
     description: "Experience luxury with our handpicked selection of premium garments",
     buttonText: "Explore Premium",
     buttonLink: "/products?category=premium",
-    backgroundImage: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&h=800&fit=crop&crop=center",
+    backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
   },
   {
     id: 4,

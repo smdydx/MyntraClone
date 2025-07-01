@@ -250,7 +250,7 @@ export default function AdminDashboard() {
             read: false
           }
         ];
-        
+
         // Add random notification every 30 seconds
         if (Math.random() > 0.7) {
           const newNotification = randomNotifications[Math.floor(Math.random() * randomNotifications.length)];
@@ -393,7 +393,7 @@ export default function AdminDashboard() {
   // Calculate real sales data from orders
   const salesData: SalesData[] = React.useMemo(() => {
     if (!Array.isArray(orders) || !orders.length) return [];
-    
+
     const monthlyData = orders.reduce((acc, order) => {
       const month = new Date(order.createdAt).toLocaleDateString('en', { month: 'short' });
       if (!acc[month]) {
@@ -427,7 +427,7 @@ export default function AdminDashboard() {
   // Calculate top products from real order data
   const topProducts = React.useMemo(() => {
     if (!Array.isArray(orders) || !orders.length) return [];
-    
+
     const productSales = orders.reduce((acc, order) => {
       order.items?.forEach((item: any) => {
         if (!acc[item.productId]) {
@@ -724,7 +724,7 @@ export default function AdminDashboard() {
       secondaryColor: formData.get("secondaryColor"),
       accentColor: formData.get("accentColor"),
       fontFamily: formData.get("fontFamily"),
-      
+
       // Hero Section
       heroTitle: formData.get("heroTitle"),
       heroSubtitle: formData.get("heroSubtitle"),
@@ -732,7 +732,7 @@ export default function AdminDashboard() {
       heroVideo: formData.get("heroVideo"),
       heroImage: formData.get("heroImage"),
       showHeroVideo: formData.get("showHeroVideo") === "on",
-      
+
       // Contact & Business
       contactEmail: formData.get("contactEmail"),
       contactPhone: formData.get("contactPhone"),
@@ -741,11 +741,11 @@ export default function AdminDashboard() {
       businessHours: formData.get("businessHours"),
       aboutText: formData.get("aboutText"),
       footerText: formData.get("footerText"),
-      
+
       // SEO
       metaDescription: formData.get("metaDescription"),
       metaKeywords: formData.get("metaKeywords"),
-      
+
       // Display Options
       showBreadcrumbs: formData.get("showBreadcrumbs") === "on",
       showRecentlyViewed: formData.get("showRecentlyViewed") === "on",
@@ -1073,7 +1073,7 @@ export default function AdminDashboard() {
                       </span>
                     )}
                   </Button>
-                  
+
                   {showNotifications && (
                     <div className="absolute right-0 top-12 w-80 bg-white dark:bg-gray-800 border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
                       <div className="p-4 border-b">
@@ -1690,7 +1690,8 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-5 w-5 text-red-600" />
                         <div>
-                          <p className="text-sm text-gray-600">Low Stock</p>
+                          <p className="text-sm text-gray-600">```python
+Low Stock</p>
                           <p className="text-2xl font-bold">{Array.isArray(products) ? products.filter(p => p.stockQuantity < 10).length : 0}</p>
                         </div>
                       </div>

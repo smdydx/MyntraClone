@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
-import { Star, Heart, ShoppingBag, Plus, Minus, ArrowLeft } from "lucide-react";
+import { Star, Heart, ShoppingBag, Plus, Minus, ArrowLeft, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +24,9 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
 
@@ -118,6 +121,24 @@ export default function ProductDetail() {
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current || !isZoomed) return;
+    
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setZoomPosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsZoomed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZoomed(false);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -179,28 +200,52 @@ export default function ProductDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
           {/* Product Images */}
-          <div className="space-y-2 md:space-y-4">
-            <div className="relative bg-white rounded-lg overflow-hidden">
-              <img
-                src={product.images?.[selectedImageIndex] || ""}
-                alt={product.name}
-                className="w-full h-64 xs:h-80 sm:h-96 md:h-[400px] lg:h-96 object-cover"
-              />
+          <div className="space-y-2 md:space-y-4 sticky top-24">
+            <div 
+              className="relative bg-white rounded-lg overflow-hidden cursor-zoom-in"
+              ref={imageRef}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="relative">
+                <img
+                  src={product.images?.[selectedImageIndex] || ""}
+                  alt={product.name}
+                  className={`w-full h-64 xs:h-80 sm:h-96 md:h-[500px] lg:h-[600px] object-cover transition-transform duration-300 ${
+                    isZoomed ? 'scale-150' : 'scale-100'
+                  }`}
+                  style={
+                    isZoomed
+                      ? {
+                          transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                        }
+                      : {}
+                  }
+                />
+                
+                {/* Zoom indicator */}
+                <div className="absolute top-4 right-4 bg-black/20 text-white p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity">
+                  <ZoomIn className="w-4 h-4" />
+                </div>
+              </div>
+
               {product.isOnSale && product.salePrice && (
-                <Badge className="absolute top-4 left-4 bg-sale-red text-white">
+                <Badge className="absolute top-4 left-4 bg-red-500 text-white z-10">
                   {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
                 </Badge>
               )}
             </div>
 
+            {/* Thumbnail Images */}
             {product.images && product.images.length > 1 && (
               <div className="flex space-x-1 xs:space-x-2 overflow-x-auto pb-2">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`flex-shrink-0 w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 rounded border-2 overflow-hidden ${
-                      selectedImageIndex === index ? 'border-hednor-gold' : 'border-gray-200'
+                    className={`flex-shrink-0 w-16 h-16 xs:w-18 xs:h-18 sm:w-20 sm:h-20 rounded border-2 overflow-hidden transition-all hover:scale-105 ${
+                      selectedImageIndex === index ? 'border-hednor-gold shadow-lg' : 'border-gray-200 hover:border-hednor-gold'
                     }`}
                   >
                     <img
