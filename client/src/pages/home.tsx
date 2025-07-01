@@ -65,6 +65,57 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Red Offer Section with Horizontal Scroll */}
+      <div className="bg-red-500 text-white py-4 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="relative">
+            <div className="flex animate-scroll space-x-8 text-sm font-medium whitespace-nowrap">
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🚚</span>
+                <span>Free Shipping Above ₹1999</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>💰</span>
+                <span>Up to 70% Off on Sale Items</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🎁</span>
+                <span>Buy 2 Get 1 Free on Selected Items</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>⚡</span>
+                <span>Flash Sale: Extra 20% Off</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🔥</span>
+                <span>Limited Time: Mega Sale</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🎯</span>
+                <span>Special Discount for New Users</span>
+              </div>
+              {/* Duplicate for seamless scroll */}
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🚚</span>
+                <span>Free Shipping Above ₹1999</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>💰</span>
+                <span>Up to 70% Off on Sale Items</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>🎁</span>
+                <span>Buy 2 Get 1 Free on Selected Items</span>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <span>⚡</span>
+                <span>Flash Sale: Extra 20% Off</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Category Grid */}
       <section className="container mx-auto px-4 py-8 bg-gray-50">
         <h2 className="font-bold text-xl md:text-2xl text-center mb-6 text-gray-800 uppercase tracking-wide">

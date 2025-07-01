@@ -18,7 +18,7 @@ import RelatedProducts from "@/components/related-products";
 import type { Product } from "@shared/schema";
 
 export default function ProductDetail() {
-  const { slug } = useParams();
+  const { slug, id } = useParams();
   const { toast } = useToast();
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -31,8 +31,8 @@ export default function ProductDetail() {
   const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
 
   const { data: product, isLoading } = useQuery<Product>({
-    queryKey: [`/api/products/slug/${slug}`],
-    enabled: !!slug,
+    queryKey: slug ? [`/api/products/slug/${slug}`] : [`/api/products/${id}`],
+    enabled: !!(slug || id),
   });
 
   const inWishlist = product ? isInWishlist(product.id) : false;
