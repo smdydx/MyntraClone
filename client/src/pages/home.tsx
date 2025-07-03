@@ -55,62 +55,130 @@ export default function Home() {
         <HeroSlider />
       </div>
 
-      {/* Offer Banner */}
-      <div className="bg-red-600 text-white py-3 px-4">
-        <div className="container mx-auto text-center">
-          <p className="text-sm md:text-base font-medium">
-            🔥 LIMITED TIME OFFER: Use Code "FREESHIP" for Free Shipping on Orders Above ₹1999! 
-            <span className="ml-2 font-bold">Shop Now & Save Big!</span>
-          </p>
+      {/* Enhanced Offer Banner */}
+      <div className="bg-gradient-to-r from-hednor-dark via-gray-900 to-hednor-dark text-white py-6 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-hednor-gold/10 via-transparent to-hednor-gold/10"></div>
+        <div className="container mx-auto text-center relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-hednor-gold flex items-center justify-center">
+                <Zap className="w-6 h-6 text-hednor-dark" />
+              </div>
+              <div className="text-left">
+                <p className="text-xs md:text-sm font-semibold text-hednor-gold uppercase tracking-wide">
+                  Limited Time Offer
+                </p>
+                <p className="text-lg md:text-xl font-bold">
+                  Free Shipping on Orders Above ₹1999
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="px-4 py-2 bg-hednor-gold text-hednor-dark rounded-full font-bold text-sm">
+                Use Code: FREESHIP
+              </div>
+              <Link href="/products">
+                <Button className="bg-white text-hednor-dark hover:bg-gray-100 font-semibold px-6 py-2">
+                  Shop Now
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Red Offer Section with Horizontal Scroll */}
-      <div className="bg-red-500 text-white py-4 overflow-hidden">
+      {/* Professional Features Banner */}
+      <div className="bg-white border-b border-gray-100 py-6">
         <div className="container mx-auto px-4">
-          <div className="relative">
-            <div className="flex animate-scroll space-x-8 text-sm font-medium whitespace-nowrap">
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🚚</span>
-                <span>Free Shipping Above ₹1999</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-hednor-gold to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>💰</span>
-                <span>Up to 70% Off on Sale Items</span>
+              <div>
+                <p className="font-semibold text-gray-800 text-sm">Free Shipping</p>
+                <p className="text-xs text-gray-500">Above ₹1999</p>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🎁</span>
-                <span>Buy 2 Get 1 Free on Selected Items</span>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>⚡</span>
-                <span>Flash Sale: Extra 20% Off</span>
+              <div>
+                <p className="font-semibold text-gray-800 text-sm">Authentic Products</p>
+                <p className="text-xs text-gray-500">100% Genuine</p>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🔥</span>
-                <span>Limited Time: Mega Sale</span>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🎯</span>
-                <span>Special Discount for New Users</span>
+              <div>
+                <p className="font-semibold text-gray-800 text-sm">Easy Returns</p>
+                <p className="text-xs text-gray-500">30 Day Policy</p>
               </div>
-              {/* Duplicate for seamless scroll */}
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🚚</span>
-                <span>Free Shipping Above ₹1999</span>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>💰</span>
-                <span>Up to 70% Off on Sale Items</span>
+              <div>
+                <p className="font-semibold text-gray-800 text-sm">24/7 Support</p>
+                <p className="text-xs text-gray-500">Live Chat</p>
               </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>🎁</span>
-                <span>Buy 2 Get 1 Free on Selected Items</span>
-              </div>
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                <span>⚡</span>
-                <span>Flash Sale: Extra 20% Off</span>
-              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Promotional Ticker */}
+      <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-3 overflow-hidden">
+        <div className="relative">
+          <div className="flex animate-scroll space-x-12 text-sm font-semibold whitespace-nowrap">
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Clock className="w-4 h-4" />
+              <span>Flash Sale: Extra 20% Off - Limited Time</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Star className="w-4 h-4" />
+              <span>Up to 70% Off on Premium Brands</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Heart className="w-4 h-4" />
+              <span>Buy 2 Get 1 Free on Selected Items</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Zap className="w-4 h-4" />
+              <span>New User Special: Extra 15% Discount</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <ShoppingCart className="w-4 h-4" />
+              <span>Mega Sale: Upto 80% Off Fashion</span>
+            </div>
+            {/* Duplicate for seamless scroll */}
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Clock className="w-4 h-4" />
+              <span>Flash Sale: Extra 20% Off - Limited Time</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Star className="w-4 h-4" />
+              <span>Up to 70% Off on Premium Brands</span>
+            </div>
+            <div className="flex items-center space-x-3 flex-shrink-0">
+              <Heart className="w-4 h-4" />
+              <span>Buy 2 Get 1 Free on Selected Items</span>
             </div>
           </div>
         </div>
