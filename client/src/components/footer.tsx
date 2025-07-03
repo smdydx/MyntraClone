@@ -5,9 +5,9 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-auto">
+    <footer className="text-white mt-auto" style={{ backgroundColor: "rgb(200, 201, 152)" }}>
       {/* Back to Top */}
-      <div className="bg-gray-800 hover:bg-gray-700 transition-colors">
+      <div className="bg-black/10 hover:bg-black/20 transition-colors">
         <div className="container mx-auto px-4 py-3 text-center">
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -19,7 +19,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="bg-gray-900 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             
@@ -74,7 +74,7 @@ export default function Footer() {
       </div>
 
       {/* Middle Section with Logo and Contact */}
-      <div className="bg-gray-800 border-t border-gray-700">
+      <div className="bg-black/10 border-t border-black/20">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-6 lg:space-y-0">
             
@@ -103,7 +103,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Links Section */}
-      <div className="bg-gray-800 border-t border-gray-700">
+      <div className="bg-black/10 border-t border-black/20">
         <div className="container mx-auto px-4 py-6 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 text-xs">
             
@@ -172,7 +172,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="bg-gray-900 border-t border-gray-700 py-4">
+      <div className="border-t border-black/20 py-4">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-gray-400 text-xs">
