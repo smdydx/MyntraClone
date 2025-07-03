@@ -7,30 +7,7 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white mt-auto">
-      {/* Newsletter Section */}
-      <div className="border-b border-gray-700/50">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <div className="text-center space-y-6">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Stay in the Loop
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Get exclusive access to new arrivals, special offers, and insider fashion updates delivered straight to your inbox.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <Input 
-                type="email" 
-                placeholder="Enter your email address"
-                className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 flex-1"
-              />
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8">
-                Subscribe
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Main Footer Content */}
       <div className="py-8 lg:py-12">
