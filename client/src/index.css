@@ -1268,6 +1268,66 @@
     background: #b8b988;
   }
 
+  /* Performance optimizations for low bandwidth */
+  .performance-optimized {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Preload critical resources */
+  .preload-critical {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+
+  /* Lazy loading optimization */
+  .lazy-content {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 200px;
+  }
+
+  /* Reduce animation complexity for low bandwidth */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Connection-aware styling */
+  @media (max-width: 768px) and (max-resolution: 150dpi) {
+    .high-res-only {
+      display: none;
+    }
+    
+    .low-bandwidth-optimize {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: optimize-contrast;
+    }
+  }
+
+  /* Optimize for slow connections */
+  .connection-aware {
+    transition: opacity 0.2s ease;
+  }
+
+  .connection-aware.loading {
+    opacity: 0.7;
+  }
+
+  /* Minimize layout shifts */
+  .layout-stable {
+    contain: layout style paint;
+  }
+
+  /* Fast response handling */
+  .fast-response {
+    contain: strict;
+    transform: translateZ(0);
+  }
+
 /* Responsive Modal Styles */
 @media (max-width: 640px) {
   .dialog-content {

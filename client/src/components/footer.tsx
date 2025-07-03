@@ -27,10 +27,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links and Categories Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
-            {/* Quick Links */}
-            <div className="sm:col-span-1 md:col-span-2 lg:col-span-3">
+          {/* Quick Links and Categories Row - Single Row with 2 Columns */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Quick Links - Left Column */}
+            <div className="text-left">
               <h3 className="font-semibold text-hednor-dark mb-4">Quick Links</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                 <ul className="space-y-2 text-sm">
@@ -46,8 +46,8 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Categories */}
-            <div className="sm:col-span-1 md:col-span-2 lg:col-span-3">
+            {/* Categories - Right Column */}
+            <div className="text-left">
               <h3 className="font-semibold text-hednor-dark mb-4">Categories</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                 <ul className="space-y-2 text-sm">
