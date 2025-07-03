@@ -1427,7 +1427,7 @@ export default function Header() {
                                 <div className="flex items-center justify-between">
                                   <Link
                                     href={item.href}
-                                    className="flex-1 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium text-sm py-3 px-3 rounded-md transition-colors"
+                                    className="flex-1 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium text-sm py-3 px-3 rounded-md transition-colors text-center"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                   >
                                     {item.name.toUpperCase()}
@@ -1460,7 +1460,7 @@ export default function Header() {
                                         <Link
                                           key={subItem.name}
                                           href={subItem.href}
-                                          className={`block text-sm py-2 px-3 rounded-md transition-colors ${
+                                          className={`block text-sm py-2 px-3 rounded-md transition-colors text-center ${
                                             subItem.isCategory
                                               ? "font-semibold text-hednor-gold hover:bg-hednor-gold/10"
                                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
@@ -1515,7 +1515,7 @@ export default function Header() {
                               </>
                             )}
                             <div
-                              className="flex items-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
+                              className="flex items-center justify-center space-x-3 text-gray-800 hover:bg-hednor-gold/10 hover:text-hednor-gold font-medium cursor-pointer transition-colors py-3 px-3 rounded-md mt-4"
                               onClick={() => {
                                 setIsMobileMenuOpen(false);
                                 setLocation("/wishlist");
