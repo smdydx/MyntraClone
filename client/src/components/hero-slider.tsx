@@ -7,6 +7,7 @@ import heroVideoPath from "/src/assets/hero-video.mp4";
 import poster1 from "/src/assets/poster1.jpg";
 import poster2 from "/src/assets/poster2.jpeg";
 import poster3 from "/src/assets/poster3.jpg";
+import ramaeraImage from "/src/assets/ramaera-banner.jpg";
 
 const heroSlides = [
   {
@@ -32,13 +33,13 @@ const heroSlides = [
   },
   {
     id: 3,
-    title: "Executive Collection",
-    subtitle: "Professional Excellence",
-    description: "Meticulously crafted pieces for the modern professional and style connoisseur",
-    buttonText: "View Executive Line",
-    buttonLink: "/products?category=premium",
-    backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
-    stats: { value: "24/7", label: "Concierge Service" }
+    title: "Ramaera Electronics",
+    subtitle: "Innovation for Every Need",
+    description: "Cutting-edge electronics and appliances for modern living with premium quality",
+    buttonText: "Explore Electronics",
+    buttonLink: "/products?category=electronics",
+    backgroundImage: ramaeraImage,
+    stats: { value: "24/7", label: "Smart Support" }
   },
   {
     id: 4,
@@ -112,7 +113,7 @@ export default function HeroSlider() {
         >
           {slide.isVideo ? (
             <video
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               autoPlay={isVideoPlaying}
               muted
               loop
@@ -128,7 +129,7 @@ export default function HeroSlider() {
               style={{ 
                 backgroundImage: `url(${slide.backgroundImage})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center center'
               }}
             />
           )}

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 // Import brand images
 import planetEraImage from "/src/assets/poster1.jpg";
-import ramaeraImage from "/src/assets/poster2.jpeg";
+import ramaeraImage from "/src/assets/ramaera-banner.jpg";
 
 const brandSlides = [
   {
