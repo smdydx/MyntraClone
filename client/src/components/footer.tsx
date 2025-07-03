@@ -73,32 +73,29 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Middle Section with Logo and Links */}
+      {/* Middle Section with Logo and Contact */}
       <div className="bg-gray-800 border-t border-gray-700">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-6 lg:space-y-0">
             
-            {/* Logo */}
-            <div className="flex items-center space-x-2">
+            {/* Logo and Contact Info */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-8">
               <img 
                 src={hednorLogoPath} 
                 alt="Hednor Logo" 
                 className="w-24 h-24 object-contain"
               />
-            </div>
-
-            {/* Language and Country */}
-            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-600 rounded hover:bg-gray-700 cursor-pointer transition-colors">
-                <Globe className="w-4 h-4" />
-                <span className="text-sm">English</span>
-              </div>
-              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-600 rounded hover:bg-gray-700 cursor-pointer transition-colors">
-                <span className="text-sm">₹ INR - IN</span>
-              </div>
-              <div className="flex items-center space-x-2 px-3 py-2 border border-gray-600 rounded hover:bg-gray-700 cursor-pointer transition-colors">
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm">India</span>
+              
+              {/* Contact Info */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-gray-300">
+                  <Phone className="w-4 h-4" />
+                  <span className="text-sm">+91 12345 67890</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-300">
+                  <Mail className="w-4 h-4" />
+                  <span className="text-sm">support@hednor.com</span>
+                </div>
               </div>
             </div>
           </div>
@@ -168,16 +165,6 @@ export default function Footer() {
                 <Twitter className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
                 <Instagram className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
                 <Youtube className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-              </div>
-              <div className="mt-3 space-y-1">
-                <div className="flex items-center space-x-2 text-gray-400">
-                  <Phone className="w-3 h-3" />
-                  <span className="text-xs">+91 12345 67890</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-400">
-                  <Mail className="w-3 h-3" />
-                  <span className="text-xs">support@hednor.com</span>
-                </div>
               </div>
             </div>
           </div>
