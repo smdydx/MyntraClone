@@ -55,38 +55,7 @@ export default function Home() {
         <HeroSlider />
       </div>
 
-      {/* Enhanced Offer Banner */}
-      <div className="bg-gradient-to-r from-hednor-dark via-gray-900 to-hednor-dark text-white py-6 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-hednor-gold/10 via-transparent to-hednor-gold/10"></div>
-        <div className="container mx-auto text-center relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-hednor-gold flex items-center justify-center">
-                <Zap className="w-6 h-6 text-hednor-dark" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs md:text-sm font-semibold text-hednor-gold uppercase tracking-wide">
-                  Limited Time Offer
-                </p>
-                <p className="text-lg md:text-xl font-bold">
-                  Free Shipping on Orders Above ₹1999
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="px-4 py-2 bg-hednor-gold text-hednor-dark rounded-full font-bold text-sm">
-                Use Code: FREESHIP
-              </div>
-              <Link href="/products">
-                <Button className="bg-white text-hednor-dark hover:bg-gray-100 font-semibold px-6 py-2">
-                  Shop Now
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       
 
@@ -635,7 +604,9 @@ export default function Home() {
             <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
               <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-hednor-gold to-yellow-500 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
                 <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM21 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h14l-1 7H8.5L7 8z" />
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Free Shipping</h3>
