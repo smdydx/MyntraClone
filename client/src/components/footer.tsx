@@ -98,7 +98,6 @@ export default function Footer() {
           </div>
           </div>
         </div>
-      </div>
 
       {/* Bottom Section */}
       <div className="border-t border-gray-700/50 bg-black/30">
