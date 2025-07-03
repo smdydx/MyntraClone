@@ -1328,7 +1328,7 @@
     transform: translateZ(0);
   }
 
-  /* Mobile Footer Improvements */
+  /* Amazon-style Footer Improvements */
   @media (max-width: 640px) {
     footer {
       padding-bottom: 80px !important; /* Account for mobile navigation */
@@ -1339,7 +1339,7 @@
       padding-right: 1rem;
     }
     
-    footer h3 {
+    footer h3, footer h4 {
       font-size: 0.875rem;
       font-weight: 600;
       margin-bottom: 0.75rem;
@@ -1358,7 +1358,7 @@
     
     /* Better spacing for mobile */
     footer .grid {
-      gap: 1rem;
+      gap: 1.5rem;
     }
     
     /* Touch-friendly links */
@@ -1366,6 +1366,20 @@
       min-height: 36px;
       display: flex;
       align-items: center;
+    }
+    
+    /* Back to top button */
+    footer button {
+      min-height: 44px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Language/Country selectors */
+    footer .border {
+      min-height: 40px;
     }
   }
 
