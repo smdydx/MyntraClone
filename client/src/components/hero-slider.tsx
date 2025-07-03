@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shi
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import heroVideoPath from "/src/assets/hero-video.mp4";
-import ramaeraImage from "/src/assets/ramaera-banner.jpg";
 
 const heroSlides = [
   {
@@ -19,23 +18,23 @@ const heroSlides = [
     stats: { value: "50K+", label: "Happy Customers" }
   },
   {
-    id: 3,
-    title: "Ramaera Electronics",
-    subtitle: "Innovation for Every Need",
-    description: "Cutting-edge electronics and appliances for modern living with premium quality",
-    buttonText: "Explore Electronics",
-    buttonLink: "/products?category=electronics",
-    backgroundImage: ramaeraImage,
+    id: 2,
+    title: "Summer Collection 2024",
+    subtitle: "Fresh & Trendy",
+    description: "Embrace the season with our vibrant summer collection featuring the latest trends",
+    buttonText: "Shop Summer",
+    buttonLink: "/products?category=summer",
+    backgroundImage: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&h=800&fit=crop&crop=center",
     stats: { value: "24/7", label: "Smart Support" }
   },
   {
-    id: 4,
+    id: 3,
     title: "Limited Edition Drop",
     subtitle: "Exclusive Access",
     description: "Be among the first to access our exclusive limited edition collections",
     buttonText: "Get Early Access",
     buttonLink: "/products?featured=true",
-    backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=800&fit=crop&crop=center",
+    backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center",
     stats: { value: "72h", label: "Express Delivery" }
   }
 ];
@@ -108,7 +107,7 @@ export default function HeroSlider() {
               poster="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop&crop=center"
             >
               <source src={slide.backgroundVideo} type="video/mp4" />
-              <source src="https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
             </video>
           ) : (
             <div
