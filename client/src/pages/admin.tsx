@@ -132,6 +132,7 @@ interface Order {
   shippingCost: number;
   tax: number;
   total: number;
+  finalAmount: number;
   shippingAddress: {
     firstName: string;
     lastName: string;
@@ -246,7 +247,7 @@ const NavItem: React.FC<NavItemProps> = ({
           )}
         </div>
       </Button>
-      
+
       {submenu && submenu.length > 0 && (
         <div className={`ml-4 space-y-1 overflow-hidden transition-all duration-300 ${
           isSubmenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
@@ -334,6 +335,54 @@ export default function AdminDashboard() {
       read: true
     }
   ]);
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    brand: '',
+    categoryId: '',
+    price: 0,
+    salePrice: 0,
+    stockQuantity: 0,
+    images: [],
+    inStock: true,
+    isFeatured: false,
+    isOnSale: false,
+  });
+
+  const queryClient = useQueryClient();
+
+  // Check if admin is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Verify token is valid by making a test request
+      fetch('/api/admin/analytics/overview', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(response => {
+        if (response.ok) {
+          setIsLoggedIn(true);
+        } else {
+          localStorage.removeItem('token');
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+      });
+    }
+  }, []);
+
+  // Real-time data simulation
+  useEffect(() => {
+    if (isLoggedIn) {
+      const interval = setInterval(() => {
+        queryClient.invalidateQueries({ queryKey: ["admin", "analytics"] });
+      }, 30000); // Refresh every 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [queryClient, isLoggedIn]);
 
   // Real-time notification system
   useEffect(() => {
@@ -378,52 +427,7 @@ export default function AdminDashboard() {
     }
   }, [isLoggedIn]);
 
-  // Mark notification as read
-  const markNotificationAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, read: true } : notif
-      )
-    );
-  };
-
-  const queryClient = useQueryClient();
-
-  // Check if admin is logged in
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Verify token is valid by making a test request
-      fetch('/api/admin/analytics/overview', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(response => {
-        if (response.ok) {
-          setIsLoggedIn(true);
-        } else {
-          localStorage.removeItem('token');
-          setIsLoggedIn(false);
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-        setIsLoggedIn(false);
-      });
-    }
-  }, []);
-
-  // Real-time data simulation
-  useEffect(() => {
-    if (isLoggedIn) {
-      const interval = setInterval(() => {
-        queryClient.invalidateQueries({ queryKey: ["admin", "analytics"] });
-      }, 30000); // Refresh every 30 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [queryClient, isLoggedIn]);
-
-  // Fetch dashboard data
+  // Fetch dashboard data - Always call hooks, use enabled to control execution
   const { data: dashboardStats, isLoading: statsLoading, error: statsError } = useQuery<DashboardStats>({
     queryKey: ["admin", "analytics"],
     queryFn: async () => {
@@ -439,35 +443,6 @@ export default function AdminDashboard() {
     staleTime: 5 * 60 * 1000, // 5 minutes
     enabled: isLoggedIn,
   });
-
-  // Show loading state for critical data
-  if (isLoggedIn && (statsLoading || productsLoading || categoriesLoading)) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600 dark:text-gray-300">Loading Admin Dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state if any critical data failed to load
-  if (isLoggedIn && (statsError || productsError || categoriesError)) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Failed to Load Data</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">There was an error loading the admin dashboard.</p>
-          <Button onClick={() => queryClient.invalidateQueries()}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   // Fetch products
   const { data: products = [], isLoading: productsLoading, error: productsError } = useQuery<Product[]>({
@@ -516,6 +491,7 @@ export default function AdminDashboard() {
       return response.json();
     },
     retry: 2,
+    enabled: isLoggedIn,
   });
 
   // Fetch orders
@@ -531,6 +507,7 @@ export default function AdminDashboard() {
       return response.json();
     },
     retry: 2,
+    enabled: isLoggedIn,
   });
 
   // Fetch users
@@ -546,74 +523,8 @@ export default function AdminDashboard() {
       return response.json();
     },
     retry: 2,
+    enabled: isLoggedIn,
   });
-
-  // Calculate real sales data from orders
-  const salesData: SalesData[] = React.useMemo(() => {
-    if (!Array.isArray(orders) || !orders.length) return [];
-
-    const monthlyData = orders.reduce((acc, order) => {
-      const month = new Date(order.createdAt).toLocaleDateString('en', { month: 'short' });
-      if (!acc[month]) {
-        acc[month] = { month, revenue: 0, orders: 0, users: new Set() };
-      }
-      acc[month].revenue += order.finalAmount || 0;
-      acc[month].orders += 1;
-      acc[month].users.add(order.userId);
-      return acc;
-    }, {} as Record<string, any>);
-
-    return Object.values(monthlyData).map((data: any) => ({
-      month: data.month,
-      revenue: data.revenue,
-      orders: data.orders,
-      users: data.users.size
-    }));
-  }, [orders]);
-
-  // Calculate device data from real analytics or remove if not available
-  const deviceData = React.useMemo(() => {
-    // For now, we'll calculate based on user agents or remove this section
-    // In a real app, this would come from analytics service
-    return [
-      { name: 'Mobile', value: 0, color: '#8884d8' },
-      { name: 'Desktop', value: 0, color: '#82ca9d' },
-      { name: 'Tablet', value: 0, color: '#ffc658' }
-    ];
-  }, []);
-
-  // Calculate top products from real order data
-  const topProducts = React.useMemo(() => {
-    if (!Array.isArray(orders) || !orders.length) return [];
-
-    const productSales = orders.reduce((acc, order) => {
-      order.items?.forEach((item: any) => {
-        if (!acc[item.productId]) {
-          acc[item.productId] = {
-            name: item.name || 'Unknown Product',
-            sales: 0,
-            revenue: 0
-          };
-        }
-        acc[item.productId].sales += item.quantity;
-        acc[item.productId].revenue += (item.price * item.quantity);
-      });
-      return acc;
-    }, {} as Record<string, any>);
-
-    return Object.values(productSales)
-      .sort((a: any, b: any) => b.revenue - a.revenue)
-      .slice(0, 5);
-  }, [orders]);
-
-  const recentOrders = orders.slice(0, 10); // Show latest 10 orders
-
-  const recentUsers = users.slice(0, 10); // Show latest 10 users
-
-  // Calculate sale products for homepage preview
-  const saleProducts = React.useMemo(() => {
-    return Array.isArray(products) ? products.filter(p => p.isOnSale || p.salePrice) : [];
-  }, [products]);
 
   // Product mutations
   const addProductMutation = useMutation({
@@ -821,6 +732,86 @@ export default function AdminDashboard() {
     }
   });
 
+  // Calculate real sales data from orders
+  const salesData: SalesData[] = React.useMemo(() => {
+    if (!Array.isArray(orders) || !orders.length) return [];
+
+    const monthlyData = orders.reduce((acc, order) => {
+      const month = new Date(order.createdAt).toLocaleDateString('en', { month: 'short' });
+      if (!acc[month]) {
+        acc[month] = { month, revenue: 0, orders: 0, users: new Set() };
+      }
+      acc[month].revenue += order.finalAmount || 0;
+      acc[month].orders += 1;
+      acc[month].users.add(order.userId);
+      return acc;
+    }, {} as Record<string, any>);
+
+    return Object.values(monthlyData).map((data: any) => ({
+      month: data.month,
+      revenue: data.revenue,
+      orders: data.orders,
+      users: data.users.size
+    }));
+  }, [orders]);
+
+  // Calculate device data from real analytics or remove if not available
+  const deviceData = React.useMemo(() => {
+    // For now, we'll calculate based on user agents or remove this section
+    // In a real app, this would come from analytics service
+    return [
+      { name: 'Mobile', value: 0, color: '#8884d8' },
+      { name: 'Desktop', value: 0, color: '#82ca9d' },
+      { name: 'Tablet', value: 0, color: '#ffc658' }
+    ];
+  }, []);
+
+  // Calculate top products from real order data
+  const topProducts = React.useMemo(() => {
+    if (!Array.isArray(orders) || !orders.length) return [];
+
+    const productSales = orders.reduce((acc, order) => {
+      order.items?.forEach((item: any) => {
+        if (!acc[item.productId]) {
+          acc[item.productId] = {
+            name: item.name || 'Unknown Product',
+            sales: 0,
+            revenue: 0
+          };
+        }
+        acc[item.productId].sales += item.quantity;
+        acc[item.productId].revenue += (item.price * item.quantity);
+      });
+      return acc;
+    }, {} as Record<string, any>);
+
+    return Object.values(productSales)
+      .sort((a: any, b: any) => b.revenue - a.revenue)
+      .slice(0, 5);
+  }, [orders]);
+
+  const recentOrders = orders.slice(0, 10); // Show latest 10 orders
+  const recentUsers = users.slice(0, 10); // Show latest 10 users
+
+  // Calculate sale products for homepage preview
+  const saleProducts = React.useMemo(() => {
+    return Array.isArray(products) ? products.filter(p => p.isOnSale || p.salePrice) : [];
+  }, [products]);
+
+  const filteredProducts = Array.isArray(products) ? products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : [];
+
+  // Mark notification as read
+  const markNotificationAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notif => 
+        notif.id === id ? { ...notif, read: true } : notif
+      )
+    );
+  };
+
   const handleProductSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -923,11 +914,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const filteredProducts = Array.isArray(products) ? products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.brand.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : [];
-
   const handleProductImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -1000,18 +986,6 @@ export default function AdminDashboard() {
       alert('Failed to seed data. Please try again.');
     }
   };
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    brand: '',
-    categoryId: '',
-    price: 0,
-    salePrice: 0,
-    stockQuantity: 0,
-    images: [],
-    inStock: true,
-    isFeatured: false,
-    isOnSale: false,
-  });
 
   // Show login form if not logged in
   if (!isLoggedIn) {
@@ -1058,6 +1032,35 @@ export default function AdminDashboard() {
     );
   }
 
+  // Show loading state for critical data
+  if (statsLoading || productsLoading || categoriesLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600 dark:text-gray-300">Loading Admin Dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if any critical data failed to load
+  if (statsError || productsError || categoriesError) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Failed to Load Data</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">There was an error loading the admin dashboard.</p>
+          <Button onClick={() => queryClient.invalidateQueries()}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Mobile Header */}
@@ -1073,7 +1076,7 @@ export default function AdminDashboard() {
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           {/* Mobile notifications */}
           <div className="relative">
@@ -1091,7 +1094,7 @@ export default function AdminDashboard() {
               )}
             </Button>
           </div>
-          
+
           {/* Hamburger Menu */}
           <Button
             variant="ghost"
@@ -1459,7 +1462,7 @@ export default function AdminDashboard() {
             <Separator className="my-6" />
 
             {/* Quick Stats */}
-            <div className="space-y-3">
+            <div className="space-y-3 p-4">
               <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Quick Stats</h3>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
@@ -2158,8 +2161,7 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-5 w-5 text-red-600" />
                         <div>
-                          <p className="text-sm text-gray-600">```python
-Low Stock</p>
+                          <p className="text-sm text-gray-600">Low Stock</p>
                           <p className="text-2xl font-bold">{Array.isArray(products) ? products.filter(p => p.stockQuantity < 10).length : 0}</p>
                         </div>
                       </div>
@@ -2505,8 +2507,7 @@ Low Stock</p>
                           <TableRow>
                             <TableHead className="w-[100px]">Image</TableHead>
                             <TableHead>Name</TableHead>
-                            <TableHead className="hidden md:table-cell">Description</TableHead>
-                            <TableHead className="hidden sm:table-cell">Type</TableHead>
+                            <TableHead className="hidden md:table-cell">Description</TableHead                            <TableHead className="hidden sm:table-cell">Type</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="hidden lg:table-cell">Products</TableHead>
                             <TableHead className="hidden xl:table-cell">Created</TableHead>
@@ -2592,71 +2593,6 @@ Low Stock</p>
                           ))}
                         </TableBody>
                       </Table>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Category Tree View */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="h-5 w-5" />
-                      Category Hierarchy
-                    </CardTitle>
-                    <CardDescription>
-                      Hierarchical view of all categories and their subcategories
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {categories
-                        .filter(cat => !cat.parentId)
-                        .map((mainCategory) => (
-                        <div key={mainCategory._id} className="border rounded-lg p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-3">
-                              {mainCategory.image && (
-                                <img 
-                                  src={mainCategory.image} 
-                                  alt={mainCategory.name}
-                                  className="w-8 h-8 rounded object-cover"
-                                />
-                              )}
-                              <div>
-                                <h4 className="font-medium">{mainCategory.name}</h4>
-                                <p className="text-sm text-gray-500">{mainCategory.description}</p>
-                              </div>
-                            </div>
-                            <Badge variant={mainCategory.isActive ? "default" : "secondary"}>
-                              {mainCategory.isActive ? "Active" : "Inactive"}
-                            </Badge>
-                          </div>
-                          {categories
-                            .filter(subCategory => subCategory.parentId === mainCategory._id)
-                            .map((subCategory) => (
-                            <div key={subCategory._id} className="pl-8 border-l border-gray-300">
-                              <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                  {subCategory.image && (
-                                    <img 
-                                      src={subCategory.image} 
-                                      alt={subCategory.name}
-                                      className="w-8 h-8 rounded object-cover"
-                                    />
-                                  )}
-                                  <div>
-                                    <h4 className="font-medium">{subCategory.name}</h4>
-                                    <p className="text-sm text-gray-500">{subCategory.description}</p>
-                                  </div>
-                                </div>
-                                <Badge variant={subCategory.isActive ? "default" : "secondary"}>
-                                  {subCategory.isActive ? "Active" : "Inactive"}
-                                </Badge>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -2841,729 +2777,18 @@ Low Stock</p>
                     </Card>
                   </TabsContent>
 
-                  {/* Hero Section Tab */}
-                  <TabsContent value="hero">
+                  <TabsContent value="general">
                     <Card>
                       <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <Home className="h-5 w-5" />
-                          Hero Section Settings
-                        </CardTitle>
+                        <CardTitle>Seed Data</CardTitle>
                         <CardDescription>
-                          Customize your homepage hero section content
+                          Seed the database with sample data for testing and development.
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <form onSubmit={handleSettingsSubmit} className="space-y-6">
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div className="space-y-4">
-                              <div>
-                                <Label htmlFor="heroTitle">Hero Title</Label>
-                                <Input 
-                                  id="heroTitle" 
-                                  name="heroTitle" 
-                                  placeholder="Welcome to Our Store"
-                                  defaultValue={siteSettings?.heroTitle || ""}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="heroSubtitle">Hero Subtitle</Label>
-                                <Textarea 
-                                  id="heroSubtitle" 
-                                  name="heroSubtitle" 
-                                  placeholder="Discover amazing products at great prices"
-                                  rows={3}
-                                  defaultValue={siteSettings?.heroSubtitle || ""}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="heroCTA">Call to Action Text</Label>
-                                <Input 
-                                  id="heroCTA" 
-                                  name="heroCTA" 
-                                  placeholder="Shop Now"
-                                  defaultValue={siteSettings?.heroCTA || ""}
-                                />
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <Switch 
-                                  id="showHeroVideo" 
-                                  name="showHeroVideo" 
-                                  defaultChecked={siteSettings?.showHeroVideo !== false}
-                                />
-                                <Label htmlFor="showHeroVideo">Show Hero Video</Label>
-                              </div>
-                            </div>
-                            <div className="space-y-4">
-                              <div>
-                                <Label htmlFor="heroVideo">Hero Video URL</Label>
-                                <Input 
-                                  id="heroVideo" 
-                                  name="heroVideo" 
-                                  placeholder="https://example.com/hero-video.mp4"
-                                  defaultValue={siteSettings?.heroVideo || ""}
-                                />
-                                <p className="text-xs text-gray-500 mt-1">MP4 video file for hero background</p>
-                              </div>
-                              <div>
-                                <Label htmlFor="heroImage">Hero Background Image (Fallback)</Label>
-                                <Input 
-                                  id="heroImage" 
-                                  name="heroImage" 
-                                  placeholder="https://example.com/hero-bg.jpg"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Used when video is disabled or unavailable</p>
-                              </div>
-                              {siteSettings?.heroVideo && (
-                                <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
-                                  <p className="text-sm font-medium mb-2">Current Hero Video Preview:</p>
-                                  <video 
-                                    src={siteSettings.heroVideo} 
-                                    className="w-full h-32 object-cover rounded"
-                                    muted
-                                    controls
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="pt-4 border-t">
-                            <Button type="submit" disabled={updateSettingsMutation.isPending}>
-                              {updateSettingsMutation.isPending ? "Updating..." : "Update Hero Section"}
-                            </Button>
-                          </div>
-                        </form>
+                        <Button onClick={handleSeedData}>Seed Sample Data</Button>
                       </CardContent>
                     </Card>
-                  </TabsContent>
-
-                  {/* Homepage Sections Tab */}
-                  <TabsContent value="homepage">
-                    <div className="space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Home className="h-5 w-5" />
-                            Homepage Sections Management
-                          </CardTitle>
-                          <CardDescription>
-                            Configure which products appear in different homepage sections
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-8">
-                            {/* Deals for You Section */}
-                            <div className="border rounded-lg p-6">
-                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Deals for You Section</h3>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="dealsTitle">Section Title</Label>
-                                  <Input 
-                                    id="dealsTitle" 
-                                    defaultValue="Deals for You" 
-                                    placeholder="Section title"
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="dealsMaxProducts">Max Products to Show</Label>
-                                  <Input 
-                                    id="dealsMaxProducts" 
-                                    type="number" 
-                                    defaultValue="5" 
-                                    min="1" 
-                                    max="20"
-                                  />
-                                </div>
-                                <div className="md:col-span-2">
-                                  <Label htmlFor="dealsFilter">Product Filter Criteria</Label>
-                                  <Select defaultValue="onSale">
-                                    <SelectTrigger>
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="onSale">Products on Sale</SelectItem>
-                                      <SelectItem value="discounted">Products with Discounts</SelectItem>
-                                      <SelectItem value="lowPrice">Low Price Products</SelectItem>
-                                      <SelectItem value="featured">Featured Products</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch id="showDealsSection" defaultChecked />
-                                  <Label htmlFor="showDealsSection">Show this section</Label>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Related Top Picks Section */}
-                            <div className="border rounded-lg p-6">
-                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Related Top Picks Section</h3>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="topPicksTitle">Section Title</Label>
-                                  <Input 
-                                    id="topPicksTitle" 
-                                    defaultValue="Related Top Picks for You" 
-                                    placeholder="Section title"
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="topPicksMaxProducts">Max Products to Show</Label>
-                                  <Input 
-                                    id="topPicksMaxProducts" 
-                                    type="number" 
-                                    defaultValue="6" 
-                                    min="1" 
-                                    max="20"
-                                  />
-                                </div>
-                                <div className="md:col-span-2">
-                                  <Label htmlFor="topPicksFilter">Product Filter Criteria</Label>
-                                  <Select defaultValue="highRating">
-                                    <SelectTrigger>
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="highRating">High Rating Products (4.0+)</SelectItem>
-                                      <SelectItem value="mostReviewed">Most Reviewed Products</SelectItem>
-                                      <SelectItem value="trending">Trending Products</SelectItem>
-                                      <SelectItem value="recentlyAdded">Recently Added</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch id="showTopPicksSection" defaultChecked />
-                                  <Label htmlFor="showTopPicksSection">Show this section</Label>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Must-Have Items Section */}
-                            <div className="border rounded-lg p-6">
-                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Must-Have Items Section</h3>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="mustHaveTitle">Section Title</Label>
-                                  <Input 
-                                    id="mustHaveTitle" 
-                                    defaultValue="Must-Have Items" 
-                                    placeholder="Section title"
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="mustHaveMaxProducts">Max Products to Show</Label>
-                                  <Input 
-                                    id="mustHaveMaxProducts" 
-                                    type="number" 
-                                    defaultValue="6" 
-                                    min="1" 
-                                    max="20"
-                                  />
-                                </div>
-                                <div className="md:col-span-2">
-                                  <Label htmlFor="mustHaveFilter">Product Filter Criteria</Label>
-                                  <Select defaultValue="popular">
-                                    <SelectTrigger>
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="popular">Popular Products (High Reviews)</SelectItem>
-                                      <SelectItem value="featured">Featured Products</SelectItem>
-                                      <SelectItem value="bestseller">Best Selling Products</SelectItem>
-                                      <SelectItem value="essential">Essential Items</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch id="showMustHaveSection" defaultChecked />
-                                  <Label htmlFor="showMustHaveSection">Show this section</Label>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Category-Specific Deals Section */}
-                            <div className="border rounded-lg p-6">
-                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Category-Specific Deals Section</h3>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="categoryDealsTitle">Section Title</Label>
-                                  <Input 
-                                    id="categoryDealsTitle" 
-                                    defaultValue="Deals for You in Clothing & Accessories" 
-                                    placeholder="Section title"
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="categoryDealsMaxProducts">Max Products to Show</Label>
-                                  <Input 
-                                    id="categoryDealsMaxProducts" 
-                                    type="number" 
-                                    defaultValue="6" 
-                                    min="1" 
-                                    max="20"
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="categoryDealsCategory">Target Category</Label>
-                                  <Select defaultValue="clothing">
-                                    <SelectTrigger>
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {categories.map((category) => (
-                                        <SelectItem key={category._id} value={category.slug}>
-                                          {category.name}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <Label htmlFor="categoryDealsFilter">Product Filter</Label>
-                                  <Select defaultValue="onSale">
-                                    <SelectTrigger>
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="onSale">On Sale Products</SelectItem>
-                                      <SelectItem value="discounted">Discounted Products</SelectItem>
-                                      <SelectItem value="featured">Featured in Category</SelectItem>
-                                      <SelectItem value="trending">Trending in Category</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch id="showCategoryDealsSection" defaultChecked />
-                                  <Label htmlFor="showCategoryDealsSection">Show this section</Label>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Section Order */}
-                            <div className="border rounded-lg p-6">
-                              <h3 className="text-lg font-semibold mb-4 text-gray-900">Section Display Order</h3>
-                              <div className="space-y-3">
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                  <span className="font-medium">1. Featured Products</span>
-                                  <div className="flex gap-2">
-                                    <Button variant="ghost" size="sm">↑</Button>
-                                    <Button variant="ghost" size="sm">↓</Button>
-                                  </div>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                  <span className="font-medium">2. Deals for You</span>
-                                  <div className="flex gap-2">
-                                    <Button variant="ghost" size="sm">↑</Button>
-                                    <Button variant="ghost" size="sm">↓</Button>
-                                  </div>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                  <span className="font-medium">3. Related Top Picks</span>
-                                  <div className="flex gap-2">
-                                    <Button variant="ghost" size="sm">↑</Button>
-                                    <Button variant="ghost" size="sm">↓</Button>
-                                  </div>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                  <span className="font-medium">4. Must-Have Items</span>
-                                  <div className="flex gap-2">
-                                    <Button variant="ghost" size="sm">↑</Button>
-                                    <Button variant="ghost" size="sm">↓</Button>
-                                  </div>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                  <span className="font-medium">5. Category-Specific Deals</span>
-                                  <div className="flex gap-2">
-                                    <Button variant="ghost" size="sm">↑</Button>
-                                    <Button variant="ghost" size="sm">↓</Button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="pt-4 border-t">
-                              <Button className="w-full md:w-auto">
-                                Save Homepage Configuration
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Current Products Preview */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Current Homepage Products Preview</CardTitle>
-                          <CardDescription>
-                            Preview of products currently displayed in each section
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-6">
-                            {/* Deals for You Preview */}
-                            <div>
-                              <h4 className="font-medium mb-3 text-gray-900">Deals for You ({saleProducts.length} products)</h4>
-                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                                {saleProducts.slice(0, 5).map((product) => (
-                                  <div key={product._id} className="border rounded-lg p-2">
-                                    <img 
-                                      src={product.images[0]} 
-                                      alt={product.name}
-                                      className="w-full h-20 object-cover rounded mb-2"
-                                    />
-                                    <p className="text-xs font-medium truncate">{product.name}</p>
-                                    <p className="text-xs text-gray-500">₹{product.salePrice || product.price}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Top Picks Preview */}
-                            <div>
-                              <h4 className="font-medium mb-3 text-gray-900">Related Top Picks ({Array.isArray(products) ? products.filter(p => p.rating >= 4.0).length : 0} products)</h4>
-                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                                {Array.isArray(products) ? products.filter(p => p.rating >= 4.0).slice(0, 6).map((product) => (
-                                  <div key={product._id} className="border rounded-lg p-2">
-                                    <img 
-                                      src={product.images[0]} 
-                                      alt={product.name}
-                                      className="w-full h-20 object-cover rounded mb-2"
-                                    />
-                                    <p className="text-xs font-medium truncate">{product.name}</p>
-                                    <p className="text-xs text-gray-500">★ {product.rating}</p>
-                                  </div>
-                                )) : []}
-                              </div>
-                            </div>
-
-                            {/* Must-Have Items Preview */}
-                            <div>
-                              <h4 className="font-medium mb-3 text-gray-900">Must-Have Items ({Array.isArray(products) ? products.filter(p => p.reviewCount >= 500 || p.isFeatured).length : 0} products)</h4>
-                              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                                {Array.isArray(products) ? products.filter(p => p.reviewCount >= 500 || p.isFeatured).slice(0, 6).map((product) => (
-                                  <div key={product._id} className="border rounded-lg p-2">
-                                    <img 
-                                      src={product.images[0]} 
-                                      alt={product.name}
-                                      className="w-full h-20 object-cover rounded mb-2"
-                                    />
-                                    <p className="text-xs font-medium truncate">{product.name}</p>
-                                    <div className="flex items-center gap-1">
-                                      {product.isFeatured && <Badge variant="secondary" className="text-xs">Featured</Badge>}
-                                      {product.reviewCount >= 500 && <span className="text-xs text-gray-500">({product.reviewCount})</span>}
-                                    </div>
-                                  </div>
-                                )) : []}
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  {/* Media Management Tab */}
-                  <TabsContent value="media">
-                    <div className="space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Upload className="h-5 w-5" />
-                            Media Library
-                          </CardTitle>
-                          <CardDescription>
-                            Upload and manage banners, posters, and promotional images
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-6">
-                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                              <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Upload New Media</h3>
-                              <p className="text-gray-500 mb-4">Drag and drop files here or click to browse</p>
-                              <input
-                                type="file"
-                                multiple
-                                accept="image/*,video/*"
-                                className="hidden"
-                                id="mediaUpload"
-                              />
-                              <label htmlFor="mediaUpload">
-                                <Button variant="outline" className="cursor-pointer">
-                                  Choose Files
-                                </Button>
-                              </label>
-                            </div>
-
-                            <div>
-                              <h4 className="font-medium mb-4">Quick Add Promotional Banners</h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="banner1">Main Banner URL</Label>
-                                  <Input id="banner1" placeholder="https://example.com/banner1.jpg" />
-                                </div>
-                                <div>
-                                  <Label htmlFor="banner2">Secondary Banner URL</Label>
-                                  <Input id="banner2" placeholder="https://example.com/banner2.jpg" />
-                                </div>
-                                <div>
-                                  <Label htmlFor="salePosters">Sale Poster URLs</Label>
-                                  <Textarea 
-                                    id="salePosters" 
-                                    placeholder="https://example.com/sale1.jpg, https://example.com/sale2.jpg"
-                                    rows={3}
-                                  />
-                                  <p className="text-xs text-gray-500 mt-1">Separate multiple URLs with commas</p>
-                                </div>
-                                <div>
-                                  <Label htmlFor="categoryBanners">Category Banners</Label>
-                                  <Textarea 
-                                    id="categoryBanners" 
-                                    placeholder="Men: https://example.com/men-banner.jpg, Women: https://example.com/women-banner.jpg"
-                                    rows={3}
-                                  />
-                                  <p className="text-xs text-gray-500 mt-1">Format: Category: URL</p>
-                                </div>
-                              </div>
-                              <Button className="mt-4">
-                                <Plus className="h-4 w-4 mr-2" />
-                                Add Promotional Content
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Current Media Assets</CardTitle>
-                          <CardDescription>
-                            Manage existing banners and promotional content
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {/* Sample media items */}
-                            <div className="border rounded-lg p-4">
-                              <img 
-                                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
-                                alt="Banner" 
-                                className="w-full h-32 object-cover rounded mb-3"
-                              />
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-medium text-sm">Main Banner</p>
-                                  <p className="text-xs text-gray-500">1920x800px</p>
-                                </div>
-                                <div className="flex gap-1">
-                                  <Button variant="ghost" size="sm">
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                  <Button variant="ghost" size="sm">
-                                    <Edit className="h-4 w-4" />
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="text-red-600">
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="border rounded-lg p-4">
-                              <img 
-                                src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
-                                alt="Sale Banner" 
-                                className="w-full h-32 object-cover rounded mb-3"
-                              />
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-medium text-sm">Sale Poster</p>
-                                  <p className="text-xs text-gray-500">800x600px</p>
-                                </div>
-                                <div className="flex gap-1">
-                                  <Button variant="ghost" size="sm">
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                  <Button variant="ghost" size="sm">
-                                    <Edit className="h-4 w-4" />
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="text-red-600">
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  {/* General Settings Tab */}
-                  <TabsContent value="general">
-                    <div className="space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Settings className="h-5 w-5" />
-                            General Website Settings
-                          </CardTitle>
-                          <CardDescription>
-                            Contact information, business details, and other settings
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <form onSubmit={handleSettingsSubmit} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="space-y-4">
-                                <div>
-                                  <Label htmlFor="contactEmail">Contact Email</Label>
-                                  <Input 
-                                    id="contactEmail" 
-                                    name="contactEmail" 
-                                    type="email"
-                                    placeholder="contact@yourstore.com"
-                                    defaultValue={siteSettings?.contactEmail || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="contactPhone">Contact Phone</Label>
-                                  <Input 
-                                    id="contactPhone" 
-                                    name="contactPhone" 
-                                    placeholder="+91 12345 67890"
-                                    defaultValue={siteSettings?.contactPhone || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="supportEmail">Support Email</Label>
-                                  <Input 
-                                    id="supportEmail" 
-                                    name="supportEmail" 
-                                    type="email"
-                                    placeholder="support@yourstore.com"
-                                    defaultValue={siteSettings?.supportEmail || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="businessHours">Business Hours</Label>
-                                  <Input 
-                                    id="businessHours" 
-                                    name="businessHours" 
-                                    placeholder="Mon-Fri: 9AM-6PM"
-                                    defaultValue={siteSettings?.businessHours || ""}
-                                  />
-                                </div>
-                              </div>
-                              <div className="space-y-4">
-                                <div>
-                                  <Label htmlFor="businessAddress">Business Address</Label>
-                                  <Textarea 
-                                    id="businessAddress" 
-                                    name="businessAddress" 
-                                    placeholder="123 Store Street, City, State, ZIP"
-                                    rows={3}
-                                    defaultValue={siteSettings?.businessAddress || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="aboutText">About Us Text</Label>
-                                  <Textarea 
-                                    id="aboutText" 
-                                    name="aboutText" 
-                                    placeholder="Brief description of your business"
-                                    rows={4}
-                                    defaultValue={siteSettings?.aboutText || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="footerText">Footer Text</Label>
-                                  <Input 
-                                    id="footerText" 
-                                    name="footerText" 
-                                    placeholder="© 2024 Your Store Name. All rights reserved."
-                                    defaultValue={siteSettings?.footerText || ""}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="space-y-4">
-                              <h4 className="font-medium">SEO Settings</h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <Label htmlFor="metaDescription">Meta Description</Label>
-                                  <Textarea 
-                                    id="metaDescription" 
-                                    name="metaDescription" 
-                                    placeholder="Brief description for search engines"
-                                    rows={3}
-                                    defaultValue={siteSettings?.metaDescription || ""}
-                                  />
-                                </div>
-                                <div>
-                                  <Label htmlFor="metaKeywords">Meta Keywords</Label>
-                                  <Textarea 
-                                    id="metaKeywords" 
-                                    name="metaKeywords" 
-                                    placeholder="keyword1, keyword2, keyword3"
-                                    rows={3}
-                                    defaultValue={siteSettings?.metaKeywords || ""}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="space-y-4">
-                              <h4 className="font-medium">Display Options</h4>
-                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="flex items-center space-x-2">
-                                  <Switch 
-                                    id="showBreadcrumbs" 
-                                    name="showBreadcrumbs" 
-                                    defaultChecked={siteSettings?.showBreadcrumbs !== false}
-                                  />
-                                  <Label htmlFor="showBreadcrumbs">Show Breadcrumbs</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch 
-                                    id="showRecentlyViewed" 
-                                    name="showRecentlyViewed" 
-                                    defaultChecked={siteSettings?.showRecentlyViewed !== false}
-                                  />
-                                  <Label htmlFor="showRecentlyViewed">Recently Viewed</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Switch 
-                                    id="enableSEO" 
-                                    name="enableSEO" 
-                                    defaultChecked={siteSettings?.enableSEO !== false}
-                                  />
-                                  <Label htmlFor="enableSEO">Enable SEO</Label>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="pt-4 border-t">
-                              <Button type="submit" disabled={updateSettingsMutation.isPending}>
-                                {updateSettingsMutation.isPending ? "Updating..." : "Update General Settings"}
-                              </Button>
-                            </div>
-                          </form>
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Seed Data</CardTitle>
-                          <CardDescription>
-                            Seed the database with sample data for testing and development.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <Button onClick={handleSeedData}>Seed Sample Data</Button>
-                        </CardContent>
-                      </Card>
-                    </div>
                   </TabsContent>
                 </Tabs>
               </div>
