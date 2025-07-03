@@ -60,9 +60,9 @@ export default function Home() {
       
 
       {/* Promotional Ticker */}
-      <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-3 overflow-hidden">
-        <div className="relative">
-          <div className="flex animate-scroll space-x-12 text-sm font-semibold whitespace-nowrap">
+      <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-2 sm:py-3 overflow-hidden">
+        <div className="relative overflow-safe">
+          <div className="flex animate-scroll space-x-8 sm:space-x-12 text-xs sm:text-sm font-semibold whitespace-nowrap">
             <div className="flex items-center space-x-3 flex-shrink-0">
               <Clock className="w-4 h-4" />
               <span>Flash Sale: Extra 20% Off - Limited Time</span>
@@ -113,24 +113,24 @@ export default function Home() {
               <Sparkles className="w-4 h-4 text-hednor-gold" />
               <span className="text-sm font-medium text-hednor-gold uppercase tracking-wide">Categories</span>
             </div>
-            <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-gray-800 mb-3">
-              Shop by <span className="text-hednor-gold">Category</span>
+            <h2 className="font-bold responsive-title md:text-3xl lg:text-4xl text-gray-800 mb-3 text-wrap">
+              Shop by <span className="text-hednor-gold gradient-text">Category</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
+            <p className="text-gray-600 max-w-2xl mx-auto responsive-subtitle text-wrap">
               Discover our curated collections designed for every style and occasion
             </p>
           </div>
 
           {categoriesLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            <div className="category-grid-responsive">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-3">
-                  <Skeleton className="h-48 md:h-56 rounded-2xl" />
+                  <Skeleton className="aspect-square rounded-2xl" />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            <div className="category-grid-responsive">
               {categories
                 .filter(category => !category.parentId)
                 .slice(0, 12)
@@ -603,7 +603,7 @@ export default function Home() {
             <p className="text-gray-600 max-w-2xl mx-auto">Experience the best in fashion with our premium services and guaranteed satisfaction</p>
           </div>
           
-          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {/* Free Shipping */}
             <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
               <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -656,7 +656,7 @@ export default function Home() {
           </div>
 
           {/* Additional Features Row for Mobile */}
-          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-6 md:mt-8">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4 sm:mt-6 md:mt-8">
             {/* Secure Payment */}
             <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
               <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
