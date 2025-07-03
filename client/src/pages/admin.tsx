@@ -305,6 +305,13 @@ export default function AdminDashboard() {
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
+
+  const handleMainNavClick = (tabName: string) => {
+    setActiveTab(tabName);
+    setIsMobileMenuOpen(false);
+    setExpandedSubmenu(null);
+  };
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -906,7 +913,7 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'processing': return 'bg-yellow-100 text-yellow-800';
+      case 'processing': return ''bg-yellow-100 text-yellow-800';
       case 'shipped': return 'bg-blue-100 text-blue-800';
       case 'delivered': return 'bg-green-100 text-green-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
@@ -1145,10 +1152,7 @@ export default function AdminDashboard() {
                 icon={<Activity className="h-5 w-5" />}
                 label="Dashboard"
                 isActive={activeTab === "dashboard"}
-                onClick={() => {
-                  setActiveTab("dashboard");
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => handleMainNavClick("dashboard")}
               />
 
               {/* E-commerce Section */}
@@ -1159,10 +1163,7 @@ export default function AdminDashboard() {
                     icon: <Package className="h-5 w-5" />,
                     label: "Products",
                     isActive: activeTab === "products",
-                    onClick: () => {
-                      setActiveTab("products");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("products")},
                     badge: Array.isArray(products) ? products.length : 0,
                     submenu: [
                       {
@@ -1209,10 +1210,7 @@ export default function AdminDashboard() {
                     icon: <FileText className="h-5 w-5" />,
                     label: "Categories",
                     isActive: activeTab === "categories",
-                    onClick: () => {
-                      setActiveTab("categories");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("categories")},
                     badge: categories.length,
                     submenu: [
                       {
@@ -1248,10 +1246,7 @@ export default function AdminDashboard() {
                     icon: <ShoppingCart className="h-5 w-5" />,
                     label: "Orders",
                     isActive: activeTab === "orders",
-                    onClick: () => {
-                      setActiveTab("orders");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("orders")},
                     badge: orders.length,
                     submenu: [
                       {
@@ -1296,10 +1291,7 @@ export default function AdminDashboard() {
                     icon: <Users className="h-5 w-5" />,
                     label: "Customers",
                     isActive: activeTab === "customers",
-                    onClick: () => {
-                      setActiveTab("customers");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("users")},
                     badge: users.length,
                     submenu: [
                       {
@@ -1344,10 +1336,7 @@ export default function AdminDashboard() {
                     icon: <BarChart3 className="h-5 w-5" />,
                     label: "Analytics",
                     isActive: activeTab === "analytics",
-                    onClick: () => {
-                      setActiveTab("analytics");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("analytics")},
                     submenu: [
                       {
                         icon: <TrendingUp className="h-4 w-4" />,
@@ -1394,10 +1383,7 @@ export default function AdminDashboard() {
                     icon: <Settings className="h-5 w-5" />,
                     label: "Settings",
                     isActive: activeTab === "settings",
-                    onClick: () => {
-                      setActiveTab("settings");
-                      setIsMobileMenuOpen(false);
-                    },
+                    onClick={() => handleMainNavClick("settings")},
                     submenu: [
                       {
                         icon: <Globe className="h-4 w-4" />,
@@ -1736,8 +1722,7 @@ export default function AdminDashboard() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ResponsiveContainer width="100%" height={300}>
-                        <PieChart>
+                      <ResponsiveContainer width="100%" height={300                        <PieChart>
                           <Pie
                             data={deviceData}
                             cx="50%"
