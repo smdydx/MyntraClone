@@ -43,7 +43,7 @@ export async function seedCategories() {
       name: "Women",
       slug: "women",
       description: "Women's fashion and accessories",
-      image: "https://media.istockphoto.com/id/915320148/photo/elegant-young-woman-is-looking-away-smiling-and-thinking.jpg?s=612x612&w=0&k=20&c=n2FD9mwA7bIU2ys8M3XM2L9Y_wlmVVOFcRtdF9RkUJc=",
+      image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400",
       isActive: true
     });
 
@@ -129,7 +129,7 @@ export async function seedCategories() {
         name: "Dresses",
         slug: "women-dresses",
         description: "Women's dresses and gowns",
-        image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
+        image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400",
         parentId: womenCategory._id,
         isActive: true
       },
@@ -137,7 +137,7 @@ export async function seedCategories() {
         name: "Tops",
         slug: "women-tops",
         description: "Women's tops and blouses",
-        image: "https://images.unsplash.com/photo-1564257577-0659a5bbc8b9?w=400",
+        image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400",
         parentId: womenCategory._id,
         isActive: true
       },
@@ -145,7 +145,7 @@ export async function seedCategories() {
         name: "Jeans",
         slug: "women-jeans",
         description: "Women's jeans and pants",
-        image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
+        image: "https://images.unsplash.com/photo-1506629905607-03e9e4ea7d25?w=400",
         parentId: womenCategory._id,
         isActive: true
       },
@@ -153,7 +153,7 @@ export async function seedCategories() {
         name: "Heels",
         slug: "women-heels",
         description: "Women's heels and footwear",
-        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400",
+        image: "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=400",
         parentId: womenCategory._id,
         isActive: true
       }
@@ -262,9 +262,9 @@ export async function seedProducts() {
         price: 2799,
         salePrice: 2199,
         images: [
-          "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=800&fit=crop",
-          "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=800&fit=crop",
-          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&h=800&fit=crop"
+          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400",
+          "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400",
+          "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400"
         ],
         sizes: ["XS", "S", "M", "L", "XL"],
         colors: ["Blue Floral", "Pink Floral", "Yellow Floral", "White Floral"],
@@ -407,9 +407,9 @@ export async function seedProducts() {
         price: 2499,
         salePrice: 1999,
         images: [
-          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=800&fit=crop",
-          "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop",
-          "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=600&h=800&fit=crop"
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+          "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=400",
+          "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400"
         ],
         sizes: ["5", "6", "7", "8", "9", "10"],
         colors: ["White", "Black", "Pink", "Navy Blue", "Red"],
