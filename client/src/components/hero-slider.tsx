@@ -272,15 +272,7 @@ export default function HeroSlider() {
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-30">
-        <div 
-          className="h-full bg-gradient-to-r from-hednor-gold to-yellow-500 transition-all duration-1000 ease-linear"
-          style={{ 
-            width: `${((currentSlide + 1) / heroSlides.length) * 100}%`
-          }}
-        />
-      </div>
+      
     </div>
   );
 }
