@@ -1070,6 +1070,59 @@
     justify-content: center;
   }
 
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Mobile-first responsive typography */
+  @media (max-width: 374px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  @media (min-width: 375px) and (max-width: 640px) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  /* Better touch targets for mobile */
+  @media (max-width: 768px) {
+    button, .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
   /* Mobile Footer Fixes */
   @media (max-width: 768px) {
     footer {

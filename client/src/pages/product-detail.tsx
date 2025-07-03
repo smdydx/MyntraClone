@@ -200,7 +200,7 @@ export default function ProductDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
           {/* Product Images */}
-          <div className="space-y-2 md:space-y-4 sticky top-24">
+          <div className="space-y-2 md:space-y-4 lg:sticky lg:top-24">
             <div 
               className="relative bg-white rounded-lg overflow-hidden cursor-zoom-in"
               ref={imageRef}
@@ -212,7 +212,7 @@ export default function ProductDetail() {
                 <img
                   src={product.images?.[selectedImageIndex] || ""}
                   alt={product.name}
-                  className={`w-full h-64 xs:h-80 sm:h-96 md:h-[500px] lg:h-[600px] object-cover transition-transform duration-300 ${
+                  className={`w-full h-56 xs:h-72 sm:h-80 md:h-96 lg:h-[500px] xl:h-[600px] object-cover transition-transform duration-300 ${
                     isZoomed ? 'scale-150' : 'scale-100'
                   }`}
                   style={
@@ -224,14 +224,14 @@ export default function ProductDetail() {
                   }
                 />
                 
-                {/* Zoom indicator */}
-                <div className="absolute top-4 right-4 bg-black/20 text-white p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity">
+                {/* Zoom indicator - Hide on mobile */}
+                <div className="hidden md:block absolute top-4 right-4 bg-black/20 text-white p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity">
                   <ZoomIn className="w-4 h-4" />
                 </div>
               </div>
 
               {product.isOnSale && product.salePrice && (
-                <Badge className="absolute top-4 left-4 bg-red-500 text-white z-10">
+                <Badge className="absolute top-2 left-2 bg-red-500 text-white z-10 text-xs px-2 py-1">
                   {Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}% OFF
                 </Badge>
               )}
@@ -239,12 +239,12 @@ export default function ProductDetail() {
 
             {/* Thumbnail Images */}
             {product.images && product.images.length > 1 && (
-              <div className="flex space-x-1 xs:space-x-2 overflow-x-auto pb-2">
+              <div className="flex space-x-1 xs:space-x-2 overflow-x-auto pb-2 scrollbar-hide">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`flex-shrink-0 w-16 h-16 xs:w-18 xs:h-18 sm:w-20 sm:h-20 rounded border-2 overflow-hidden transition-all hover:scale-105 ${
+                    className={`flex-shrink-0 w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded border-2 overflow-hidden transition-all hover:scale-105 ${
                       selectedImageIndex === index ? 'border-hednor-gold shadow-lg' : 'border-gray-200 hover:border-hednor-gold'
                     }`}
                   >
@@ -260,36 +260,36 @@ export default function ProductDetail() {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-xl xs:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">
                 {product.name}
               </h1>
-              <p className="text-lg text-gray-600 mb-4">{product.brand}</p>
+              <p className="text-base md:text-lg text-gray-600 mb-3 md:mb-4">{product.brand}</p>
 
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex flex-col xs:flex-row xs:items-center xs:space-x-4 space-y-2 xs:space-y-0 mb-4">
                 <div className="flex items-center space-x-2">
                   <div className="flex">
                     {renderStars(product.rating || "0")}
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs xs:text-sm text-gray-600">
                     ({product.reviewCount?.toLocaleString() || 0} reviews)
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4 mb-6">
+              <div className="flex flex-col xs:flex-row xs:items-center xs:space-x-4 space-y-1 xs:space-y-0 mb-4 md:mb-6">
                 {product.salePrice ? (
                   <>
-                    <span className="text-3xl font-bold text-hednor-dark">
+                    <span className="text-2xl xs:text-3xl md:text-4xl font-bold text-hednor-dark">
                       {formatPrice(product.salePrice)}
                     </span>
-                    <span className="text-xl text-gray-500 line-through">
+                    <span className="text-lg xs:text-xl md:text-2xl text-gray-500 line-through">
                       {formatPrice(product.price)}
                     </span>
                   </>
                 ) : (
-                  <span className="text-3xl font-bold text-hednor-dark">
+                  <span className="text-2xl xs:text-3xl md:text-4xl font-bold text-hednor-dark">
                     {formatPrice(product.price)}
                   </span>
                 )}
@@ -300,15 +300,15 @@ export default function ProductDetail() {
             {product.sizes && product.sizes.length > 0 && (
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-medium text-gray-900">Size</h3>
+                  <h3 className="font-medium text-gray-900 text-sm md:text-base">Size</h3>
                   <SizeGuide />
                 </div>
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 xl:grid-cols-5 gap-2 mb-3">
                   {product.sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 md:px-4 md:py-2 border rounded-md text-xs md:text-sm font-medium transition-colors ${
                         selectedSize === size
                           ? 'border-hednor-gold bg-hednor-gold text-hednor-dark'
                           : 'border-gray-300 text-gray-700 hover:border-hednor-gold'
@@ -320,7 +320,7 @@ export default function ProductDetail() {
                 </div>
                 {/* Size Information */}
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                  <p className="text-xs text-yellow-800">
+                  <p className="text-xs md:text-sm text-yellow-800">
                     <strong>Size Guide:</strong> Model is 5'8" wearing size M. For relaxed fit, choose one size up.
                   </p>
                 </div>
@@ -330,13 +330,13 @@ export default function ProductDetail() {
             {/* Color Selection */}
             {product.colors && product.colors.length > 0 && (
               <div>
-                <h3 className="font-semibold mb-3">Color</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="font-semibold mb-3 text-sm md:text-base">Color</h3>
+                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {product.colors.map((color) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
+                      className={`px-3 py-2 md:px-4 md:py-2 border rounded-lg text-xs md:text-sm font-medium transition-colors ${
                         selectedColor === color
                           ? 'border-hednor-gold bg-hednor-gold text-hednor-dark'
                           : 'border-gray-300 hover:border-hednor-gold'
@@ -351,7 +351,7 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div>
-              <h3 className="font-semibold mb-3">Quantity</h3>
+              <h3 className="font-semibold mb-3 text-sm md:text-base">Quantity</h3>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center border rounded-lg">
                   <Button
@@ -359,42 +359,43 @@ export default function ProductDetail() {
                     size="sm"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
+                    className="h-8 w-8 md:h-10 md:w-10"
                   >
-                    <Minus className="w-4 h-4" />
+                    <Minus className="w-3 h-3 md:w-4 md:h-4" />
                   </Button>
-                  <span className="px-4 py-2 font-medium">{quantity}</span>
+                  <span className="px-3 py-2 md:px-4 md:py-2 font-medium text-sm md:text-base min-w-[40px] text-center">{quantity}</span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setQuantity(quantity + 1)}
+                    className="h-8 w-8 md:h-10 md:w-10"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-3 h-3 md:w-4 md:h-4" />
                   </Button>
                 </div>
               </div>
             </div>
 
             {/* Add to Cart/Wishlist */}
-            <div className="flex space-x-4">
+            <div className="flex flex-col xs:flex-row space-y-3 xs:space-y-0 xs:space-x-4">
               <Button
                 onClick={handleAddToCart}
-                className="flex-1 bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold"
-                size="lg"
+                className="flex-1 bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold text-sm md:text-base h-11 md:h-12"
               >
-                <ShoppingBag className="w-5 h-5 mr-2" />
+                <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Add to Cart
               </Button>
               <Button
                 variant="outline"
-                size="lg"
                 onClick={handleWishlistToggle}
-                className={`${
+                className={`xs:w-auto w-full h-11 md:h-12 ${
                   inWishlist 
                     ? "border-sale-red text-sale-red hover:bg-red-50" 
                     : "border-gray-300 hover:border-sale-red hover:text-sale-red"
                 }`}
               >
-                <Heart className={`w-5 h-5 ${inWishlist ? "fill-sale-red" : ""}`} />
+                <Heart className={`w-4 h-4 md:w-5 md:h-5 ${inWishlist ? "fill-sale-red" : ""} xs:mr-0 mr-2`} />
+                <span className="xs:hidden">Wishlist</span>
               </Button>
             </div>
 
@@ -412,32 +413,32 @@ export default function ProductDetail() {
             </div>
 
             {/* Delivery & Service Info */}
-            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-              <h3 className="font-semibold text-gray-900">Delivery & Services</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div className="bg-gray-50 p-3 md:p-4 rounded-lg space-y-3">
+              <h3 className="font-semibold text-gray-900 text-sm md:text-base">Delivery & Services</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
                 <div className="flex items-center space-x-2">
-                  <Truck className="w-4 h-4 text-green-600" />
+                  <Truck className="w-3 h-3 md:w-4 md:h-4 text-green-600 flex-shrink-0" />
                   <span>Free delivery above ₹1999</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RotateCcw className="w-4 h-4 text-blue-600" />
+                  <RotateCcw className="w-3 h-3 md:w-4 md:h-4 text-blue-600 flex-shrink-0" />
                   <span>Easy 30-day returns</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Shield className="w-4 h-4 text-purple-600" />
+                  <Shield className="w-3 h-3 md:w-4 md:h-4 text-purple-600 flex-shrink-0" />
                   <span>100% authentic products</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Award className="w-4 h-4 text-yellow-600" />
+                  <Award className="w-3 h-3 md:w-4 md:h-4 text-yellow-600 flex-shrink-0" />
                   <span>Quality guaranteed</span>
                 </div>
               </div>
             </div>
 
             {/* Product Highlights */}
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">Product Highlights</h3>
-              <ul className="space-y-1 text-sm text-gray-700">
+            <div className="bg-blue-50 p-3 md:p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2 text-sm md:text-base">Product Highlights</h3>
+              <ul className="space-y-1 text-xs md:text-sm text-gray-700">
                 <li>• Premium quality fabric</li>
                 <li>• Regular fit for comfortable wear</li>
                 <li>• Machine washable</li>
@@ -449,10 +450,10 @@ export default function ProductDetail() {
 
         {/* Product Details Tabs */}
         <Tabs defaultValue="description" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="description">Description</TabsTrigger>
-            <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="description" className="text-xs xs:text-sm md:text-base px-2 xs:px-4 py-2">Description</TabsTrigger>
+            <TabsTrigger value="specifications" className="text-xs xs:text-sm md:text-base px-2 xs:px-4 py-2">Specifications</TabsTrigger>
+            <TabsTrigger value="reviews" className="text-xs xs:text-sm md:text-base px-2 xs:px-4 py-2">Reviews</TabsTrigger>
           </TabsList>
 
           <TabsContent value="description" className="mt-6">
@@ -492,7 +493,7 @@ export default function ProductDetail() {
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {/* Rating Summary */}
               <div className="bg-white p-6 rounded-lg">
                 <h3 className="font-semibold mb-4">Ratings & Reviews</h3>
