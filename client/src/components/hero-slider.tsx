@@ -4,9 +4,6 @@ import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shi
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import heroVideoPath from "/src/assets/hero-video.mp4";
-import poster1 from "/src/assets/poster1.jpg";
-import poster2 from "/src/assets/poster2.jpg";
-import poster3 from "/src/assets/poster3.jpg";
 import ramaeraImage from "/src/assets/ramaera-banner.jpg";
 
 const heroSlides = [
