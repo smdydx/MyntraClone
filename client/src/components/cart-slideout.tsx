@@ -216,12 +216,12 @@ const CartSlideout: React.FC<CartSlideoutProps> = ({ isOpen, onClose }) => {
 
             {/* Action Buttons */}
             <div className="space-y-2">
-              <Link href="/cart" className="block w-full">
+              <Link href="/checkout" className="block w-full">
                 <Button 
                   className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold py-2.5 sm:py-3 text-sm sm:text-base"
                   onClick={onClose}
                 >
-                  View Bag
+                  Proceed to Checkout
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>

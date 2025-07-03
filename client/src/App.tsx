@@ -21,7 +21,6 @@ import Cookies from "./pages/cookies";
 import FAQ from "./pages/faq";
 import LiveChat from "./pages/live-chat";
 import NotFound from "@/pages/not-found";
-import Cart from "@/pages/cart"; //Import cart component
 
 function Router() {
   return (
@@ -30,7 +29,6 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/products/:slug" component={ProductDetail} />
       <Route path="/product/:id" component={ProductDetail} />
-      <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/profile" component={Profile} />
       <Route path="/wishlist" component={Wishlist} />
