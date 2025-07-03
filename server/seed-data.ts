@@ -41,9 +41,9 @@ export async function seedCategories() {
 
     const womenCategory = await categoryService.createCategory({
       name: "Women",
-      slug: "women", 
+      slug: "women",
       description: "Women's fashion and accessories",
-      image: "https://images.unsplash.com/photo-1494790108755-2616c57f8188?w=400",
+      image: "https://media.istockphoto.com/id/915320148/photo/elegant-young-woman-is-looking-away-smiling-and-thinking.jpg?s=612x612&w=0&k=20&c=n2FD9mwA7bIU2ys8M3XM2L9Y_wlmVVOFcRtdF9RkUJc=",
       isActive: true
     });
 
@@ -590,7 +590,7 @@ export async function seedProducts() {
         isFeatured: true,
         isOnSale: true
       }
-      
+
     ];
 
     for (const product of sampleProducts) {
