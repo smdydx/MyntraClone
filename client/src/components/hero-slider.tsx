@@ -218,38 +218,61 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Navigation Controls */}
-      <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="flex items-center gap-2 md:gap-4">
-          {/* Slide Indicators */}
-          <div className="flex items-center gap-1 md:gap-2">
+      {/* Navigation Controls - Redesigned */}
+      <div className="absolute bottom-6 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* Modern Slide Indicators */}
+          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-2 md:p-3">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={cn(
-                  "h-1.5 md:h-2 rounded-full transition-all duration-300",
+                  "relative overflow-hidden rounded-full transition-all duration-500 group",
                   index === currentSlide 
-                    ? "w-6 md:w-8 bg-hednor-gold" 
-                    : "w-1.5 md:w-2 bg-white/40 hover:bg-white/60"
+                    ? "w-10 md:w-12 h-3 md:h-4 bg-gradient-to-r from-hednor-gold to-yellow-400 shadow-lg shadow-hednor-gold/30" 
+                    : "w-3 md:w-4 h-3 md:h-4 bg-white/30 hover:bg-white/50 hover:scale-110"
                 )}
-              />
+              >
+                {index === currentSlide && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+                )}
+                <span className="sr-only">Go to slide {index + 1}</span>
+              </button>
             ))}
           </div>
 
-          {/* Video Controls */}
+          {/* Enhanced Video Controls */}
           {heroSlides[currentSlide].isVideo && (
-            <button
-              onClick={toggleVideo}
-              className="ml-2 md:ml-4 p-1.5 md:p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all"
-            >
-              {isVideoPlaying ? (
-                <Pause className="w-3 h-3 md:w-4 md:h-4 text-white" />
-              ) : (
-                <Play className="w-3 h-3 md:w-4 md:h-4 text-white" />
-              )}
-            </button>
+            <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-2 md:p-3">
+              <button
+                onClick={toggleVideo}
+                className="relative p-2 md:p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-hednor-gold/20 to-yellow-400/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {isVideoPlaying ? (
+                  <Pause className="w-4 h-4 md:w-5 md:h-5 text-white relative z-10" />
+                ) : (
+                  <Play className="w-4 h-4 md:w-5 md:h-5 text-white relative z-10" />
+                )}
+              </button>
+              <div className="w-px h-6 bg-white/20" />
+              <div className="text-xs md:text-sm text-white/70 font-medium">
+                {isVideoPlaying ? 'Playing' : 'Paused'}
+              </div>
+            </div>
           )}
+        </div>
+      </div>
+
+      {/* Slide Counter */}
+      <div className="absolute bottom-6 md:bottom-12 right-6 md:right-12 z-30">
+        <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl px-3 md:px-4 py-2 md:py-3">
+          <div className="text-white text-sm md:text-base font-medium">
+            <span className="text-hednor-gold">{String(currentSlide + 1).padStart(2, '0')}</span>
+            <span className="text-white/50 mx-1">/</span>
+            <span className="text-white/70">{String(heroSlides.length).padStart(2, '0')}</span>
+          </div>
         </div>
       </div>
 
