@@ -1210,7 +1210,7 @@ export default function AdminDashboard() {
                     icon: <FileText className="h-5 w-5" />,
                     label: "Categories",
                     isActive: activeTab === "categories",
-                    onClick: () => handleMainNavClick("categories")},
+                    onClick: () => handleMainNavClick("categories"),
                     badge: categories.length,
                     submenu: [
                       {
