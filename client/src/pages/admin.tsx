@@ -2507,7 +2507,8 @@ export default function AdminDashboard() {
                           <TableRow>
                             <TableHead className="w-[100px]">Image</TableHead>
                             <TableHead>Name</TableHead>
-                            <TableHead className="hidden md:table-cell">Description</TableHead                            <TableHead className="hidden sm:table-cell">Type</TableHead>
+                            <TableHead className="hidden md:table-cell">Description</TableHead>
+                            <TableHead className="hidden sm:table-cell">Type</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="hidden lg:table-cell">Products</TableHead>
                             <TableHead className="hidden xl:table-cell">Created</TableHead>
