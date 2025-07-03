@@ -88,60 +88,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Professional Features Banner */}
-      <div className="bg-white border-b border-gray-100 py-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-hednor-gold to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm">Free Shipping</p>
-                <p className="text-xs text-gray-500">Above ₹1999</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm">Authentic Products</p>
-                <p className="text-xs text-gray-500">100% Genuine</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm">Easy Returns</p>
-                <p className="text-xs text-gray-500">30 Day Policy</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm">24/7 Support</p>
-                <p className="text-xs text-gray-500">Live Chat</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Promotional Ticker */}
       <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-3 overflow-hidden">
@@ -671,6 +618,128 @@ export default function Home() {
             <Button className="w-full md:w-auto bg-hednor-gold text-hednor-dark px-8 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
               Subscribe
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Professional Features Section - Before Footer */}
+      <section className="bg-white border-t border-gray-100 py-8 lg:py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-4">Why Choose Hednor?</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Experience the best in fashion with our premium services and guaranteed satisfaction</p>
+          </div>
+          
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+            {/* Free Shipping */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-hednor-gold to-yellow-500 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Free Shipping</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">Above ₹1999</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Fast delivery across India with no extra charges</p>
+            </div>
+
+            {/* Authentic Products */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Authentic Products</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">100% Genuine</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Only original products from verified brands</p>
+            </div>
+
+            {/* Easy Returns */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Easy Returns</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">30 Day Policy</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Hassle-free returns and exchanges</p>
+            </div>
+
+            {/* 24/7 Support */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">24/7 Support</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">Live Chat</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Round-the-clock customer assistance</p>
+            </div>
+          </div>
+
+          {/* Additional Features Row for Mobile */}
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-6 md:mt-8">
+            {/* Secure Payment */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Secure Payment</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">SSL Protected</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Safe and secure payment processing</p>
+            </div>
+
+            {/* Quality Assurance */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Quality Assurance</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">Premium Quality</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Rigorous quality checks on all products</p>
+            </div>
+
+            {/* Fast Delivery */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Fast Delivery</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">Express Shipping</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Quick delivery in metro cities</p>
+            </div>
+
+            {/* Size Guide */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-all duration-300 group">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2V3z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 21a4 4 0 004-4V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4zM17 3h2a2 2 0 012 2v12a4 4 0 01-4 4h-2V3z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-gray-800 text-base md:text-lg mb-2">Size Guide</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-1">Perfect Fit</p>
+              <p className="text-xs text-gray-500 leading-relaxed">Detailed size charts for accurate fitting</p>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-8 lg:mt-12">
+            <Link href="/products">
+              <Button className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 px-8 py-3 text-lg font-semibold rounded-lg transition-colors">
+                Start Shopping Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
