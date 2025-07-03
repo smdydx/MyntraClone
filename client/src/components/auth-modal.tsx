@@ -111,35 +111,39 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[95vw] max-w-[425px] mx-auto">
         <DialogHeader>
-          <DialogTitle>{isLogin ? 'Login' : 'Register'}</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">{isLogin ? 'Login' : 'Register'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="username" className="text-sm font-medium">Username</Label>
             <Input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              className="h-11 text-base"
+              placeholder="Enter your username"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-sm font-medium">Password</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="h-11 text-base"
+              placeholder="Enter your password"
             />
           </div>
           <Button
             disabled={isLogin ? loginMutation.isPending : registerMutation.isPending}
             type="submit"
-            className="w-full"
+            className="w-full h-11 text-base font-medium"
           >
             {isLogin ? 
               (loginMutation.isPending ? 'Logging in...' : 'Login') : 
@@ -147,11 +151,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             }
           </Button>
         </form>
-        <DialogFooter className="flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">
+        <DialogFooter className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 pt-4">
+          <p className="text-sm text-muted-foreground text-center sm:text-left">
             {isLogin ? "Don't have an account?" : "Already have an account?"}
           </p>
-          <Button variant="outline" onClick={toggleAuthMode}>
+          <Button variant="outline" onClick={toggleAuthMode} className="w-full sm:w-auto">
             {isLogin ? 'Register' : 'Login'}
           </Button>
         </DialogFooter>

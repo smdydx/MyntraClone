@@ -1597,7 +1597,7 @@ export default function Header() {
                     >
                       <div className="relative">
                         <ShoppingBag className="h-4 w-4" />
-                        
+
                       </div>
                     </Button>
                   </div>
@@ -1807,7 +1807,7 @@ export default function Header() {
                     <ShoppingBag className="h-4 w-4" />
                     <span className="text-xs font-medium">Bag</span>
                   </Button>
-                  
+
                 </div>
               </div>
             </div>
@@ -1829,7 +1829,10 @@ export default function Header() {
       />
 
       {/* Auth Modal */}
-      <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </>
   );
 }
