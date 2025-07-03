@@ -19,7 +19,7 @@ export default function Footer() {
             <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 max-w-md leading-relaxed">
               Your trusted fashion destination for the latest trends and timeless styles.
             </p>
-            <div className="flex justify-start space-x-3 sm:space-x-4"></div>
+            <div className="flex justify-start space-x-3 sm:space-x-4">
               <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
               <Twitter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
               <Instagram className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
