@@ -19,7 +19,7 @@ import FloatingActionButtons from "@/components/floating-action-buttons";
 import { NotificationManager } from "@/components/notification-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Star, Clock, Zap, Heart, ShoppingCart } from "lucide-react";
+import { ArrowRight, Star, Clock, Zap, Heart, ShoppingCart, Sparkles } from "lucide-react";
 
 export default function Home() {
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
