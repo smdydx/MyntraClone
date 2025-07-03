@@ -141,14 +141,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Back to Top */}
-      <button 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
-        aria-label="Back to top"
-      >
-        <ArrowRight className="w-5 h-5 rotate-[-90deg]" />
-      </button>
-    </footer>
+      </footer>
   );
 }
