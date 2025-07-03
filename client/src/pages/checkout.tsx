@@ -102,7 +102,7 @@ export default function Checkout() {
     shippingAmount: shippingCost,
     taxAmount: tax,
     finalAmount,
-    shippingAddress: sameAsShipping ? shippingAddress : shippingAddress,
+    shippingAddress: shippingAddress,
     billingAddress: sameAsShipping ? shippingAddress : billingAddress
   };
 
@@ -726,11 +726,19 @@ export default function Checkout() {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
                               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
-                                <CreditCard className="w-5 h-5 text-white" />
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                                </svg>
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900">Credit/Debit Card</div>
-                                <div className="text-sm text-gray-500">Visa, MasterCard, RuPay, AMEX</div>
+                                <div className="text-sm text-gray-500 flex items-center space-x-2">
+                                  <span>Visa</span>
+                                  <span>•</span>
+                                  <span>MasterCard</span>
+                                  <span>•</span>
+                                  <span>RuPay</span>
+                                </div>
                               </div>
                             </div>
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
@@ -749,9 +757,12 @@ export default function Checkout() {
                         <Label htmlFor="gpay" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
-                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                              <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12.24 10.285c-.24-.64-.36-1.285-.36-1.95 0-2.16 1.44-3.975 3.48-4.575.24-.075.48-.12.72-.165C15.24 2.4 13.8 1.5 12.12 1.5c-2.52 0-4.56 2.085-4.56 4.65 0 .69.12 1.335.36 1.95.24.615.6 1.17 1.05 1.665.45.495.96.915 1.56 1.26.48.285 1.02.48 1.56.645-.12-.03-.24-.06-.36-.09-.96-.27-1.8-.75-2.49-1.395z" fill="#4285F4"/>
+                                  <path d="M16.44 3.6c-.24.045-.48.09-.72.165C13.68 4.365 12.24 6.18 12.24 8.34c0 .665.12 1.305.36 1.95.24.615.6 1.17 1.05 1.665.45.495.96.915 1.56 1.26.48.285 1.02.48 1.56.645.54.165 1.14.24 1.74.24 1.32 0 2.52-.45 3.48-1.215-.96.765-2.16 1.215-3.48 1.215-.6 0-1.2-.075-1.74-.24-.54-.165-1.08-.36-1.56-.645-.6-.345-1.11-.765-1.56-1.26-.45-.495-.81-1.05-1.05-1.665-.24-.645-.36-1.285-.36-1.95 0-2.16 1.44-3.975 3.48-4.575z" fill="#34A853"/>
+                                  <path d="M12.24 8.34c0-.665.12-1.305.36-1.95.24-.645.6-1.17 1.05-1.665.45-.495.96-.915 1.56-1.26.48-.285 1.02-.48 1.56-.645.54-.165 1.14-.24 1.74-.24 1.32 0 2.52.45 3.48 1.215.96-.765 2.16-1.215 3.48-1.215.6 0 1.2.075 1.74.24.54.165 1.08.36 1.56.645.6.345 1.11.765 1.56 1.26.45.495.81 1.05 1.05 1.665.24.645.36 1.285.36 1.95 0 2.16-1.44 3.975-3.48 4.575-.24.075-.48.12-.72.165.84.6 1.8 1.5 1.8 2.1 0 2.52-2.04 4.56-4.56 4.56s-4.56-2.04-4.56-4.56c0-.6.96-1.5 1.8-2.1-.24-.045-.48-.09-.72-.165-2.04-.6-3.48-2.415-3.48-4.575z" fill="#FBBC05"/>
+                                  <path d="M18.48 13.14c-.24.045-.48.09-.72.165-2.04.6-3.48 2.415-3.48 4.575 0 .665.12 1.305.36 1.95.24.615.6 1.17 1.05 1.665.45.495.96.915 1.56 1.26.48.285 1.02.48 1.56.645.54.165 1.14.24 1.74.24 1.32 0 2.52-.45 3.48-1.215-.96.765-2.16 1.215-3.48 1.215-.6 0-1.2-.075-1.74-.24-.54-.165-1.08-.36-1.56-.645-.6-.345-1.11-.765-1.56-1.26-.45-.495-.81-1.05-1.05-1.665-.24-.645-.36-1.285-.36-1.95 0-2.16 1.44-3.975 3.48-4.575.24-.075.48-.12.72-.165z" fill="#EA4335"/>
                                 </svg>
                               </div>
                               <div>
@@ -774,8 +785,10 @@ export default function Checkout() {
                         <Label htmlFor="phonepe" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg flex items-center justify-center mr-3">
-                                <Smartphone className="w-5 h-5 text-white" />
+                              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                </svg>
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900">PhonePe</div>
@@ -797,15 +810,17 @@ export default function Checkout() {
                         <Label htmlFor="paytm" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
-                                <Wallet className="w-5 h-5 text-white" />
+                              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                </svg>
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900">Paytm</div>
                                 <div className="text-sm text-gray-500">Pay via Paytm wallet</div>
                               </div>
                             </div>
-                            <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                               Wallet
                             </Badge>
                           </div>
@@ -820,9 +835,9 @@ export default function Checkout() {
                         <Label htmlFor="upi" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-3">
-                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5zm-2 8h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
                                 </svg>
                               </div>
                               <div>
@@ -855,8 +870,10 @@ export default function Checkout() {
                         <Label htmlFor="cod" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-r from-green-600 to-green-700 rounded-lg flex items-center justify-center mr-3">
-                                <Banknote className="w-5 h-5 text-white" />
+                              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+                                </svg>
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900">Cash on Delivery</div>

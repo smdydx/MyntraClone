@@ -259,8 +259,8 @@ export default function Products() {
                   ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6' 
                   : 'flex flex-col space-y-4'
               }`}>
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} viewMode={viewMode} />
+                {filteredProducts.map((product, index) => (
+                  <ProductCard key={product._id || `product-${index}`} product={product} viewMode={viewMode} />
                 ))}
               </div>
             )}
