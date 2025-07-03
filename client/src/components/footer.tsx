@@ -7,7 +7,7 @@ import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_17509494079
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white mt-auto">
-      
+
 
       {/* Main Footer Content */}
       <div className="py-8 lg:py-12">
