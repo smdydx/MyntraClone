@@ -66,7 +66,9 @@ export default function Checkout() {
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, [isAuthenticated, cartCount, setLocation]);
 
@@ -117,11 +119,21 @@ export default function Checkout() {
         return;
       }
 
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/razorpay/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ amount: finalAmount })
       });
@@ -150,7 +162,7 @@ export default function Checkout() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                "Authorization": `Bearer ${token}`
               },
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
@@ -211,11 +223,21 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/gpay/initiate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           amount: finalAmount,
@@ -254,11 +276,21 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/phonepe/initiate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           amount: finalAmount,
@@ -297,11 +329,21 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/paytm/initiate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           amount: finalAmount,
@@ -340,11 +382,21 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/upi/initiate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           amount: finalAmount,
@@ -384,11 +436,21 @@ export default function Checkout() {
     try {
       setIsProcessing(true);
   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to continue with payment.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch("/api/payment/cod", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ orderData })
       });
@@ -421,6 +483,15 @@ export default function Checkout() {
   };
 
   const handlePayment = () => {
+    if (!isAuthenticated || !localStorage.getItem("token")) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to continue with payment.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (!shippingAddress.fullName || !shippingAddress.phone || !shippingAddress.addressLine1 || 
         !shippingAddress.city || !shippingAddress.state || !shippingAddress.pincode) {
       toast({
