@@ -4,6 +4,9 @@ import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shi
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import heroVideoPath from "/src/assets/hero-video.mp4";
+import poster1 from "/src/assets/poster1.jpg";
+import poster2 from "/src/assets/poster2.jpeg";
+import poster3 from "/src/assets/poster3.jpg";
 
 const heroSlides = [
   {
@@ -19,6 +22,26 @@ const heroSlides = [
   },
   {
     id: 2,
+    title: "Planet Era Spices",
+    subtitle: "अपना स्वाद, अपनों के साथ",
+    description: "Discover authentic Indian spices and masalas for every culinary adventure",
+    buttonText: "Shop Spices",
+    buttonLink: "/products?category=spices",
+    backgroundImage: poster1,
+    stats: { value: "100%", label: "Pure & Natural" }
+  },
+  {
+    id: 3,
+    title: "Ramaera Electronics",
+    subtitle: "Innovation for Every Need",
+    description: "Cutting-edge electronics and appliances for modern living",
+    buttonText: "Explore Electronics",
+    buttonLink: "/products?category=electronics",
+    backgroundImage: poster2,
+    stats: { value: "24/7", label: "Customer Support" }
+  },
+  {
+    id: 4,
     title: "Sustainable Luxury",
     subtitle: "Conscious Fashion Forward",
     description: "Where sustainability meets style - premium fashion with environmental responsibility",
@@ -28,7 +51,7 @@ const heroSlides = [
     stats: { value: "100%", label: "Authentic Products" }
   },
   {
-    id: 3,
+    id: 5,
     title: "Executive Collection",
     subtitle: "Professional Excellence",
     description: "Meticulously crafted pieces for the modern professional and style connoisseur",
@@ -38,7 +61,7 @@ const heroSlides = [
     stats: { value: "24/7", label: "Concierge Service" }
   },
   {
-    id: 4,
+    id: 6,
     title: "Limited Edition Drop",
     subtitle: "Exclusive Access",
     description: "Be among the first to access our exclusive limited edition collections",
