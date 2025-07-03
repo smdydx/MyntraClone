@@ -125,46 +125,46 @@ export default function HeroSlider() {
               "translate-y-0 opacity-100"
             )}>
               {/* Premium Badge */}
-              <div className="inline-flex items-center gap-1 sm:gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-2 sm:px-4 py-1 sm:py-2 rounded-full mb-4 sm:mb-6">
-                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
-                <span className="text-xs sm:text-sm font-medium text-white">
+              <div className="inline-flex items-center gap-1 sm:gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-2 sm:px-4 py-1 sm:py-2 rounded-full mb-3 xs:mb-4 sm:mb-6 mx-auto xs:mx-0">
+                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-white truncate">
                   {heroSlides[currentSlide].subtitle}
                 </span>
-                <div className="w-1 h-1 bg-hednor-gold rounded-full hidden sm:block" />
-                <span className="text-xs text-gray-300 hidden sm:inline">Premium Collection</span>
+                <div className="w-1 h-1 bg-hednor-gold rounded-full hidden sm:block flex-shrink-0" />
+                <span className="text-xs text-gray-300 hidden sm:inline truncate">Premium Collection</span>
               </div>
 
               {/* Main Title */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                <span className="block">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 xs:mb-4 sm:mb-6 leading-tight px-2 xs:px-0">
+                <span className="block text-center xs:text-left">
                   {heroSlides[currentSlide].title.split(' ').slice(0, -1).join(' ')}
                 </span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold block text-center xs:text-left">
                   {heroSlides[currentSlide].title.split(' ').slice(-1)}
                 </span>
               </h1>
 
               {/* Description */}
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 sm:mb-8 max-w-2xl leading-relaxed">
+              <p className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-4 xs:mb-6 sm:mb-8 max-w-2xl leading-relaxed px-2 xs:px-0 text-center xs:text-left">
                 {heroSlides[currentSlide].description}
               </p>
 
               {/* Stats & CTA */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
+              <div className="flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-0">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full sm:w-auto"
+                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full xs:w-full sm:w-auto min-h-[44px] rounded-lg"
                   onClick={() => {
                     window.location.href = heroSlides[currentSlide].buttonLink;
                   }}
                 >
-                  {heroSlides[currentSlide].buttonText}
-                  <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="truncate">{heroSlides[currentSlide].buttonText}</span>
+                  <ArrowRight className="ml-1 xs:ml-2 w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                 </Button>
 
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <div className="text-center">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+                <div className="flex items-center justify-center xs:justify-start gap-3 xs:gap-4 sm:gap-6">
+                  <div className="text-center xs:text-left">
+                    <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white">
                       {heroSlides[currentSlide].stats.value}
                     </div>
                     <div className="text-xs sm:text-sm text-gray-400">
@@ -172,12 +172,12 @@ export default function HeroSlider() {
                     </div>
                   </div>
                   
-                  <div className="w-px h-8 sm:h-12 bg-gray-600" />
+                  <div className="w-px h-6 xs:h-8 sm:h-12 bg-gray-600" />
                   
                   <div className="flex items-center gap-1 sm:gap-2">
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-hednor-gold text-hednor-gold" />
+                        <Star key={i} className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 fill-hednor-gold text-hednor-gold" />
                       ))}
                     </div>
                     <span className="text-white text-xs sm:text-sm font-medium">4.9</span>
@@ -186,13 +186,13 @@ export default function HeroSlider() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex items-center gap-4 sm:gap-6 text-gray-300">
+              <div className="flex items-center justify-center xs:justify-start gap-3 xs:gap-4 sm:gap-6 text-gray-300 px-2 xs:px-0">
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span className="text-xs sm:text-sm">Secure Shopping</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Award className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span className="text-xs sm:text-sm">Premium Quality</span>
                 </div>
               </div>
