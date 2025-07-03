@@ -1,13 +1,8 @@
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shield, Award } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Star, Shield, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import heroVideoPath from "/src/assets/hero-video.mp4";
-import poster1 from "/src/assets/poster1.jpg";
-import poster2 from "/src/assets/poster2.jpg";
-import poster3 from "/src/assets/poster3.jpg";
-import ramaeraImage from "/src/assets/ramaera-banner.jpg";
 
 const heroSlides = [
   {
@@ -17,9 +12,18 @@ const heroSlides = [
     description: "Discover curated collections from world-renowned designers and emerging talents",
     buttonText: "Explore Collection",
     buttonLink: "/products",
-    isVideo: true,
-    backgroundVideo: heroVideoPath,
+    backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=1080&fit=crop&crop=center",
     stats: { value: "50K+", label: "Happy Customers" }
+  },
+  {
+    id: 2,
+    title: "Latest Fashion Trends",
+    subtitle: "Style Revolution",
+    description: "Stay ahead with the latest fashion trends and seasonal collections",
+    buttonText: "Shop Now",
+    buttonLink: "/products?category=fashion",
+    backgroundImage: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=1920&h=1080&fit=crop&crop=center",
+    stats: { value: "1000+", label: "New Arrivals" }
   },
   {
     id: 3,
@@ -28,7 +32,7 @@ const heroSlides = [
     description: "Cutting-edge electronics and appliances for modern living with premium quality",
     buttonText: "Explore Electronics",
     buttonLink: "/products?category=electronics",
-    backgroundImage: ramaeraImage,
+    backgroundImage: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1920&h=1080&fit=crop&crop=center",
     stats: { value: "24/7", label: "Smart Support" }
   },
   {
@@ -38,15 +42,24 @@ const heroSlides = [
     description: "Be among the first to access our exclusive limited edition collections",
     buttonText: "Get Early Access",
     buttonLink: "/products?featured=true",
-    backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=800&fit=crop&crop=center",
+    backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=1080&fit=crop&crop=center",
     stats: { value: "72h", label: "Express Delivery" }
+  },
+  {
+    id: 5,
+    title: "Summer Collection",
+    subtitle: "Beat the Heat",
+    description: "Fresh summer styles that keep you cool and trendy all season long",
+    buttonText: "Shop Summer",
+    buttonLink: "/products?category=summer",
+    backgroundImage: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&h=1080&fit=crop&crop=center",
+    stats: { value: "30%", label: "Off Sale" }
   }
 ];
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -76,17 +89,7 @@ export default function HeroSlider() {
     setTimeout(() => setIsAutoPlaying(true), 15000);
   };
 
-  const toggleVideo = () => {
-    setIsVideoPlaying(!isVideoPlaying);
-    const video = document.querySelector('video');
-    if (video) {
-      if (isVideoPlaying) {
-        video.pause();
-      } else {
-        video.play();
-      }
-    }
-  };
+  
 
   return (
     <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -101,28 +104,14 @@ export default function HeroSlider() {
               : "opacity-0 scale-105"
           )}
         >
-          {slide.isVideo ? (
-            <video
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              autoPlay={isVideoPlaying}
-              muted
-              loop
-              playsInline
-              poster="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop&crop=center"
-            >
-              <source src={slide.backgroundVideo} type="video/mp4" />
-              <source src="https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-            </video>
-          ) : (
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 hover:scale-100 transition-transform duration-6000 ease-out"
-              style={{ 
-                backgroundImage: `url(${slide.backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center center'
-              }}
-            />
-          )}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 hover:scale-100 transition-transform duration-6000 ease-out"
+            style={{ 
+              backgroundImage: `url(${slide.backgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center'
+            }}
+          />
 
           {/* Premium Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
@@ -245,26 +234,7 @@ export default function HeroSlider() {
             ))}
           </div>
 
-          {/* Enhanced Video Controls */}
-          {heroSlides[currentSlide].isVideo && (
-            <div className="flex items-center gap-1 sm:gap-2 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-1.5 sm:p-2 md:p-3">
-              <button
-                onClick={toggleVideo}
-                className="relative p-1.5 sm:p-2 md:p-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl transition-all duration-300 group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-hednor-gold/20 to-yellow-400/20 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                {isVideoPlaying ? (
-                  <Pause className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white relative z-10" />
-                ) : (
-                  <Play className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white relative z-10" />
-                )}
-              </button>
-              <div className="w-px h-4 sm:h-6 bg-white/20" />
-              <div className="text-xs sm:text-sm text-white/70 font-medium">
-                {isVideoPlaying ? 'Playing' : 'Paused'}
-              </div>
-            </div>
-          )}
+          
         </div>
       </div>
 
