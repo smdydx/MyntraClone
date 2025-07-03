@@ -1,191 +1,154 @@
-
 import { Link } from "wouter";
-import { Facebook, Twitter, Instagram, Youtube, Globe, MapPin, Phone, Mail } from "lucide-react";
+import { Facebook, Twitter, Instagram, Youtube, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import hednorLogoPath from "@assets/Hednor Logo 22 updated-5721x3627_1750949407940.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-auto">
-      {/* Back to Top */}
-      <div className="bg-gray-800 hover:bg-gray-700 transition-colors">
-        <div className="container mx-auto px-4 py-3 text-center">
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-white hover:text-gray-300 text-sm font-medium"
-          >
-            Back to top
-          </button>
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white mt-auto">
+      {/* Newsletter Section */}
+      <div className="border-b border-gray-700/50">
+        <div className="container mx-auto px-4 py-12 max-w-7xl">
+          <div className="text-center space-y-6">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Stay in the Loop
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Get exclusive access to new arrivals, special offers, and insider fashion updates delivered straight to your inbox.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <Input 
+                type="email" 
+                placeholder="Enter your email address"
+                className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 flex-1"
+              />
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8">
+                Subscribe
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Footer Content */}
-      <div className="bg-gray-900 py-12">
+      <div className="py-16">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            {/* Get to Know Us */}
-            <div>
-              <h3 className="text-white font-bold text-base mb-4">Get to Know Us</h3>
-              <ul className="space-y-2">
-                <li><Link href="/about" className="text-gray-300 hover:text-white text-sm transition-colors">About Hednor</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Careers</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Press Releases</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Investor Relations</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Sustainability</Link></li>
-              </ul>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
 
-            {/* Make Money with Us */}
-            <div>
-              <h3 className="text-white font-bold text-base mb-4">Make Money with Us</h3>
-              <ul className="space-y-2">
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Sell on Hednor</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Become an Affiliate</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Advertise Your Products</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Supply to Hednor</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Host a Hub</Link></li>
-              </ul>
-            </div>
+            {/* Brand Section */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src={hednorLogoPath} 
+                  alt="Hednor Logo" 
+                  className="w-12 h-12 object-contain"
+                />
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  Hednor
+                </span>
+              </div>
+              <p className="text-gray-400 leading-relaxed max-w-md">
+                Redefining fashion with cutting-edge designs and premium quality. Your style, our passion.
+              </p>
 
-            {/* Hednor Payment Products */}
-            <div>
-              <h3 className="text-white font-bold text-base mb-4">Hednor Payment Products</h3>
-              <ul className="space-y-2">
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Hednor Business Card</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Shop with Points</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Reload Your Balance</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Hednor Currency Converter</Link></li>
-              </ul>
-            </div>
-
-            {/* Let Us Help You */}
-            <div>
-              <h3 className="text-white font-bold text-base mb-4">Let Us Help You</h3>
-              <ul className="space-y-2">
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Your Account</Link></li>
-                <li><Link href="/order-tracking" className="text-gray-300 hover:text-white text-sm transition-colors">Your Orders</Link></li>
-                <li><Link href="/shipping" className="text-gray-300 hover:text-white text-sm transition-colors">Shipping Rates & Policies</Link></li>
-                <li><Link href="/returns" className="text-gray-300 hover:text-white text-sm transition-colors">Returns & Replacements</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white text-sm transition-colors">Help</Link></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Middle Section with Logo and Contact */}
-      <div className="bg-gray-800 border-t border-gray-700">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-6 lg:space-y-0">
-            
-            {/* Logo and Contact Info */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-8">
-              <img 
-                src={hednorLogoPath} 
-                alt="Hednor Logo" 
-                className="w-24 h-24 object-contain"
-              />
-              
               {/* Contact Info */}
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2 text-gray-300">
-                  <Phone className="w-4 h-4" />
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <Phone className="w-4 h-4 text-blue-400" />
                   <span className="text-sm">+91 12345 67890</span>
                 </div>
-                <div className="flex items-center space-x-2 text-gray-300">
-                  <Mail className="w-4 h-4" />
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <Mail className="w-4 h-4 text-blue-400" />
                   <span className="text-sm">support@hednor.com</span>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <MapPin className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm">Mumbai, India</span>
+                </div>
+              </div>
+
+              {/* Social Media */}
+              <div className="flex space-x-4">
+                <div className="p-2 bg-gray-800/50 hover:bg-blue-600 rounded-lg transition-colors cursor-pointer group">
+                  <Facebook className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                </div>
+                <div className="p-2 bg-gray-800/50 hover:bg-blue-400 rounded-lg transition-colors cursor-pointer group">
+                  <Twitter className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                </div>
+                <div className="p-2 bg-gray-800/50 hover:bg-pink-600 rounded-lg transition-colors cursor-pointer group">
+                  <Instagram className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                </div>
+                <div className="p-2 bg-gray-800/50 hover:bg-red-600 rounded-lg transition-colors cursor-pointer group">
+                  <Youtube className="w-5 h-5 text-gray-400 group-hover:text-white" />
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Bottom Links Section */}
-      <div className="bg-gray-800 border-t border-gray-700">
-        <div className="container mx-auto px-4 py-6 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 text-xs">
-            
-            {/* Hednor Fashion */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Hednor Fashion</h4>
-              <ul className="space-y-1">
-                <li><Link href="/products?category=men" className="text-gray-400 hover:text-white transition-colors">Men's Fashion</Link></li>
-                <li><Link href="/products?category=women" className="text-gray-400 hover:text-white transition-colors">Women's Fashion</Link></li>
-                <li><Link href="/products?category=kids" className="text-gray-400 hover:text-white transition-colors">Kids' Fashion</Link></li>
-              </ul>
+            {/* Quick Links */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Quick Links</h3>
+              <div className="grid grid-cols-1 gap-3">
+                <Link href="/about" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">About Us</Link>
+                <Link href="/contact" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Contact</Link>
+                <Link href="/faq" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">FAQ</Link>
+                <Link href="/size-guide" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Size Guide</Link>
+                <Link href="/live-chat" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Live Chat</Link>
+              </div>
             </div>
 
-            {/* Hednor Lifestyle */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Hednor Lifestyle</h4>
-              <ul className="space-y-1">
-                <li><Link href="/products?category=home" className="text-gray-400 hover:text-white transition-colors">Home & Living</Link></li>
-                <li><Link href="/products?category=beauty" className="text-gray-400 hover:text-white transition-colors">Beauty & Personal Care</Link></li>
-                <li><Link href="/products?category=accessories" className="text-gray-400 hover:text-white transition-colors">Accessories</Link></li>
-              </ul>
+            {/* Categories */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Categories</h3>
+              <div className="grid grid-cols-1 gap-3">
+                <Link href="/products?category=men" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Men's Fashion</Link>
+                <Link href="/products?category=women" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Women's Fashion</Link>
+                <Link href="/products?category=kids" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Kids' Fashion</Link>
+                <Link href="/products?category=accessories" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Accessories</Link>
+                <Link href="/products?category=beauty" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Beauty & Care</Link>
+              </div>
             </div>
 
-            {/* Customer Care */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Customer Care</h4>
-              <ul className="space-y-1">
-                <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link href="/live-chat" className="text-gray-400 hover:text-white transition-colors">Live Chat</Link></li>
-                <li><Link href="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
-              </ul>
-            </div>
-
-            {/* Policies */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Policies</h4>
-              <ul className="space-y-1">
-                <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-                <li><Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">Cookie Policy</Link></li>
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Support</h4>
-              <ul className="space-y-1">
-                <li><Link href="/size-guide" className="text-gray-400 hover:text-white transition-colors">Size Guide</Link></li>
-                <li><Link href="/shipping" className="text-gray-400 hover:text-white transition-colors">Shipping Info</Link></li>
-                <li><Link href="/returns" className="text-gray-400 hover:text-white transition-colors">Returns</Link></li>
-              </ul>
-            </div>
-
-            {/* Connect */}
-            <div>
-              <h4 className="text-white font-semibold mb-2">Connect</h4>
-              <div className="flex space-x-3">
-                <Facebook className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Twitter className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Instagram className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Youtube className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
+            {/* Customer Service */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Customer Service</h3>
+              <div className="grid grid-cols-1 gap-3">
+                <Link href="/order-tracking" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Track Orders</Link>
+                <Link href="/shipping" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Shipping Info</Link>
+                <Link href="/returns" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Returns & Exchanges</Link>
+                <Link href="/wishlist" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Wishlist</Link>
+                <Link href="/profile" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">My Account</Link>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="bg-gray-900 border-t border-gray-700 py-4">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
-            <p className="text-gray-400 text-xs">
-              © 2025 Hednor, Inc. All rights reserved.
+      {/* Bottom Section */}
+      <div className="border-t border-gray-700/50 bg-black/30">
+        <div className="container mx-auto px-4 py-6 max-w-7xl">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-gray-400 text-sm">
+              © 2025 Hednor. All rights reserved. Crafted with passion.
             </p>
-            <div className="flex space-x-4 text-xs">
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy</Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms</Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">Cookies</Link>
+            <div className="flex space-x-6 text-sm">
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link>
+              <Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">Cookie Policy</Link>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Back to Top */}
+      <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
+        aria-label="Back to top"
+      >
+        <ArrowRight className="w-5 h-5 rotate-[-90deg]" />
+      </button>
     </footer>
   );
 }
