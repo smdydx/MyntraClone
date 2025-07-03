@@ -135,7 +135,7 @@ export default function HeroSlider() {
               </div>
 
               {/* Main Title */}
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 xs:mb-4 sm:mb-6 leading-tight px-2 xs:px-0">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 xs:mb-4 sm:mb-6 leading-tight px-8 xs:px-6 sm:px-0">
                 <span className="block text-center xs:text-left">
                   {heroSlides[currentSlide].title.split(' ').slice(0, -1).join(' ')}
                 </span>
@@ -145,15 +145,15 @@ export default function HeroSlider() {
               </h1>
 
               {/* Description */}
-              <p className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-4 xs:mb-6 sm:mb-8 max-w-2xl leading-relaxed px-2 xs:px-0 text-center xs:text-left">
+              <p className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-4 xs:mb-6 sm:mb-8 max-w-2xl leading-relaxed px-8 xs:px-6 sm:px-0 text-center xs:text-left">
                 {heroSlides[currentSlide].description}
               </p>
 
               {/* Stats & CTA */}
-              <div className="flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-0">
+              <div className="flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 sm:mb-8 px-8 xs:px-6 sm:px-0">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full xs:w-full sm:w-auto min-h-[44px] rounded-lg"
+                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full xs:w-full sm:w-auto min-h-[44px] rounded-lg max-w-[calc(100vw-100px)] xs:max-w-[calc(100vw-80px)] sm:max-w-none"
                   onClick={() => {
                     window.location.href = heroSlides[currentSlide].buttonLink;
                   }}
@@ -186,7 +186,7 @@ export default function HeroSlider() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center xs:justify-start gap-3 xs:gap-4 sm:gap-6 text-gray-300 px-2 xs:px-0">
+              <div className="flex items-center justify-center xs:justify-start gap-3 xs:gap-4 sm:gap-6 text-gray-300 px-8 xs:px-6 sm:px-0">
                 <div className="flex items-center gap-1 sm:gap-2">
                   <Shield className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span className="text-xs sm:text-sm">Secure Shopping</span>
@@ -218,19 +218,19 @@ export default function HeroSlider() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+        className="absolute left-1 xs:left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
         onClick={prevSlide}
       >
-        <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+        <ChevronLeft className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
       </Button>
 
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+        className="absolute right-1 xs:right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
         onClick={nextSlide}
       >
-        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+        <ChevronRight className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
       </Button>
 
       
