@@ -55,31 +55,6 @@ export default function Home() {
         <HeroSlider />
       </div>
 
-      {/* Brand Banners Section */}
-      <div className="w-full h-16 md:h-20 lg:h-24 overflow-hidden bg-white">
-        <div className="flex h-full">
-          {/* Planetsera Spices Banner */}
-          <div className="w-1/2 h-full relative overflow-hidden group cursor-pointer">
-            <img
-              src="/attached_assets/poster2_1751570115532.jpeg"
-              alt="Planetsera Spices - अपना स्वाद, अपनों के साथ"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
-          </div>
-          
-          {/* Ramaera Electronics Banner */}
-          <div className="w-1/2 h-full relative overflow-hidden group cursor-pointer">
-            <img
-              src="/attached_assets/poster3_1751570115565.jpg"
-              alt="Ramaera Electronics - Innovation for Every Need"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
-          </div>
-        </div>
-      </div>
-
       
 
       
