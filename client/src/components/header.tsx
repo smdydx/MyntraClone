@@ -1507,7 +1507,6 @@ export default function Header() {
                                   className="w-full bg-hednor-gold text-hednor-dark hover:bg-yellow-400 font-medium py-3"
                                   onClick={() => {
                                     setIsMobileMenuOpen(false);
-                                    setIsLogin(false);
                                     setIsAuthModalOpen(true);
                                   }}
                                 >
@@ -1767,15 +1766,32 @@ export default function Header() {
                     </Button>
                   </Link>
                 ) : (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsAuthModalOpen(true)}
-                    className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
-                  >
-                    <User className="h-4 w-4" />
-                    <span className="text-xs font-medium">Profile</span>
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setIsLogin(true);
+                        setIsAuthModalOpen(true);
+                      }}
+                      className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="text-xs font-medium">Login</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setIsLogin(false);
+                        setIsAuthModalOpen(true);
+                      }}
+                      className="flex items-center text-white hover:text-hednor-gold cursor-pointer transition-colors p-2 space-x-1"
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="text-xs font-medium">Register</span>
+                    </Button>
+                  </div>
                 )}
 
                 {/* Wishlist */}
@@ -1831,7 +1847,8 @@ export default function Header() {
       {/* Auth Modal */}
       <AuthModal 
         isOpen={isAuthModalOpen} 
-        onClose={() => setIsAuthModalOpen(false)} 
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={isLogin ? 'login' : 'register'}
       />
     </>
   );
