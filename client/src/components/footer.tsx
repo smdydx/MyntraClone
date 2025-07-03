@@ -33,44 +33,41 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="py-16">
+      <div className="py-8 lg:py-12">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
 
             {/* Brand Section */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="flex items-center space-x-3">
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center justify-center lg:justify-start">
                 <img 
                   src={hednorLogoPath} 
                   alt="Hednor Logo" 
                   className="w-12 h-12 object-contain"
                 />
-                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  Hednor
-                </span>
               </div>
-              <p className="text-gray-400 leading-relaxed max-w-md">
+              <p className="text-gray-400 leading-relaxed max-w-md text-center lg:text-left">
                 Redefining fashion with cutting-edge designs and premium quality. Your style, our passion.
               </p>
 
               {/* Contact Info */}
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3 text-gray-300">
+              <div className="space-y-2">
+                <div className="flex items-center justify-center lg:justify-start space-x-3 text-gray-300">
                   <Phone className="w-4 h-4 text-blue-400" />
                   <span className="text-sm">+91 12345 67890</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-300">
+                <div className="flex items-center justify-center lg:justify-start space-x-3 text-gray-300">
                   <Mail className="w-4 h-4 text-blue-400" />
                   <span className="text-sm">support@hednor.com</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-300">
+                <div className="flex items-center justify-center lg:justify-start space-x-3 text-gray-300">
                   <MapPin className="w-4 h-4 text-blue-400" />
                   <span className="text-sm">Mumbai, India</span>
                 </div>
               </div>
 
               {/* Social Media */}
-              <div className="flex space-x-4">
+              <div className="flex justify-center lg:justify-start space-x-3">
                 <div className="p-2 bg-gray-800/50 hover:bg-blue-600 rounded-lg transition-colors cursor-pointer group">
                   <Facebook className="w-5 h-5 text-gray-400 group-hover:text-white" />
                 </div>
@@ -87,9 +84,9 @@ export default function Footer() {
             </div>
 
             {/* Quick Links */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Quick Links</h3>
-              <div className="grid grid-cols-1 gap-3">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center lg:text-left">Quick Links</h3>
+              <div className="grid grid-cols-1 gap-2">
                 <Link href="/about" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">About Us</Link>
                 <Link href="/contact" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Contact</Link>
                 <Link href="/faq" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">FAQ</Link>
@@ -99,9 +96,9 @@ export default function Footer() {
             </div>
 
             {/* Categories */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Categories</h3>
-              <div className="grid grid-cols-1 gap-3">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center lg:text-left">Categories</h3>
+              <div className="grid grid-cols-1 gap-2">
                 <Link href="/products?category=men" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Men's Fashion</Link>
                 <Link href="/products?category=women" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Women's Fashion</Link>
                 <Link href="/products?category=kids" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Kids' Fashion</Link>
@@ -111,9 +108,9 @@ export default function Footer() {
             </div>
 
             {/* Customer Service */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-3">Customer Service</h3>
-              <div className="grid grid-cols-1 gap-3">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center lg:text-left">Customer Service</h3>
+              <div className="grid grid-cols-1 gap-2">
                 <Link href="/order-tracking" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Track Orders</Link>
                 <Link href="/shipping" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Shipping Info</Link>
                 <Link href="/returns" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Returns & Exchanges</Link>
