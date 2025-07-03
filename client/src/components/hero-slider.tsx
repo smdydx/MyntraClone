@@ -22,16 +22,6 @@ const heroSlides = [
     stats: { value: "50K+", label: "Happy Customers" }
   },
   {
-    id: 2,
-    title: "Sustainable Luxury",
-    subtitle: "Conscious Fashion Forward",
-    description: "Where sustainability meets style - premium fashion with environmental responsibility",
-    buttonText: "Shop Sustainable",
-    buttonLink: "/products?category=sustainable",
-    backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center",
-    stats: { value: "100%", label: "Authentic Products" }
-  },
-  {
     id: 3,
     title: "Ramaera Electronics",
     subtitle: "Innovation for Every Need",
