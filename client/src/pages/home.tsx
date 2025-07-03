@@ -718,6 +718,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Newsletter */}
+      <section className="bg-hednor-dark py-12">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="font-poppins font-bold text-2xl md:text-3xl text-white mb-4">
+            Stay in the Loop
+          </h2>
+          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            Subscribe to our newsletter and be the first to know about new collections, exclusive deals, and fashion trends.
+          </p>
+          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 max-w-md mx-auto">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full md:flex-1 px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-hednor-gold focus:border-transparent"
+            />
+            <Button className="w-full md:w-auto bg-hednor-gold text-hednor-dark px-8 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
+              Subscribe
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Recently Viewed */}
       <RecentlyViewed />
 
