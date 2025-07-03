@@ -201,38 +201,7 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Myntra-Style Navigation Controls */}
-      <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
-          {/* Myntra-Style Slide Indicators */}
-          <div className="flex items-center gap-2 sm:gap-3 bg-black/30 backdrop-blur-md rounded-full px-3 sm:px-4 py-2 sm:py-3 border border-white/20">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={cn(
-                  "relative rounded-full transition-all duration-300 ease-out group",
-                  index === currentSlide 
-                    ? "w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 shadow-lg shadow-red-500/40 scale-110" 
-                    : "w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white/50 hover:bg-white/80 hover:scale-105"
-                )}
-              >
-                {index === currentSlide && (
-                  <>
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 rounded-full bg-red-500/30 animate-ping" />
-                    {/* Inner shine effect */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-red-400 to-red-600" />
-                  </>
-                )}
-                <span className="sr-only">Go to slide {index + 1}</span>
-              </button>
-            ))}
-          </div>
-
-          
-        </div>
-      </div>
+      
 
       {/* Slide Counter */}
       <div className="absolute bottom-6 md:bottom-12 right-6 md:right-12 z-30">
