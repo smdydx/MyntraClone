@@ -1328,6 +1328,47 @@
     transform: translateZ(0);
   }
 
+  /* Mobile Footer Improvements */
+  @media (max-width: 640px) {
+    footer {
+      padding-bottom: 80px !important; /* Account for mobile navigation */
+    }
+    
+    footer .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    footer h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    
+    footer ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    footer ul li a {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      padding: 0.25rem 0;
+      display: block;
+    }
+    
+    /* Better spacing for mobile */
+    footer .grid {
+      gap: 1rem;
+    }
+    
+    /* Touch-friendly links */
+    footer a {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
 /* Responsive Modal Styles */
 @media (max-width: 640px) {
   .dialog-content {

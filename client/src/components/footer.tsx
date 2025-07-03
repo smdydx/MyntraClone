@@ -8,18 +8,18 @@ export default function Footer() {
       <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
         <div className="space-y-6 sm:space-y-8 mb-4 sm:mb-6">
           {/* Company Info */}
-          <div className="text-center lg:text-left">
-            <div className="flex items-center justify-center lg:justify-start space-x-2 mb-3 sm:mb-4">
+          <div className="text-left">
+            <div className="flex items-center justify-start space-x-2 mb-3 sm:mb-4">
               <img 
                 src={hednorLogoPath} 
                 alt="Hednor Logo" 
-                className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain"
               />
             </div>
-            <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 max-w-md mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 max-w-md leading-relaxed">
               Your trusted fashion destination for the latest trends and timeless styles.
             </p>
-            <div className="flex justify-center lg:justify-start space-x-3 sm:space-x-4">
+            <div className="flex justify-start space-x-3 sm:space-x-4"></div>
               <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
               <Twitter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
               <Instagram className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 hover:text-hednor-gold cursor-pointer transition-colors touch-target" />
@@ -91,7 +91,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-300 pt-4 sm:pt-6 pb-3 sm:pb-4 text-center">
+        <div className="border-t border-gray-300 pt-4 sm:pt-6 pb-3 sm:pb-4 text-left sm:text-center">
           <p className="text-gray-600 text-xs sm:text-sm leading-relaxed px-2">
             © 2025 Hednor. All rights reserved.<br className="sm:hidden" />
             <span className="hidden sm:inline"> | </span>Made with ❤️ for fashion lovers
