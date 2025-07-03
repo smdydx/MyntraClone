@@ -147,6 +147,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       let sortOption: any = {};
+
+
+// Token verification endpoint
+app.get("/api/auth/verify", authenticateToken, async (req, res) => {
+  try {
+    res.json({ 
+      success: true, 
+      message: "Token is valid",
+      user: req.user 
+    });
+  } catch (error) {
+    console.error("Token verification error:", error);
+    res.status(401).json({ 
+      success: false, 
+      message: "Token verification failed" 
+    });
+  }
+});
+
       switch (sortBy) {
         case 'price-low-high':
           sortOption = { price: 1 };

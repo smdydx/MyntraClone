@@ -482,13 +482,49 @@ export default function Checkout() {
     }
   };
 
-  const handlePayment = () => {
-    if (!isAuthenticated || !localStorage.getItem("token")) {
+  const refreshTokenIfNeeded = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+      const response = await fetch("/api/auth/verify", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        // Token expired, try to refresh or redirect to login
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        toast({
+          title: "Session Expired",
+          description: "Please sign in again to continue.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Token verification failed:", error);
+      return false;
+    }
+  };
+
+  const handlePayment = async () => {
+    if (!isAuthenticated) {
       toast({
         title: "Authentication Required",
         description: "Please sign in to continue with payment.",
         variant: "destructive"
       });
+      return;
+    }
+
+    // Verify token before proceeding
+    const isValidToken = await refreshTokenIfNeeded();
+    if (!isValidToken) {
       return;
     }
 
@@ -689,14 +725,88 @@ export default function Checkout() {
                         <Label htmlFor="razorpay" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <CreditCard className="w-5 h-5 text-blue-600 mr-3" />
+                              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                                <CreditCard className="w-5 h-5 text-white" />
+                              </div>
                               <div>
                                 <div className="font-medium text-gray-900">Credit/Debit Card</div>
-                                <div className="text-sm text-gray-500">Visa, MasterCard, RuPay</div>
+                                <div className="text-sm text-gray-500">Visa, MasterCard, RuPay, AMEX</div>
                               </div>
                             </div>
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                              <Shield className="w-3 h-3 mr-1" />
                               Secure
+                            </Badge>
+                          </div>
+                        </Label>
+                      </div>
+                    </div>
+
+                    {/* Google Pay */}
+                    <div className="border border-gray-200 rounded-lg p-4 hover:border-hednor-gold transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="gpay" id="gpay" className="text-hednor-gold" />
+                        <Label htmlFor="gpay" className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                </svg>
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">Google Pay</div>
+                                <div className="text-sm text-gray-500">Quick & secure payment</div>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                              Instant
+                            </Badge>
+                          </div>
+                        </Label>
+                      </div>
+                    </div>
+
+                    {/* PhonePe */}
+                    <div className="border border-gray-200 rounded-lg p-4 hover:border-hednor-gold transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="phonepe" id="phonepe" className="text-hednor-gold" />
+                        <Label htmlFor="phonepe" className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg flex items-center justify-center mr-3">
+                                <Smartphone className="w-5 h-5 text-white" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">PhonePe</div>
+                                <div className="text-sm text-gray-500">Pay via PhonePe wallet</div>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                              Fast
+                            </Badge>
+                          </div>
+                        </Label>
+                      </div>
+                    </div>
+
+                    {/* Paytm */}
+                    <div className="border border-gray-200 rounded-lg p-4 hover:border-hednor-gold transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="paytm" id="paytm" className="text-hednor-gold" />
+                        <Label htmlFor="paytm" className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
+                                <Wallet className="w-5 h-5 text-white" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900">Paytm</div>
+                                <div className="text-sm text-gray-500">Pay via Paytm wallet</div>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200">
+                              Wallet
                             </Badge>
                           </div>
                         </Label>
@@ -710,20 +820,24 @@ export default function Checkout() {
                         <Label htmlFor="upi" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <Smartphone className="w-5 h-5 text-orange-600 mr-3" />
+                              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                                </svg>
+                              </div>
                               <div>
                                 <div className="font-medium text-gray-900">UPI</div>
                                 <div className="text-sm text-gray-500">Pay using UPI ID</div>
                               </div>
                             </div>
-                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
                               Instant
                             </Badge>
                           </div>
                         </Label>
                       </div>
                       {paymentMethod === "upi" && (
-                        <div className="mt-3 pl-8">
+                        <div className="mt-3 pl-13">
                           <Input
                             placeholder="Enter your UPI ID (e.g., yourname@paytm)"
                             value={upiId}
@@ -741,13 +855,16 @@ export default function Checkout() {
                         <Label htmlFor="cod" className="flex-1 cursor-pointer">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                              <Banknote className="w-5 h-5 text-green-600 mr-3" />
+                              <div className="w-10 h-10 bg-gradient-to-r from-green-600 to-green-700 rounded-lg flex items-center justify-center mr-3">
+                                <Banknote className="w-5 h-5 text-white" />
+                              </div>
                               <div>
                                 <div className="font-medium text-gray-900">Cash on Delivery</div>
                                 <div className="text-sm text-gray-500">Pay when you receive</div>
                               </div>
                             </div>
                             <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                              <Truck className="w-3 h-3 mr-1" />
                               +₹40 COD Fee
                             </Badge>
                           </div>
