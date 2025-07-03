@@ -218,24 +218,29 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Navigation Controls - Redesigned */}
-      <div className="absolute bottom-6 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30">
+      {/* Myntra-Style Navigation Controls */}
+      <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <div className="flex items-center gap-4 md:gap-6">
-          {/* Modern Slide Indicators */}
-          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-2 md:p-3">
+          {/* Myntra-Style Slide Indicators */}
+          <div className="flex items-center gap-3 bg-black/30 backdrop-blur-md rounded-full px-4 py-3 border border-white/20">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={cn(
-                  "relative overflow-hidden rounded-full transition-all duration-500 group",
+                  "relative rounded-full transition-all duration-300 ease-out group",
                   index === currentSlide 
-                    ? "w-10 md:w-12 h-3 md:h-4 bg-gradient-to-r from-hednor-gold to-yellow-400 shadow-lg shadow-hednor-gold/30" 
-                    : "w-3 md:w-4 h-3 md:h-4 bg-white/30 hover:bg-white/50 hover:scale-110"
+                    ? "w-3 h-3 bg-red-500 shadow-lg shadow-red-500/40 scale-110" 
+                    : "w-2.5 h-2.5 bg-white/50 hover:bg-white/80 hover:scale-105"
                 )}
               >
                 {index === currentSlide && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+                  <>
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 rounded-full bg-red-500/30 animate-ping" />
+                    {/* Inner shine effect */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-red-400 to-red-600" />
+                  </>
                 )}
                 <span className="sr-only">Go to slide {index + 1}</span>
               </button>

@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Enhanced pagination dots animations */
+/* Myntra-style navigation dots animations */
+@keyframes myntraGlow {
+  0%, 100% { 
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4), 0 0 16px rgba(239, 68, 68, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 0 0 24px rgba(239, 68, 68, 0.3);
+  }
+}
+
+@keyframes myntraPulse {
+  0% { 
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: scale(1.3);
+    opacity: 0.3;
+  }
+  100% { 
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
 @keyframes slideProgress {
   0% { 
     width: 0%; 
@@ -17,31 +41,16 @@
   }
 }
 
-@keyframes dotPulse {
-  0%, 100% { 
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% { 
-    transform: scale(1.1);
-    opacity: 1;
-  }
-}
-
-/* Custom pagination dot styles */
-.pagination-dot-active {
-  animation: dotPulse 2s ease-in-out infinite;
-}
-
-.pagination-dot-container {
-  backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.pagination-dot-container:hover {
+/* Enhanced navigation container */
+.myntra-nav-container {
   background: rgba(0, 0, 0, 0.25);
-  border-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.myntra-nav-container:hover {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Enhanced Mobile responsive fixes for all devices */
