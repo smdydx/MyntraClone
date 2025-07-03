@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import CategoryCard from "@/components/category-card";
 import HeroSlider from "@/components/hero-slider";
+import BrandShowcase from "@/components/brand-showcase";
 import TrendingBrands from "@/components/trending-brands";
 import type { Product, Category } from "@shared/schema";
 import NewsletterPopup from "@/components/newsletter-popup";
@@ -52,6 +53,11 @@ export default function Home() {
       {/* Hero Slider */}
       <div className="w-full overflow-hidden">
         <HeroSlider />
+      </div>
+
+      {/* Brand Showcase */}
+      <div className="w-full overflow-hidden">
+        <BrandShowcase />
       </div>
 
       

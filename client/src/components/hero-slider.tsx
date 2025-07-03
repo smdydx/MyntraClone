@@ -20,26 +20,7 @@ const heroSlides = [
     backgroundVideo: heroVideoPath,
     stats: { value: "50K+", label: "Happy Customers" }
   },
-  {
-    id: 2,
-    title: "Planet Era Spices",
-    subtitle: "अपना स्वाद, अपनों के साथ",
-    description: "Discover authentic Indian spices and masalas for every culinary adventure",
-    buttonText: "Shop Spices",
-    buttonLink: "/products?category=spices",
-    backgroundImage: poster1,
-    stats: { value: "100%", label: "Pure & Natural" }
-  },
-  {
-    id: 3,
-    title: "Ramaera Electronics",
-    subtitle: "Innovation for Every Need",
-    description: "Cutting-edge electronics and appliances for modern living",
-    buttonText: "Explore Electronics",
-    buttonLink: "/products?category=electronics",
-    backgroundImage: poster2,
-    stats: { value: "24/7", label: "Customer Support" }
-  },
+  
   {
     id: 4,
     title: "Sustainable Luxury",
