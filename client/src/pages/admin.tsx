@@ -1210,7 +1210,7 @@ export default function AdminDashboard() {
                     icon: <FileText className="h-5 w-5" />,
                     label: "Categories",
                     isActive: activeTab === "categories",
-                    onClick={() => handleMainNavClick("categories")},
+                    onClick: () => handleMainNavClick("categories")},
                     badge: categories.length,
                     submenu: [
                       {
@@ -1291,7 +1291,7 @@ export default function AdminDashboard() {
                     icon: <Users className="h-5 w-5" />,
                     label: "Customers",
                     isActive: activeTab === "customers",
-                    onClick: () => handleMainNavClick("users")},
+                    onClick: () => handleMainNavClick("users") ,
                     badge: users.length,
                     submenu: [
                       {
@@ -1336,7 +1336,7 @@ export default function AdminDashboard() {
                     icon: <BarChart3 className="h-5 w-5" />,
                     label: "Analytics",
                     isActive: activeTab === "analytics",
-                    onClick: () => handleMainNavClick("analytics")},
+                    onClick: () => handleMainNavClick("analytics") ,
                     submenu: [
                       {
                         icon: <TrendingUp className="h-4 w-4" />,
@@ -1383,7 +1383,7 @@ export default function AdminDashboard() {
                     icon: <Settings className="h-5 w-5" />,
                     label: "Settings",
                     isActive: activeTab === "settings",
-                    onClick: () => handleMainNavClick("settings")},
+                    onClick: () => handleMainNavClick("settings") ,
                     submenu: [
                       {
                         icon: <Globe className="h-4 w-4" />,
