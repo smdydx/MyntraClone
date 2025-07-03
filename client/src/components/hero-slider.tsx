@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shield, Award } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Star, Shield, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import heroVideoPath from "/src/assets/hero-video.mp4";
@@ -42,7 +42,6 @@ const heroSlides = [
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -72,17 +71,7 @@ export default function HeroSlider() {
     setTimeout(() => setIsAutoPlaying(true), 15000);
   };
 
-  const toggleVideo = () => {
-    setIsVideoPlaying(!isVideoPlaying);
-    const video = document.querySelector('video');
-    if (video) {
-      if (isVideoPlaying) {
-        video.pause();
-      } else {
-        video.play();
-      }
-    }
-  };
+  
 
   return (
     <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -100,7 +89,7 @@ export default function HeroSlider() {
           {slide.isVideo ? (
             <video
               className="absolute inset-0 w-full h-full object-cover object-center"
-              autoPlay={isVideoPlaying}
+              autoPlay
               muted
               loop
               playsInline
@@ -241,26 +230,7 @@ export default function HeroSlider() {
             ))}
           </div>
 
-          {/* Enhanced Video Controls */}
-          {heroSlides[currentSlide].isVideo && (
-            <div className="flex items-center gap-1 sm:gap-2 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-1.5 sm:p-2 md:p-3">
-              <button
-                onClick={toggleVideo}
-                className="relative p-1.5 sm:p-2 md:p-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl transition-all duration-300 group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-hednor-gold/20 to-yellow-400/20 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                {isVideoPlaying ? (
-                  <Pause className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white relative z-10" />
-                ) : (
-                  <Play className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white relative z-10" />
-                )}
-              </button>
-              <div className="w-px h-4 sm:h-6 bg-white/20" />
-              <div className="text-xs sm:text-sm text-white/70 font-medium">
-                {isVideoPlaying ? 'Playing' : 'Paused'}
-              </div>
-            </div>
-          )}
+          
         </div>
       </div>
 

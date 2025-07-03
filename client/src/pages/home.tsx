@@ -62,7 +62,7 @@ export default function Home() {
       
 
       {/* Promotional Ticker */}
-      <div className="text-hednor-dark py-3 sm:py-4 overflow-hidden" style={{ backgroundColor: "rgb(200, 201, 152)" }}</div>
+      <div className="text-hednor-dark py-3 sm:py-4 overflow-hidden" style={{ backgroundColor: "rgb(200, 201, 152)" }}>
         <div className="relative overflow-hidden">
           <div className="flex space-x-8 sm:space-x-12 md:space-x-16 text-sm sm:text-base font-semibold whitespace-nowrap" style={{ animation: 'scroll 60s linear infinite' }}>
             <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
