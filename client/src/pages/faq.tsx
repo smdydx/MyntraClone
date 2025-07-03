@@ -65,14 +65,21 @@ export default function FAQ() {
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="mr-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-800">Frequently Asked Questions</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Link href="/">
+                <Button variant="ghost" size="sm" className="mr-4">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Button>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-800">Frequently Asked Questions</h1>
+            </div>
+            <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+              <Link href="/" className="hover:text-hednor-gold">Home</Link>
+              <span>/</span>
+              <span>FAQ</span>
+            </div>
           </div>
         </div>
       </div>

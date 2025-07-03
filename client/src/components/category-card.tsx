@@ -7,8 +7,10 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({ category }: CategoryCardProps) {
+  const categorySlug = category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  
   return (
-    <Link href={`/products?category=${category.slug || category.name.toLowerCase()}`}>
+    <Link href={`/products?category=${encodeURIComponent(categorySlug)}`}>
       <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] border border-gray-200/50">
         {/* Main Image Container with proper aspect ratio */}
         <div className="relative aspect-square overflow-hidden image-container">
