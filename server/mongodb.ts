@@ -223,9 +223,25 @@ export class CartService {
   }
 
   async getCartItems(userId: string): Promise<CartItem[]> {
-    return await this.collection
-      .find({ userId: new ObjectId(userId) })
-      .toArray();
+    try {
+      return await this.collection
+        .find({ userId: new ObjectId(userId) })
+        .toArray();
+    } catch (error) {
+      console.error('Error getting cart items:', error);
+      return [];
+    }
+  }
+
+  async getGuestCartItems(sessionId: string): Promise<CartItem[]> {
+    try {
+      return await this.collection
+        .find({ sessionId: sessionId })
+        .toArray();
+    } catch (error) {
+      console.error('Error getting guest cart items:', error);
+      return [];
+    }
   }
 
   async addToCart(
@@ -432,30 +448,75 @@ export class ProductService {
     this.collection = db.collection<Product>("products");
   }
 
-  async getProducts(filters: any = {}): Promise<Product[]> {
-    const query: any = {};
+  async getProducts(filters: any = {}, options: any = {}): Promise<Product[]> {
+    try {
+      const query: any = {};
 
-    if (filters.categoryId) {
-      query.categoryId = new ObjectId(filters.categoryId);
+      if (filters.categoryId) {
+        query.categoryId = new ObjectId(filters.categoryId);
+      }
+
+      if (filters.category) {
+        query.categoryId = new ObjectId(filters.category);
+      }
+
+      if (filters.brand) {
+        query.brand = { $regex: filters.brand, $options: "i" };
+      }
+
+      if (filters.featured || filters.isFeatured) {
+        query.isFeatured = true;
+      }
+
+      if (filters.onSale || filters.isOnSale) {
+        query.isOnSale = true;
+      }
+
+      if (filters.inStock !== undefined) {
+        query.inStock = filters.inStock;
+      }
+
+      if (filters.price) {
+        query.price = {};
+        if (filters.price.$gte !== undefined) {
+          query.price.$gte = filters.price.$gte;
+        }
+        if (filters.price.$lte !== undefined) {
+          query.price.$lte = filters.price.$lte;
+        }
+      }
+
+      if (filters.$or) {
+        query.$or = filters.$or;
+      }
+
+      if (filters.search) {
+        query.$or = [
+          { name: { $regex: filters.search, $options: "i" } },
+          { description: { $regex: filters.search, $options: "i" } },
+          { brand: { $regex: filters.search, $options: "i" } },
+        ];
+      }
+
+      let cursor = this.collection.find(query);
+
+      if (options.sort) {
+        cursor = cursor.sort(options.sort);
+      }
+
+      if (options.skip) {
+        cursor = cursor.skip(options.skip);
+      }
+
+      if (options.limit) {
+        cursor = cursor.limit(options.limit);
+      }
+
+      return await cursor.toArray();
+    } catch (error) {
+      console.error('Error getting products:', error);
+      return [];
     }
-
-    if (filters.featured) {
-      query.isFeatured = true;
-    }
-
-    if (filters.onSale) {
-      query.isOnSale = true;
-    }
-
-    if (filters.search) {
-      query.$or = [
-        { name: { $regex: filters.search, $options: "i" } },
-        { description: { $regex: filters.search, $options: "i" } },
-        { brand: { $regex: filters.search, $options: "i" } },
-      ];
-    }
-
-    return await this.collection.find(query).toArray();
   }
 
   async getProductById(id: string): Promise<Product | null> {
@@ -567,25 +628,44 @@ export class ProductService {
   }
 
   async getFilteredProducts(filter = {}, options: any = {}) {
-    let query = this.collection.find(filter);
+    try {
+      let query = this.collection.find(filter);
 
-    if (options.sort) {
-      query = query.sort(options.sort);
+      if (options.sort) {
+        query = query.sort(options.sort);
+      }
+
+      if (options.skip) {
+        query = query.skip(options.skip);
+      }
+
+      if (options.limit) {
+        query = query.limit(options.limit);
+      }
+
+      return await query.toArray();
+    } catch (error) {
+      console.error('Error getting filtered products:', error);
+      return [];
     }
-
-    if (options.skip) {
-      query = query.skip(options.skip);
-    }
-
-    if (options.limit) {
-      query = query.limit(options.limit);
-    }
-
-    return await query.toArray();
   }
 
   async getProductCount(filter = {}) {
-    return await this.collection.countDocuments(filter);
+    try {
+      return await this.collection.countDocuments(filter);
+    } catch (error) {
+      console.error('Error getting product count:', error);
+      return 0;
+    }
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    try {
+      return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+    } catch (error) {
+      console.error('Error getting all products:', error);
+      return [];
+    }
   }
 }
 
@@ -760,7 +840,12 @@ export class OrderService {
   }
 
   async getAllOrders(): Promise<Order[]> {
-    return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+    try {
+      return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+    } catch (error) {
+      console.error('Error getting all orders:', error);
+      return [];
+    }
   }
 
   async updateOrderStatus(

@@ -437,28 +437,70 @@ export default function AdminDashboard() {
     },
     retry: 3,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: isLoggedIn,
   });
+
+  // Show loading state for critical data
+  if (isLoggedIn && (statsLoading || productsLoading || categoriesLoading)) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600 dark:text-gray-300">Loading Admin Dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if any critical data failed to load
+  if (isLoggedIn && (statsError || productsError || categoriesError)) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Failed to Load Data</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">There was an error loading the admin dashboard.</p>
+          <Button onClick={() => queryClient.invalidateQueries()}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   // Fetch products
   const { data: products = [], isLoading: productsLoading, error: productsError } = useQuery<Product[]>({
     queryKey: ["admin", "products"],
     queryFn: async () => {
-      const response = await fetch("/api/products");
+      const response = await fetch("/api/admin/products", {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'x-admin-request': 'true'
+        }
+      });
       if (!response.ok) throw new Error("Failed to fetch products");
-      return response.json();
+      const data = await response.json();
+      return Array.isArray(data) ? data : data.products || [];
     },
     retry: 2,
+    enabled: isLoggedIn,
   });
 
   // Fetch categories
   const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useQuery<Category[]>({
     queryKey: ["admin", "categories"],
     queryFn: async () => {
-      const response = await fetch("/api/categories");
+      const response = await fetch("/api/admin/categories", {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
     },
     retry: 2,
+    enabled: isLoggedIn,
   });
 
   // Fetch site settings

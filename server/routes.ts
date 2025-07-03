@@ -126,8 +126,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const filter: any = {};
 
-      if (category) filter.category = category;
-      if (brand) filter.brand = brand;
+      if (category) {
+        // Handle both category ID and category name
+        if (ObjectId.isValid(category as string)) {
+          filter.categoryId = new ObjectId(category as string);
+        } else {
+          // Find category by name and get its ID
+          const categoryDoc = await categoryService.getCategoryBySlug(category as string);
+          if (categoryDoc) {
+            filter.categoryId = categoryDoc._id;
+          }
+        }
+      }
+      if (brand) filter.brand = { $regex: brand, $options: 'i' };
       if (inStock === 'true') filter.inStock = true;
       if (featured === 'true') filter.isFeatured = true;
       if (sale === 'true') filter.isOnSale = true;
@@ -197,26 +208,36 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
       // Ensure products is always an array
       const productsArray = Array.isArray(products) ? products : [];
 
-      res.json({
-        products: productsArray,
-        pagination: {
-          page: parseInt(page as string),
-          limit: parseInt(limit as string),
-          total: total || 0,
-          pages: Math.ceil((total || 0) / parseInt(limit as string))
-        }
-      });
+      // For admin dashboard, return products array directly
+      if (req.headers['x-admin-request'] === 'true') {
+        res.json(productsArray);
+      } else {
+        // For frontend, return with pagination
+        res.json({
+          products: productsArray,
+          pagination: {
+            page: parseInt(page as string),
+            limit: parseInt(limit as string),
+            total: total || 0,
+            pages: Math.ceil((total || 0) / parseInt(limit as string))
+          }
+        });
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
-      res.json({
-        products: [],
-        pagination: {
-          page: 1,
-          limit: 20,
-          total: 0,
-          pages: 0
-        }
-      });
+      if (req.headers['x-admin-request'] === 'true') {
+        res.json([]);
+      } else {
+        res.json({
+          products: [],
+          pagination: {
+            page: 1,
+            limit: 20,
+            total: 0,
+            pages: 0
+          }
+        });
+      }
     }
   });
 
@@ -363,6 +384,17 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
     }
   });
 
+  // Admin endpoint to get all products
+  app.get("/api/admin/products", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const products = await productService.getAllProducts();
+      res.json(products);
+    } catch (error) {
+      console.error('Admin products fetch error:', error);
+      res.status(500).json({ message: "Failed to fetch products", error: error.message });
+    }
+  });
+
   // Admin routes for products
   app.post("/api/admin/products", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
@@ -454,6 +486,17 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
     } catch (error) {
       console.error('Admin login error:', error);
       res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // Admin endpoint to get all categories
+  app.get("/api/admin/categories", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const categories = await categoryService.getCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error('Admin categories fetch error:', error);
+      res.status(500).json({ message: "Failed to fetch categories", error: error.message });
     }
   });
 
@@ -705,11 +748,11 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
       // Calculate real analytics from database
       const totalUsers = await userService.getUserCount() || 0;
       const allOrders = await orderService.getAllOrders() || [];
-      const totalProducts = await productService.getProductCount() || 0;
+      const totalProducts = await productService.getProductCount({}) || 0;
 
       const totalOrders = Array.isArray(allOrders) ? allOrders.length : 0;
       const totalRevenue = Array.isArray(allOrders) ? allOrders.reduce((sum, order) => {
-        const amount = order.finalAmount || order.total || 0;
+        const amount = order.finalAmount || order.totalAmount || order.total || 0;
         return sum + (typeof amount === 'number' ? amount : 0);
       }, 0) : 0;
 
@@ -725,7 +768,7 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
       
       const newOrdersToday = ordersToday.length;
       const revenueToday = ordersToday.reduce((sum, order) => {
-        const amount = order.finalAmount || order.total || 0;
+        const amount = order.finalAmount || order.totalAmount || order.total || 0;
         return sum + (typeof amount === 'number' ? amount : 0);
       }, 0);
 
