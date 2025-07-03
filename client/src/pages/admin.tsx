@@ -913,7 +913,7 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'processing': return ''bg-yellow-100 text-yellow-800';
+      case 'processing': return 'bg-yellow-100 text-yellow-800';
       case 'shipped': return 'bg-blue-100 text-blue-800';
       case 'delivered': return 'bg-green-100 text-green-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
@@ -2311,6 +2311,197 @@ export default function AdminDashboard() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Edit Product Dialog */}
+                <Dialog open={!!editingProduct} onOpenChange={() => setEditingProduct(null)}>
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Edit Product</DialogTitle>
+                      <DialogDescription>
+                        Update the product information below.
+                      </DialogDescription>
+                    </DialogHeader>
+                    {editingProduct && (
+                      <form onSubmit={handleProductSubmit} className="space-y-6">
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Basic Information</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="edit-name">Product Name *</Label>
+                              <Input 
+                                id="edit-name" 
+                                name="name" 
+                                defaultValue={editingProduct.name}
+                                required 
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="edit-slug">URL Slug *</Label>
+                              <Input 
+                                id="edit-slug" 
+                                name="slug" 
+                                defaultValue={editingProduct.slug}
+                                required 
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor="edit-description">Description</Label>
+                            <Textarea 
+                              id="edit-description" 
+                              name="description" 
+                              defaultValue={editingProduct.description}
+                              rows={4}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Category & Brand</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="edit-brand">Brand *</Label>
+                              <Input 
+                                id="edit-brand" 
+                                name="brand" 
+                                defaultValue={editingProduct.brand}
+                                required 
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="edit-categoryId">Category</Label>
+                              <Select name="categoryId" defaultValue={editingProduct.categoryId}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Choose category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {categories.map((category) => (
+                                    <SelectItem key={category._id} value={category._id}>
+                                      {category.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Pricing</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="edit-price">Regular Price (₹) *</Label>
+                              <Input 
+                                id="edit-price" 
+                                name="price" 
+                                type="number" 
+                                step="0.01"
+                                defaultValue={editingProduct.price}
+                                required 
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="edit-salePrice">Sale Price (₹)</Label>
+                              <Input 
+                                id="edit-salePrice" 
+                                name="salePrice" 
+                                type="number" 
+                                step="0.01"
+                                defaultValue={editingProduct.salePrice || ""}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Images</h3>
+                          <div>
+                            <Label htmlFor="edit-images">Image URLs *</Label>
+                            <Textarea 
+                              id="edit-images" 
+                              name="images" 
+                              defaultValue={editingProduct.images.join(", ")}
+                              rows={3}
+                              required 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Product Details</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="edit-sizes">Sizes</Label>
+                              <Input 
+                                id="edit-sizes" 
+                                name="sizes" 
+                                defaultValue={editingProduct.sizes?.join(", ") || ""}
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="edit-colors">Colors</Label>
+                              <Input 
+                                id="edit-colors" 
+                                name="colors" 
+                                defaultValue={editingProduct.colors?.join(", ") || ""}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor="edit-tags">Tags</Label>
+                            <Input 
+                              id="edit-tags" 
+                              name="tags" 
+                              defaultValue={editingProduct.tags?.join(", ") || ""}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Inventory</h3>
+                          <div>
+                            <Label htmlFor="edit-stockQuantity">Stock Quantity *</Label>
+                            <Input 
+                              id="edit-stockQuantity" 
+                              name="stockQuantity" 
+                              type="number"
+                              defaultValue={editingProduct.stockQuantity}
+                              required 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Settings</h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <Label htmlFor="edit-inStock">In Stock</Label>
+                              <Switch id="edit-inStock" name="inStock" defaultChecked={editingProduct.inStock} />
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <Label htmlFor="edit-isFeatured">Featured</Label>
+                              <Switch id="edit-isFeatured" name="isFeatured" defaultChecked={editingProduct.isFeatured} />
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <Label htmlFor="edit-isOnSale">On Sale</Label>
+                              <Switch id="edit-isOnSale" name="isOnSale" defaultChecked={editingProduct.isOnSale} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t">
+                          <Button 
+                            type="submit" 
+                            disabled={updateProductMutation.isPending} 
+                            className="w-full"
+                          >
+                            {updateProductMutation.isPending ? "Updating..." : "Update Product"}
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
 
@@ -2582,6 +2773,87 @@ export default function AdminDashboard() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Edit Category Dialog */}
+                <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Edit Category</DialogTitle>
+                      <DialogDescription>
+                        Update the category information below.
+                      </DialogDescription>
+                    </DialogHeader>
+                    {editingCategory && (
+                      <form onSubmit={handleCategorySubmit} className="space-y-4">
+                        <div>
+                          <Label htmlFor="edit-cat-name">Category Name</Label>
+                          <Input 
+                            id="edit-cat-name" 
+                            name="name" 
+                            defaultValue={editingCategory.name}
+                            required 
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="edit-cat-slug">Slug</Label>
+                          <Input 
+                            id="edit-cat-slug" 
+                            name="slug" 
+                            defaultValue={editingCategory.slug}
+                            required 
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="edit-cat-description">Description</Label>
+                          <Textarea 
+                            id="edit-cat-description" 
+                            name="description" 
+                            defaultValue={editingCategory.description || ""}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="edit-cat-image">Image URL</Label>
+                          <Input 
+                            id="edit-cat-image" 
+                            name="image" 
+                            defaultValue={editingCategory.image || ""}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="edit-cat-parentId">Parent Category</Label>
+                          <Select name="parentId" defaultValue={editingCategory.parentId || "none"}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">No Parent (Main Category)</SelectItem>
+                              {categories.filter(cat => !cat.parentId && cat._id !== editingCategory._id).map((category) => (
+                                <SelectItem key={category._id} value={category._id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch 
+                            id="edit-cat-isActive" 
+                            name="isActive" 
+                            defaultChecked={editingCategory.isActive} 
+                          />
+                          <Label htmlFor="edit-cat-isActive">Active</Label>
+                        </div>
+                        <Button 
+                          type="submit" 
+                          disabled={updateCategoryMutation.isPending} 
+                          className="w-full"
+                        >
+                          {updateCategoryMutation.isPending ? "Updating..." : "Update Category"}
+                        </Button>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
 
