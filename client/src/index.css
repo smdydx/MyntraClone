@@ -548,6 +548,155 @@
     100% { background-position: 0% 50%; }
   }
 
+  /* Myntra-style Auth Modal Animations */
+  .auth-modal-enter {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  .auth-modal-enter-active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .auth-modal-exit {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  .auth-modal-exit-active {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Enhanced Input Field Animations */
+  .auth-input {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid #e5e7eb;
+  }
+
+  .auth-input:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .auth-input:hover {
+    border-color: #f3f4f6;
+    transform: translateY(-0.5px);
+  }
+
+  /* Floating Label Animation */
+  .floating-label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 0 4px;
+    color: #6b7280;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .floating-label-active {
+    top: 0;
+    font-size: 12px;
+    color: #f59e0b;
+    font-weight: 500;
+  }
+
+  /* Button Ripple Effect */
+  .btn-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn-ripple:active::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 640px) {
+    .auth-modal-content {
+      margin: 0;
+      border-radius: 0;
+      min-height: 100vh;
+      width: 100vw;
+      max-width: none;
+    }
+    
+    .auth-input {
+      font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .auth-button {
+      height: 48px;
+      font-size: 16px;
+    }
+  }
+
+  /* High DPI Displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .auth-input {
+      border-width: 1px;
+    }
+  }
+
+  /* Form Validation Styles */
+  .input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+  }
+
+  .input-success {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Touch-friendly sizing for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .auth-input, .auth-button {
+      min-height: 44px;
+    }
+    
+    .touch-target {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
   .typing-effect {
     overflow: hidden;
     border-right: 2px solid #f59e0b;
