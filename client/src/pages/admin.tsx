@@ -918,10 +918,16 @@ export default function AdminDashboard() {
         {/* Sidebar */}
         <div className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-200 ease-in-out lg:block`}>
           <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Admin Panel</h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Database className="h-5 w-5 text-white" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Admin Panel</h2>
+            </div>
 
             {/* Navigation */}
-            <nav className="space-y-2">
+            <nav className="space-y-1">
+              {/* Dashboard */}
               <Button
                 variant={activeTab === "dashboard" ? "default" : "ghost"}
                 className="w-full justify-start"
@@ -933,72 +939,361 @@ export default function AdminDashboard() {
                 <Activity className="mr-2 h-4 w-4" />
                 Dashboard
               </Button>
-              <Button
-                variant={activeTab === "products" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("products");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <Package className="mr-2 h-4 w-4" />
-                Products
-              </Button>
-              <Button
-                variant={activeTab === "categories" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("categories");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                Categories
-              </Button>
-              <Button
-                variant={activeTab === "orders" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("orders");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Orders
-              </Button>
-              <Button
-                variant={activeTab === "customers" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("customers");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <Users className="mr-2 h-4 w-4" />
-                Customers
-              </Button>
-              <Button
-                variant={activeTab === "analytics" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("analytics");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <TrendingUp className="mr-2 h-4 w-4" />
-                Analytics
-              </Button>
-              <Button
-                variant={activeTab === "settings" ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => {
-                  setActiveTab("settings");
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </Button>
+
+              {/* E-commerce Section */}
+              <div className="mt-6">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  E-Commerce
+                </div>
+                
+                {/* Products with submenu */}
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "products" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("products");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Package className="mr-2 h-4 w-4" />
+                    Products Management
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("products");
+                        setIsAddingProduct(true);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Plus className="mr-2 h-3 w-3" />
+                      Add Product
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("products");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Package className="mr-2 h-3 w-3" />
+                      All Products
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("products");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <AlertCircle className="mr-2 h-3 w-3" />
+                      Low Stock
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Categories with submenu */}
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "categories" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("categories");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    Categories
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("categories");
+                        setIsAddingCategory(true);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Plus className="mr-2 h-3 w-3" />
+                      Add Category
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("categories");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <FileText className="mr-2 h-3 w-3" />
+                      All Categories
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Orders with submenu */}
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "orders" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("orders");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Orders
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("orders");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <ShoppingCart className="mr-2 h-3 w-3" />
+                      All Orders
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("orders");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <CheckCircle className="mr-2 h-3 w-3" />
+                      Pending Orders
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("orders");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <CreditCard className="mr-2 h-3 w-3" />
+                      Payment Issues
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Customer Management Section */}
+              <div className="mt-6">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Customer Management
+                </div>
+                
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "customers" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("customers");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Customers
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("customers");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Users className="mr-2 h-3 w-3" />
+                      All Customers
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("customers");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Star className="mr-2 h-3 w-3" />
+                      VIP Customers
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Analytics & Reports Section */}
+              <div className="mt-6">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Analytics & Reports
+                </div>
+                
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "analytics" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("analytics");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Analytics
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("analytics");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <BarChart3 className="mr-2 h-3 w-3" />
+                      Sales Reports
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("analytics");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <TrendingUp className="mr-2 h-3 w-3" />
+                      Traffic Analytics
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("analytics");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Globe className="mr-2 h-3 w-3" />
+                      Conversion Tracking
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Settings Section */}
+              <div className="mt-6">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  System
+                </div>
+                
+                <div className="space-y-1">
+                  <Button
+                    variant={activeTab === "settings" ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab("settings");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Button>
+                  <div className="ml-6 space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("settings");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Globe className="mr-2 h-3 w-3" />
+                      Site Settings
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("settings");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <CreditCard className="mr-2 h-3 w-3" />
+                      Payment Config
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveTab("settings");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Smartphone className="mr-2 h-3 w-3" />
+                      Mobile App
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Tools Section */}
+              <div className="mt-6">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Quick Tools
+                </div>
+                
+                <div className="space-y-1">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleSeedData}
+                  >
+                    <Database className="mr-2 h-4 w-4" />
+                    Seed Data
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => window.open('/', '_blank')}
+                  >
+                    <Globe className="mr-2 h-4 w-4" />
+                    View Store
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => queryClient.invalidateQueries()}
+                  >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Refresh Data
+                  </Button>
+                </div>
+              </div>
             </nav>
 
             <Separator className="my-6" />
