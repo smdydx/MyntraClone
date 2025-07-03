@@ -55,10 +55,7 @@ export default function Home() {
         <HeroSlider />
       </div>
 
-      {/* Brand Showcase */}
-      <div className="w-full overflow-hidden">
-        <BrandShowcase />
-      </div>
+      
 
       
 
