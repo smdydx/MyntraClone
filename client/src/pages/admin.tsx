@@ -1722,7 +1722,7 @@ export default function AdminDashboard() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ResponsiveContainer width="100%" height={300>
+                      <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                           <Pie
                             data={deviceData}
