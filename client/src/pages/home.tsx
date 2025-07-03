@@ -8,7 +8,6 @@ import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import CategoryCard from "@/components/category-card";
 import HeroSlider from "@/components/hero-slider";
-import ReviewsSection from "@/components/reviews-section";
 import TrendingBrands from "@/components/trending-brands";
 import type { Product, Category } from "@shared/schema";
 import NewsletterPopup from "@/components/newsletter-popup";
@@ -718,9 +717,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Reviews Section */}
-      <ReviewsSection />
 
       {/* Newsletter */}
       <section className="bg-hednor-dark py-12">

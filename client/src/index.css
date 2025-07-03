@@ -996,6 +996,135 @@
 
   @media (min-width: 480px) {
     .category-grid-responsive {
+
+
+/* Professional Hero Section Enhancements */
+.gradient-text {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Professional backdrop blur effects */
+.backdrop-blur-luxury {
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+}
+
+/* Premium glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hero slide transitions */
+.hero-slide-enter {
+  opacity: 0;
+  transform: translateX(100px) scale(0.95);
+}
+
+.hero-slide-enter-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: all 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hero-slide-exit {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.hero-slide-exit-active {
+  opacity: 0;
+  transform: translateX(-100px) scale(0.95);
+  transition: all 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Professional shadow effects */
+.shadow-luxury {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.shadow-gold {
+  box-shadow: 
+    0 20px 40px -12px rgba(251, 191, 36, 0.25),
+    0 0 0 1px rgba(251, 191, 36, 0.1);
+}
+
+/* Sophisticated hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Professional typography */
+.text-professional {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+/* Luxury button effects */
+.btn-luxury {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-luxury:hover::before {
+  left: 100%;
+}
+
+/* Professional animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Staggered animations */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }

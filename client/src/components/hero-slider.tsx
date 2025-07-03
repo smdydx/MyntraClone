@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause, ArrowRight, Sparkles, Star, Shield, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import heroVideoPath from "/src/assets/hero-video.mp4";
@@ -7,62 +8,58 @@ import heroVideoPath from "/src/assets/hero-video.mp4";
 const heroSlides = [
   {
     id: 1,
-    title: "Fashion Video",
-    subtitle: "Experience Fashion in Motion",
-    description: "Watch our latest fashion showcase featuring the newest trends",
-    buttonText: "Shop Now",
+    title: "Premium Fashion Experience",
+    subtitle: "Elevate Your Style",
+    description: "Discover curated collections from world-renowned designers and emerging talents",
+    buttonText: "Explore Collection",
     buttonLink: "/products",
     isVideo: true,
     backgroundVideo: heroVideoPath,
+    stats: { value: "50K+", label: "Happy Customers" }
   },
   {
     id: 2,
-    title: "New Collection",
-    subtitle: "Spring Summer 2025",
-    description: "Discover the latest trends in fashion with our premium collection",
-    buttonText: "Shop Now",
-    buttonLink: "/products",
+    title: "Sustainable Luxury",
+    subtitle: "Conscious Fashion Forward",
+    description: "Where sustainability meets style - premium fashion with environmental responsibility",
+    buttonText: "Shop Sustainable",
+    buttonLink: "/products?category=sustainable",
     backgroundImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop&crop=center",
+    stats: { value: "100%", label: "Authentic Products" }
   },
   {
     id: 3,
-    title: "Premium Quality",
-    subtitle: "Crafted with Care",
-    description: "Experience luxury with our handpicked selection of premium garments",
-    buttonText: "Explore Premium",
+    title: "Executive Collection",
+    subtitle: "Professional Excellence",
+    description: "Meticulously crafted pieces for the modern professional and style connoisseur",
+    buttonText: "View Executive Line",
     buttonLink: "/products?category=premium",
     backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
+    stats: { value: "24/7", label: "Concierge Service" }
   },
   {
     id: 4,
-    title: "Sale Up to 70% Off",
-    subtitle: "Limited Time Offer",
-    description: "Don't miss out on our biggest sale of the year",
-    buttonText: "Shop Sale",
-    buttonLink: "/products?sale=true",
+    title: "Limited Edition Drop",
+    subtitle: "Exclusive Access",
+    description: "Be among the first to access our exclusive limited edition collections",
+    buttonText: "Get Early Access",
+    buttonLink: "/products?featured=true",
     backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=800&fit=crop&crop=center",
-  },
-  {
-    id: 5,
-    title: "Exclusive Designs",
-    subtitle: "Hednor Studio Collection",
-    description: "Unique pieces designed exclusively for fashion-forward individuals",
-    buttonText: "View Collection",
-    buttonLink: "/products?category=studio",
-    backgroundImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=800&fit=crop&crop=center",
-  },
+    stats: { value: "72h", label: "Express Delivery" }
+  }
 ];
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
@@ -70,39 +67,50 @@ export default function HeroSlider() {
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
     setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    setTimeout(() => setIsAutoPlaying(true), 15000);
   };
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    setTimeout(() => setIsAutoPlaying(true), 15000);
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
     setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    setTimeout(() => setIsAutoPlaying(true), 15000);
+  };
+
+  const toggleVideo = () => {
+    setIsVideoPlaying(!isVideoPlaying);
+    const video = document.querySelector('video');
+    if (video) {
+      if (isVideoPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+    }
   };
 
   return (
-    <div className="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+    <div className="relative h-[600px] md:h-[700px] lg:h-[800px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      {/* Background Slides */}
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
           className={cn(
             "absolute inset-0 transition-all duration-1000 ease-in-out",
             index === currentSlide
-              ? "opacity-100 transform translate-x-0"
-              : index < currentSlide
-              ? "opacity-0 transform -translate-x-full"
-              : "opacity-0 transform translate-x-full"
+              ? "opacity-100 scale-100"
+              : "opacity-0 scale-105"
           )}
         >
           {slide.isVideo ? (
             <video
               className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
+              autoPlay={isVideoPlaying}
               muted
               loop
               playsInline
@@ -110,48 +118,146 @@ export default function HeroSlider() {
             >
               <source src={slide.backgroundVideo} type="video/mp4" />
               <source src="https://videos.pexels.com/video-files/3252653/3252653-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
             </video>
           ) : (
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 hover:scale-100 transition-transform duration-[6s] ease-out"
               style={{ backgroundImage: `url(${slide.backgroundImage})` }}
             />
           )}
 
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30" />
-
-          <div className="container mx-auto px-4 h-full flex items-center relative z-10">
-            <div className="max-w-xl text-white">
-              <h2 className="text-xs md:text-sm font-medium mb-2 opacity-90 text-hednor-gold">
-                {slide.subtitle}
-              </h2>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
-                {slide.title}
-              </h1>
-              <p className="text-sm md:text-base mb-4 opacity-90 max-w-md">
-                {slide.description}
-              </p>
-              <Button
-                size="default"
-                className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500 font-semibold px-5 py-2 text-sm transition-all transform hover:scale-105"
-                onClick={() => {
-                  window.location.href = slide.buttonLink;
-                }}
-              >
-                {slide.buttonText}
-              </Button>
-            </div>
-          </div>
+          {/* Premium Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
       ))}
 
-      {/* Navigation Arrows */}
+      {/* Content */}
+      <div className="relative z-20 h-full">
+        <div className="container mx-auto px-4 h-full flex items-center">
+          <div className="max-w-3xl">
+            {/* Slide Content */}
+            <div className={cn(
+              "transition-all duration-1000 ease-out transform",
+              "translate-y-0 opacity-100"
+            )}>
+              {/* Premium Badge */}
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full mb-6">
+                <Sparkles className="w-4 h-4 text-hednor-gold" />
+                <span className="text-sm font-medium text-white">
+                  {heroSlides[currentSlide].subtitle}
+                </span>
+                <div className="w-1 h-1 bg-hednor-gold rounded-full" />
+                <span className="text-xs text-gray-300">Premium Collection</span>
+              </div>
+
+              {/* Main Title */}
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                <span className="block">
+                  {heroSlides[currentSlide].title.split(' ').slice(0, -1).join(' ')}
+                </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold">
+                  {heroSlides[currentSlide].title.split(' ').slice(-1)}
+                </span>
+              </h1>
+
+              {/* Description */}
+              <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
+                {heroSlides[currentSlide].description}
+              </p>
+
+              {/* Stats & CTA */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-8 py-4 text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25"
+                  onClick={() => {
+                    window.location.href = heroSlides[currentSlide].buttonLink;
+                  }}
+                >
+                  {heroSlides[currentSlide].buttonText}
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+
+                <div className="flex items-center gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-white">
+                      {heroSlides[currentSlide].stats.value}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {heroSlides[currentSlide].stats.label}
+                    </div>
+                  </div>
+                  
+                  <div className="w-px h-12 bg-gray-600" />
+                  
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-hednor-gold text-hednor-gold" />
+                      ))}
+                    </div>
+                    <span className="text-white text-sm font-medium">4.9</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex items-center gap-6 text-gray-300">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  <span className="text-sm">Secure Shopping</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4" />
+                  <span className="text-sm">Premium Quality</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="flex items-center gap-4">
+          {/* Slide Indicators */}
+          <div className="flex items-center gap-2">
+            {heroSlides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  index === currentSlide 
+                    ? "w-8 bg-hednor-gold" 
+                    : "w-2 bg-white/40 hover:bg-white/60"
+                )}
+              />
+            ))}
+          </div>
+
+          {/* Video Controls */}
+          {heroSlides[currentSlide].isVideo && (
+            <button
+              onClick={toggleVideo}
+              className="ml-4 p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all"
+            >
+              {isVideoPlaying ? (
+                <Pause className="w-4 h-4 text-white" />
+              ) : (
+                <Play className="w-4 h-4 text-white" />
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Arrow Navigation */}
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-12 h-12"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-6 w-6" />
@@ -160,13 +266,21 @@ export default function HeroSlider() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-12 h-12"
         onClick={nextSlide}
       >
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      
+      {/* Progress Bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-30">
+        <div 
+          className="h-full bg-gradient-to-r from-hednor-gold to-yellow-500 transition-all duration-1000 ease-linear"
+          style={{ 
+            width: `${((currentSlide + 1) / heroSlides.length) * 100}%`
+          }}
+        />
+      </div>
     </div>
   );
 }
