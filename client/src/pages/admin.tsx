@@ -1163,7 +1163,7 @@ export default function AdminDashboard() {
                     icon: <Package className="h-5 w-5" />,
                     label: "Products",
                     isActive: activeTab === "products",
-                    onClick={() => handleMainNavClick("products")},
+                    onClick: () => handleMainNavClick("products")
                     badge: Array.isArray(products) ? products.length : 0,
                     submenu: [
                       {
