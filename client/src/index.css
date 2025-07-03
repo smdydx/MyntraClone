@@ -996,6 +996,60 @@
 
   .slide-in-from-left {
     animation: slide-in-from-left 200ms ease-out;
+
+
+/* Category Card Animations */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skewX(12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(12deg);
+  }
+}
+
+.animate-shine {
+  animation: shine 0.8s ease-out;
+}
+
+/* Image optimization for category cards */
+.category-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: auto;
+}
+
+/* Hover effects for category cards */
+.category-card:hover .category-image {
+  filter: contrast(1.15) saturate(1.2) brightness(1.05);
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #f59e0b, #eab308, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
   }
 
   .slide-out-to-left {

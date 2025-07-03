@@ -101,26 +101,55 @@ export default function Home() {
       </div>
 
       {/* Category Grid */}
-      <section className="container mx-auto px-4 py-8 bg-gray-50">
-        <h2 className="font-bold text-xl md:text-2xl text-center mb-6 text-gray-800 uppercase tracking-wide">
-          Shop by Category
-        </h2>
+      <section className="relative overflow-hidden py-12 lg:py-16">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_50%)]"></div>
+        
+        <div className="container mx-auto px-4 relative">
+          {/* Header */}
+          <div className="text-center mb-10 lg:mb-12">
+            <div className="inline-flex items-center gap-2 bg-hednor-gold/10 px-4 py-2 rounded-full mb-4">
+              <Sparkles className="w-4 h-4 text-hednor-gold" />
+              <span className="text-sm font-medium text-hednor-gold uppercase tracking-wide">Categories</span>
+            </div>
+            <h2 className="font-bold text-2xl md:text-3xl lg:text-4xl text-gray-800 mb-3">
+              Shop by <span className="text-hednor-gold">Category</span>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
+              Discover our curated collections designed for every style and occasion
+            </p>
+          </div>
 
-        {categoriesLoading ? (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 md:h-32 rounded-lg" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {categories
-              .filter(category => !category.parentId)
-              .map((category) => (
-                <CategoryCard key={category._id || category.id} category={category} />
+          {categoriesLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="h-48 md:h-56 rounded-2xl" />
+                </div>
               ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+              {categories
+                .filter(category => !category.parentId)
+                .slice(0, 12)
+                .map((category) => (
+                  <CategoryCard key={category._id || category.id} category={category} />
+                ))}
+            </div>
+          )}
+
+          {/* View All Button */}
+          <div className="text-center mt-10">
+            <Link href="/products">
+              <button className="group inline-flex items-center gap-2 bg-white border-2 border-hednor-gold text-hednor-gold px-8 py-3 rounded-full font-semibold hover:bg-hednor-gold hover:text-hednor-dark transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                View All Categories
+                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+            </Link>
           </div>
-        )}
+        </div>
       </section>
 
       {/* Trending Now */}
