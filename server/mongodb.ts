@@ -31,17 +31,27 @@ export function verifyToken(token: string): { userId: string; email: string } {
 export async function connectToMongoDB() {
   try {
     if (db) {
-      console.log('Already connected to MongoDB');
-      return;
+      try {
+        // Test existing connection
+        await db.admin().ping();
+        console.log('Already connected to MongoDB');
+        return;
+      } catch (error) {
+        console.log('Existing connection failed, reconnecting...');
+        db = null;
+        client = null;
+      }
     }
 
     const uri = process.env.MONGODB_URI || MONGODB_URI;
     client = new MongoClient(uri, {
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
       retryWrites: true,
-      retryReads: true
+      retryReads: true,
+      connectTimeoutMS: 30000,
+      heartbeatFrequencyMS: 10000
     });
 
     await client.connect();
@@ -50,7 +60,10 @@ export async function connectToMongoDB() {
     // Test the connection
     await db.admin().ping();
 
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB successfully');
+
+    // Create indexes if they don't exist
+    await createIndexes();
 
     // Handle connection events
     client.on('error', (error) => {
@@ -661,7 +674,14 @@ export class ProductService {
 
   async getAllProducts(): Promise<Product[]> {
     try {
-      return await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+      if (!this.collection) {
+        console.error('Products collection not initialized');
+        return [];
+      }
+      
+      const products = await this.collection.find({}).sort({ createdAt: -1 }).toArray();
+      console.log(`Successfully fetched ${products.length} products`);
+      return products;
     } catch (error) {
       console.error('Error getting all products:', error);
       return [];

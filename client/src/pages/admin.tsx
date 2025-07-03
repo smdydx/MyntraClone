@@ -935,7 +935,7 @@ export default function AdminDashboard() {
       const imageUrl = URL.createObjectURL(file);
       setNewProduct(prev => ({
         ...prev,
-        images: [...prev.images, imageUrl]
+        images: [...(prev.images || []), imageUrl]
       }));
     }
   };

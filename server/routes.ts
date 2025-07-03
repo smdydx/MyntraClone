@@ -1,15 +1,22 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { ObjectId } from "mongodb";
 import { connectToMongoDB, UserService, CategoryService, ProductService, CartService, WishlistService, SiteSettingsService, OrderService, PaymentService, generateToken } from "./mongodb";
 import { authenticateToken, optionalAuth, AuthenticatedRequest } from "./middleware";
 
 // Define a middleware to authenticate admin users
-const authenticateAdmin = (req: AuthenticatedRequest, res: Express.Response, next: Express.NextFunction) => {
-  // Check if user exists and has admin role
-  if (req.user && req.user.email === "adminhednor@gmail.com") {
-    next(); // Proceed to the next middleware or route handler
-  } else {
-    res.status(403).json({ message: "Unauthorized: Admin access required" });
+const authenticateAdmin = (req: AuthenticatedRequest, res: any, next: any) => {
+  try {
+    // Check if user exists and has admin role
+    if (req.user && (req.user.userId === "admin" || req.user.email === "adminhednor@gmail.com")) {
+      next(); // Proceed to the next middleware or route handler
+    } else {
+      console.log('Admin access denied for user:', req.user?.email);
+      res.status(403).json({ message: "Unauthorized: Admin access required" });
+    }
+  } catch (error) {
+    console.error('Admin authentication error:', error);
+    res.status(500).json({ message: "Authentication error" });
   }
 };
 
@@ -387,11 +394,20 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
   // Admin endpoint to get all products
   app.get("/api/admin/products", authenticateToken, authenticateAdmin, async (req: AuthenticatedRequest, res) => {
     try {
+      console.log('Fetching admin products...');
       const products = await productService.getAllProducts();
-      res.json(products);
-    } catch (error) {
+      console.log(`Found ${products.length} products`);
+      
+      // Ensure we always return an array
+      const productsArray = Array.isArray(products) ? products : [];
+      res.json(productsArray);
+    } catch (error: any) {
       console.error('Admin products fetch error:', error);
-      res.status(500).json({ message: "Failed to fetch products", error: error.message });
+      res.status(500).json({ 
+        message: "Failed to fetch products", 
+        error: error.message || "Unknown error",
+        products: [] // Return empty array on error
+      });
     }
   });
 
@@ -745,10 +761,31 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
   // Dashboard analytics endpoints
   app.get("/api/admin/analytics/overview", authenticateToken, async (req: AuthenticatedRequest, res) => {
     try {
-      // Calculate real analytics from database
-      const totalUsers = await userService.getUserCount() || 0;
-      const allOrders = await orderService.getAllOrders() || [];
-      const totalProducts = await productService.getProductCount({}) || 0;
+      console.log('Fetching analytics overview...');
+      
+      // Calculate real analytics from database with proper error handling
+      let totalUsers = 0;
+      let allOrders: any[] = [];
+      let totalProducts = 0;
+
+      try {
+        totalUsers = await userService.getUserCount() || 0;
+      } catch (error) {
+        console.error('Error getting user count:', error);
+      }
+
+      try {
+        allOrders = await orderService.getAllOrders() || [];
+      } catch (error) {
+        console.error('Error getting orders:', error);
+        allOrders = [];
+      }
+
+      try {
+        totalProducts = await productService.getProductCount({}) || 0;
+      } catch (error) {
+        console.error('Error getting product count:', error);
+      }
 
       const totalOrders = Array.isArray(allOrders) ? allOrders.length : 0;
       const totalRevenue = Array.isArray(allOrders) ? allOrders.reduce((sum, order) => {
