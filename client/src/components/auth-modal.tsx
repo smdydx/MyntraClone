@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import { Button } from './ui/button';
@@ -110,7 +109,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isLogin) {
       if (!formData.username || !formData.password) {
         toast({
@@ -130,7 +129,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
         });
         return;
       }
-      
+
       if (formData.password !== formData.confirmPassword) {
         toast({
           title: 'Password Mismatch',
@@ -172,12 +171,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
       <DialogContent className="w-[95vw] max-w-[400px] sm:max-w-[420px] md:max-w-[450px] lg:max-w-[480px] mx-auto p-0 gap-0 overflow-hidden bg-white border-0 shadow-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <DialogHeader className="relative bg-gradient-to-r from-hednor-gold to-yellow-400 p-4 sm:p-6 pb-6 sm:pb-8 text-center">
-          <button
-            onClick={handleClose}
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-          >
-            <X className="w-4 h-4 sm:w-5 sm:h-5 text-hednor-dark" />
-          </button>
+          
           <div className="mb-3 sm:mb-4">
             <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg">
               <User className="w-6 h-6 sm:w-8 sm:h-8 text-hednor-gold" />
@@ -338,7 +332,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
             >
               {isLogin ? 'Create New Account' : 'Sign In Instead'}
             </Button>
-            
+
             {/* Terms and Privacy (Register only) */}
             {!isLogin && (
               <p className="text-xs text-gray-500 leading-relaxed px-2 sm:px-4">
