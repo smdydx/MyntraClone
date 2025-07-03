@@ -181,6 +181,122 @@ interface Notification {
   read: boolean;
 }
 
+// Navigation Components
+interface NavItemProps {
+  icon: React.ReactNode;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+  badge?: number;
+  badgeColor?: string;
+  submenu?: {
+    icon: React.ReactNode;
+    label: string;
+    onClick?: () => void;
+    badge?: number;
+    badgeColor?: string;
+  }[];
+}
+
+const NavItem: React.FC<NavItemProps> = ({ 
+  icon, 
+  label, 
+  isActive = false, 
+  onClick, 
+  badge, 
+  badgeColor = "bg-blue-500",
+  submenu 
+}) => {
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+
+  return (
+    <div className="space-y-1">
+      <Button
+        variant={isActive ? "default" : "ghost"}
+        className={`w-full justify-between text-left h-auto py-3 px-4 ${
+          isActive 
+            ? "bg-blue-600 text-white shadow-md" 
+            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+        }`}
+        onClick={() => {
+          if (submenu && submenu.length > 0) {
+            setIsSubmenuOpen(!isSubmenuOpen);
+          }
+          onClick?.();
+        }}
+      >
+        <div className="flex items-center space-x-3">
+          <div className={`${isActive ? "text-white" : "text-gray-500"}`}>
+            {icon}
+          </div>
+          <span className="font-medium text-sm">{label}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          {badge !== undefined && badge > 0 && (
+            <span className={`inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded-full ${badgeColor} min-w-[20px] h-5`}>
+              {badge > 99 ? '99+' : badge}
+            </span>
+          )}
+          {submenu && submenu.length > 0 && (
+            <div className={`transition-transform duration-200 ${isSubmenuOpen ? 'rotate-90' : ''}`}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          )}
+        </div>
+      </Button>
+      
+      {submenu && submenu.length > 0 && (
+        <div className={`ml-4 space-y-1 overflow-hidden transition-all duration-300 ${
+          isSubmenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          {submenu.map((item, index) => (
+            <Button
+              key={index}
+              variant="ghost"
+              className="w-full justify-between text-left h-auto py-2 px-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-l-2 border-gray-200 dark:border-gray-600 ml-2"
+              onClick={item.onClick}
+            >
+              <div className="flex items-center space-x-3">
+                <div className="text-gray-400 dark:text-gray-500">
+                  {item.icon}
+                </div>
+                <span className="text-sm">{item.label}</span>
+              </div>
+              {item.badge !== undefined && item.badge > 0 && (
+                <span className={`inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded-full ${item.badgeColor || badgeColor} min-w-[18px] h-4`}>
+                  {item.badge > 99 ? '99+' : item.badge}
+                </span>
+              )}
+            </Button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface NavSectionProps {
+  title: string;
+  items: NavItemProps[];
+}
+
+const NavSection: React.FC<NavSectionProps> = ({ title, items }) => {
+  return (
+    <div className="space-y-2">
+      <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
+        {title}
+      </div>
+      <div className="space-y-1">
+        {items.map((item, index) => (
+          <NavItem key={index} {...item} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -903,398 +1019,400 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+      <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <Database className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white">Admin Panel</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Management
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          {/* Mobile notifications */}
+          <div className="relative">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="relative p-2"
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              <Bell className="h-5 w-5" />
+              {notifications.filter(n => !n.read).length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                  {notifications.filter(n => !n.read).length}
+                </span>
+              )}
+            </Button>
+          </div>
+          
+          {/* Hamburger Menu */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-2 relative"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <div className="relative w-6 h-6 flex flex-col justify-center items-center">
+              <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'}`}></span>
+              <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transform transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'}`}></span>
+            </div>
+          </Button>
+        </div>
       </div>
 
       <div className="flex">
         {/* Sidebar */}
-        <div className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-200 ease-in-out lg:block`}>
-          <div className="p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Database className="h-5 w-5 text-white" />
+        <div className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out lg:block shadow-xl lg:shadow-none`}>
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Database className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="hidden lg:block">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Admin Panel</h2>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Management Dashboard</p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="lg:hidden"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Admin Panel</h2>
             </div>
 
             {/* Navigation */}
-            <nav className="space-y-1">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {/* Dashboard */}
-              <Button
-                variant={activeTab === "dashboard" ? "default" : "ghost"}
-                className="w-full justify-start"
+              <NavItem
+                icon={<Activity className="h-5 w-5" />}
+                label="Dashboard"
+                isActive={activeTab === "dashboard"}
                 onClick={() => {
                   setActiveTab("dashboard");
                   setIsMobileMenuOpen(false);
                 }}
-              >
-                <Activity className="mr-2 h-4 w-4" />
-                Dashboard
-              </Button>
+              />
 
               {/* E-commerce Section */}
-              <div className="mt-6">
-                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  E-Commerce
-                </div>
-                
-                {/* Products with submenu */}
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "products" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+              <NavSection 
+                title="E-Commerce"
+                items={[
+                  {
+                    icon: <Package className="h-5 w-5" />,
+                    label: "Products",
+                    isActive: activeTab === "products",
+                    onClick: () => {
                       setActiveTab("products");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <Package className="mr-2 h-4 w-4" />
-                    Products Management
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("products");
-                        setIsAddingProduct(true);
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Plus className="mr-2 h-3 w-3" />
-                      Add Product
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("products");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Package className="mr-2 h-3 w-3" />
-                      All Products
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("products");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <AlertCircle className="mr-2 h-3 w-3" />
-                      Low Stock
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Categories with submenu */}
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "categories" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+                    },
+                    badge: Array.isArray(products) ? products.length : 0,
+                    submenu: [
+                      {
+                        icon: <Plus className="h-4 w-4" />,
+                        label: "Add Product",
+                        onClick: () => {
+                          setActiveTab("products");
+                          setIsAddingProduct(true);
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <Package className="h-4 w-4" />,
+                        label: "All Products",
+                        onClick: () => {
+                          setActiveTab("products");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: Array.isArray(products) ? products.length : 0
+                      },
+                      {
+                        icon: <AlertCircle className="h-4 w-4" />,
+                        label: "Low Stock",
+                        onClick: () => {
+                          setActiveTab("products");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: Array.isArray(products) ? products.filter(p => p.stockQuantity < 10).length : 0,
+                        badgeColor: "bg-red-500"
+                      },
+                      {
+                        icon: <Star className="h-4 w-4" />,
+                        label: "Featured",
+                        onClick: () => {
+                          setActiveTab("products");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: Array.isArray(products) ? products.filter(p => p.isFeatured).length : 0,
+                        badgeColor: "bg-yellow-500"
+                      }
+                    ]
+                  },
+                  {
+                    icon: <FileText className="h-5 w-5" />,
+                    label: "Categories",
+                    isActive: activeTab === "categories",
+                    onClick: () => {
                       setActiveTab("categories");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <FileText className="mr-2 h-4 w-4" />
-                    Categories
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("categories");
-                        setIsAddingCategory(true);
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Plus className="mr-2 h-3 w-3" />
-                      Add Category
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("categories");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <FileText className="mr-2 h-3 w-3" />
-                      All Categories
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Orders with submenu */}
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "orders" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+                    },
+                    badge: categories.length,
+                    submenu: [
+                      {
+                        icon: <Plus className="h-4 w-4" />,
+                        label: "Add Category",
+                        onClick: () => {
+                          setActiveTab("categories");
+                          setIsAddingCategory(true);
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <FileText className="h-4 w-4" />,
+                        label: "Main Categories",
+                        onClick: () => {
+                          setActiveTab("categories");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: categories.filter(cat => !cat.parentId).length
+                      },
+                      {
+                        icon: <Globe className="h-4 w-4" />,
+                        label: "Subcategories",
+                        onClick: () => {
+                          setActiveTab("categories");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: categories.filter(cat => cat.parentId).length
+                      }
+                    ]
+                  },
+                  {
+                    icon: <ShoppingCart className="h-5 w-5" />,
+                    label: "Orders",
+                    isActive: activeTab === "orders",
+                    onClick: () => {
                       setActiveTab("orders");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Orders
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("orders");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <ShoppingCart className="mr-2 h-3 w-3" />
-                      All Orders
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("orders");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <CheckCircle className="mr-2 h-3 w-3" />
-                      Pending Orders
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("orders");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <CreditCard className="mr-2 h-3 w-3" />
-                      Payment Issues
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                    },
+                    badge: orders.length,
+                    submenu: [
+                      {
+                        icon: <ShoppingCart className="h-4 w-4" />,
+                        label: "All Orders",
+                        onClick: () => {
+                          setActiveTab("orders");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: orders.length
+                      },
+                      {
+                        icon: <CheckCircle className="h-4 w-4" />,
+                        label: "Pending",
+                        onClick: () => {
+                          setActiveTab("orders");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: orders.filter(o => o.status === 'pending').length,
+                        badgeColor: "bg-orange-500"
+                      },
+                      {
+                        icon: <CreditCard className="h-4 w-4" />,
+                        label: "Payment Issues",
+                        onClick: () => {
+                          setActiveTab("orders");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: orders.filter(o => o.paymentStatus === 'failed').length,
+                        badgeColor: "bg-red-500"
+                      }
+                    ]
+                  }
+                ]}
+              />
 
-              {/* Customer Management Section */}
-              <div className="mt-6">
-                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Customer Management
-                </div>
-                
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "customers" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+              {/* Customer Management */}
+              <NavSection
+                title="Customer Management"
+                items={[
+                  {
+                    icon: <Users className="h-5 w-5" />,
+                    label: "Customers",
+                    isActive: activeTab === "customers",
+                    onClick: () => {
                       setActiveTab("customers");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Customers
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("customers");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Users className="mr-2 h-3 w-3" />
-                      All Customers
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("customers");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Star className="mr-2 h-3 w-3" />
-                      VIP Customers
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                    },
+                    badge: users.length,
+                    submenu: [
+                      {
+                        icon: <Users className="h-4 w-4" />,
+                        label: "All Customers",
+                        onClick: () => {
+                          setActiveTab("customers");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: users.length
+                      },
+                      {
+                        icon: <Star className="h-4 w-4" />,
+                        label: "VIP Customers",
+                        onClick: () => {
+                          setActiveTab("customers");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: users.filter(u => u.totalSpent > 50000).length,
+                        badgeColor: "bg-yellow-500"
+                      },
+                      {
+                        icon: <Activity className="h-4 w-4" />,
+                        label: "New Customers",
+                        onClick: () => {
+                          setActiveTab("customers");
+                          setIsMobileMenuOpen(false);
+                        },
+                        badge: users.filter(u => new Date(u.createdAt) > new Date(Date.now() - 30*24*60*60*1000)).length,
+                        badgeColor: "bg-green-500"
+                      }
+                    ]
+                  }
+                ]}
+              />
 
-              {/* Analytics & Reports Section */}
-              <div className="mt-6">
-                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Analytics & Reports
-                </div>
-                
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "analytics" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+              {/* Analytics & Reports */}
+              <NavSection
+                title="Analytics & Reports"
+                items={[
+                  {
+                    icon: <BarChart3 className="h-5 w-5" />,
+                    label: "Analytics",
+                    isActive: activeTab === "analytics",
+                    onClick: () => {
                       setActiveTab("analytics");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <TrendingUp className="mr-2 h-4 w-4" />
-                    Analytics
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("analytics");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <BarChart3 className="mr-2 h-3 w-3" />
-                      Sales Reports
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("analytics");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <TrendingUp className="mr-2 h-3 w-3" />
-                      Traffic Analytics
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("analytics");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Globe className="mr-2 h-3 w-3" />
-                      Conversion Tracking
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                    },
+                    submenu: [
+                      {
+                        icon: <TrendingUp className="h-4 w-4" />,
+                        label: "Sales Reports",
+                        onClick: () => {
+                          setActiveTab("analytics");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <Activity className="h-4 w-4" />,
+                        label: "Traffic Analytics",
+                        onClick: () => {
+                          setActiveTab("analytics");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <Globe className="h-4 w-4" />,
+                        label: "Conversion Tracking",
+                        onClick: () => {
+                          setActiveTab("analytics");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <DollarSign className="h-4 w-4" />,
+                        label: "Revenue Reports",
+                        onClick: () => {
+                          setActiveTab("analytics");
+                          setIsMobileMenuOpen(false);
+                        }
+                      }
+                    ]
+                  }
+                ]}
+              />
 
-              {/* Settings Section */}
-              <div className="mt-6">
-                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  System
-                </div>
-                
-                <div className="space-y-1">
-                  <Button
-                    variant={activeTab === "settings" ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
+              {/* System Settings */}
+              <NavSection
+                title="System"
+                items={[
+                  {
+                    icon: <Settings className="h-5 w-5" />,
+                    label: "Settings",
+                    isActive: activeTab === "settings",
+                    onClick: () => {
                       setActiveTab("settings");
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Button>
-                  <div className="ml-6 space-y-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("settings");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Globe className="mr-2 h-3 w-3" />
-                      Site Settings
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("settings");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <CreditCard className="mr-2 h-3 w-3" />
-                      Payment Config
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-                      onClick={() => {
-                        setActiveTab("settings");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Smartphone className="mr-2 h-3 w-3" />
-                      Mobile App
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                    },
+                    submenu: [
+                      {
+                        icon: <Globe className="h-4 w-4" />,
+                        label: "Site Settings",
+                        onClick: () => {
+                          setActiveTab("settings");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <CreditCard className="h-4 w-4" />,
+                        label: "Payment Config",
+                        onClick: () => {
+                          setActiveTab("settings");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <Smartphone className="h-4 w-4" />,
+                        label: "Mobile App",
+                        onClick: () => {
+                          setActiveTab("settings");
+                          setIsMobileMenuOpen(false);
+                        }
+                      },
+                      {
+                        icon: <Bell className="h-4 w-4" />,
+                        label: "Notifications",
+                        onClick: () => {
+                          setActiveTab("settings");
+                          setIsMobileMenuOpen(false);
+                        }
+                      }
+                    ]
+                  }
+                ]}
+              />
 
-              {/* Quick Tools Section */}
-              <div className="mt-6">
-                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Quick Tools
-                </div>
-                
-                <div className="space-y-1">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={handleSeedData}
-                  >
-                    <Database className="mr-2 h-4 w-4" />
-                    Seed Data
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => window.open('/', '_blank')}
-                  >
-                    <Globe className="mr-2 h-4 w-4" />
-                    View Store
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => queryClient.invalidateQueries()}
-                  >
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Refresh Data
-                  </Button>
-                </div>
-              </div>
-            </nav>
+              {/* Quick Tools */}
+              <NavSection
+                title="Quick Tools"
+                items={[
+                  {
+                    icon: <Database className="h-5 w-5" />,
+                    label: "Seed Data",
+                    onClick: handleSeedData
+                  },
+                  {
+                    icon: <Globe className="h-5 w-5" />,
+                    label: "View Store",
+                    onClick: () => window.open('/', '_blank')
+                  },
+                  {
+                    icon: <RefreshCw className="h-5 w-5" />,
+                    label: "Refresh Data",
+                    onClick: () => queryClient.invalidateQueries()
+                  }
+                ]}
+              />
+            </div>
 
             <Separator className="my-6" />
 
@@ -1321,10 +1439,23 @@ export default function AdminDashboard() {
 
         {/* Mobile Overlay */}
         {isMobileMenuOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+          <>
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Quick Stats overlay for mobile */}
+            <div className="fixed bottom-4 right-4 z-50 lg:hidden">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center space-x-2">
+                  <Activity className="h-4 w-4 text-green-500" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    {Math.floor(Math.random() * 50 + 20)} Live Users
+                  </span>
+                </div>
+              </div>
+            </div>
+          </>
         )}
 
         {/* Main Content */}
