@@ -54,12 +54,12 @@ export default function Checkout() {
   const [sameAsShipping, setSameAsShipping] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      setLocation("/");
-      return;
-    }
     if (cartCount === 0) {
       setLocation("/products");
+      return;
+    }
+    if (!isAuthenticated) {
+      // Don't redirect, let user login from checkout page
       return;
     }
     
@@ -491,9 +491,39 @@ export default function Checkout() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Address and Payment */}
-          <div className="lg:col-span-2 space-y-6">
+        {!isAuthenticated ? (
+          <div className="max-w-md mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Login Required</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">Please login to proceed with checkout</p>
+                <Button 
+                  onClick={() => {
+                    // This will open the auth modal
+                    const authModal = document.querySelector('[data-auth-modal]') as HTMLElement;
+                    if (authModal) {
+                      authModal.click();
+                    }
+                  }}
+                  className="bg-hednor-gold text-hednor-dark hover:bg-yellow-500"
+                >
+                  Login to Continue
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Address and Payment */}
+            <div className="lg:col-span-2 space-y-6"></div>
+        )}
+
+        {isAuthenticated && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Address and Payment */}
+            <div className="lg:col-span-2 space-y-6">
             {/* Shipping Address */}
             <Card>
               <CardHeader>
@@ -771,7 +801,8 @@ export default function Checkout() {
               </CardContent>
             </Card>
           </div>
-        </div>
+          </div>
+        )}
       </div>
 
       <Footer />
