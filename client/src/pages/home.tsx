@@ -65,9 +65,9 @@ export default function Home() {
       
 
       {/* Promotional Ticker */}
-      <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-2 sm:py-3 overflow-hidden">
+      <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-3 sm:py-4 overflow-hidden">
         <div className="relative overflow-hidden">
-          <div className="flex animate-scroll space-x-6 sm:space-x-8 md:space-x-12 text-xs sm:text-sm font-semibold whitespace-nowrap">
+          <div className="flex space-x-8 sm:space-x-12 md:space-x-16 text-sm sm:text-base font-semibold whitespace-nowrap" style={{ animation: 'scroll 60s linear infinite' }}>
             <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Flash Sale: Extra 20% Off - Limited Time</span>

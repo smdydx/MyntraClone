@@ -1429,7 +1429,6 @@ img, video {
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
   .animate-in {
     animation: enter 200ms ease-out;
   }
@@ -1518,7 +1517,7 @@ img, video {
 
   @keyframes scroll {
   0% {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
   100% {
     transform: translateX(-100%);
