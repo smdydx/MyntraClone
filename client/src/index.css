@@ -1050,6 +1050,15 @@
   transition: transform 8000ms ease-out;
 }
 
+/* Custom duration classes */
+.duration-6000 {
+  transition-duration: 6000ms;
+}
+
+.duration-8000 {
+  transition-duration: 8000ms;
+}
+
 .hero-slide-enter-active {
   opacity: 1;
   transform: translateX(0) scale(1);

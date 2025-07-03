@@ -49,7 +49,7 @@ export default function BrandShowcase() {
   };
 
   return (
-    <section className="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <section className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Background Slides */}
       {brandSlides.map((slide, index) => (
         <div
@@ -62,8 +62,12 @@ export default function BrandShowcase() {
           )}
         >
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 hover:scale-100 transition-transform duration-[8s] ease-out"
-            style={{ backgroundImage: `url(${slide.backgroundImage})` }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 hover:scale-100 transition-transform duration-8000 ease-out"
+            style={{ 
+              backgroundImage: `url(${slide.backgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           />
           
           {/* Gradient Overlay */}
@@ -75,50 +79,50 @@ export default function BrandShowcase() {
       {/* Content */}
       <div className="relative z-20 h-full">
         <div className="container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-2xl">
+          <div className="max-w-full sm:max-w-2xl">
             <div className={cn(
               "transition-all duration-1000 ease-out transform",
               "translate-y-0 opacity-100"
             )}>
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full mb-4">
-                <Award className="w-3 h-3 text-hednor-gold" />
+              <div className="inline-flex items-center gap-1 sm:gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full mb-3 sm:mb-4">
+                <Award className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-hednor-gold" />
                 <span className="text-xs font-medium text-white">
                   {brandSlides[currentSlide].badge}
                 </span>
               </div>
 
               {/* Title */}
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
+              <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 leading-tight">
                 {brandSlides[currentSlide].title}
               </h2>
 
               {/* Subtitle */}
-              <p className="text-lg md:text-xl text-hednor-gold mb-3 font-medium">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-hednor-gold mb-2 sm:mb-3 font-medium">
                 {brandSlides[currentSlide].subtitle}
               </p>
 
               {/* Description */}
-              <p className="text-sm md:text-base text-gray-200 mb-6 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm md:text-base text-gray-200 mb-4 sm:mb-6 max-w-xl leading-relaxed">
                 {brandSlides[currentSlide].description}
               </p>
 
               {/* CTA and Stats */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-6 py-3 text-sm transition-all transform hover:scale-105 shadow-xl"
+                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm transition-all transform hover:scale-105 shadow-xl w-full sm:w-auto"
                   onClick={() => {
                     window.location.href = brandSlides[currentSlide].buttonLink;
                   }}
                 >
                   {brandSlides[currentSlide].buttonText}
-                  <ArrowRight className="ml-2 w-4 h-4" />
+                  <ArrowRight className="ml-2 w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div className="text-center">
-                    <div className="text-xl md:text-2xl font-bold text-white">
+                    <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                       {brandSlides[currentSlide].stats.value}
                     </div>
                     <div className="text-xs text-gray-400">
@@ -126,11 +130,11 @@ export default function BrandShowcase() {
                     </div>
                   </div>
                   
-                  <div className="w-px h-8 bg-gray-600" />
+                  <div className="w-px h-6 sm:h-8 bg-gray-600" />
                   
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-hednor-gold text-hednor-gold" />
+                      <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-hednor-gold text-hednor-gold" />
                     ))}
                     <span className="text-white text-xs font-medium ml-1">4.9</span>
                   </div>
@@ -142,8 +146,8 @@ export default function BrandShowcase() {
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-3 py-2 border border-white/20">
+      <div className="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-2 sm:px-3 py-1.5 sm:py-2 border border-white/20">
           {brandSlides.map((_, index) => (
             <button
               key={index}
@@ -151,8 +155,8 @@ export default function BrandShowcase() {
               className={cn(
                 "relative rounded-full transition-all duration-300 ease-out",
                 index === currentSlide 
-                  ? "w-2.5 h-2.5 bg-hednor-gold shadow-lg shadow-hednor-gold/40" 
-                  : "w-2 h-2 bg-white/50 hover:bg-white/80"
+                  ? "w-2 h-2 sm:w-2.5 sm:h-2.5 bg-hednor-gold shadow-lg shadow-hednor-gold/40" 
+                  : "w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/50 hover:bg-white/80"
               )}
             >
               <span className="sr-only">Go to slide {index + 1}</span>
@@ -162,9 +166,9 @@ export default function BrandShowcase() {
       </div>
 
       {/* Slide Counter */}
-      <div className="absolute bottom-4 right-4 z-30">
-        <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl px-3 py-2">
-          <div className="text-white text-sm font-medium">
+      <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 z-30">
+        <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-2">
+          <div className="text-white text-xs sm:text-sm font-medium">
             <span className="text-hednor-gold">{String(currentSlide + 1).padStart(2, '0')}</span>
             <span className="text-white/50 mx-1">/</span>
             <span className="text-white/70">{String(brandSlides.length).padStart(2, '0')}</span>

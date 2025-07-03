@@ -66,39 +66,39 @@ export default function Home() {
 
       {/* Promotional Ticker */}
       <div className="bg-gradient-to-r from-hednor-gold via-yellow-400 to-hednor-gold text-hednor-dark py-2 sm:py-3 overflow-hidden">
-        <div className="relative overflow-safe">
-          <div className="flex animate-scroll space-x-8 sm:space-x-12 text-xs sm:text-sm font-semibold whitespace-nowrap">
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Clock className="w-4 h-4" />
+        <div className="relative overflow-hidden">
+          <div className="flex animate-scroll space-x-6 sm:space-x-8 md:space-x-12 text-xs sm:text-sm font-semibold whitespace-nowrap">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Flash Sale: Extra 20% Off - Limited Time</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Star className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Up to 70% Off on Premium Brands</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Heart className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Buy 2 Get 1 Free on Selected Items</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Zap className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>New User Special: Extra 15% Discount</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <ShoppingCart className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Mega Sale: Upto 80% Off Fashion</span>
             </div>
             {/* Duplicate for seamless scroll */}
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Clock className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Flash Sale: Extra 20% Off - Limited Time</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Star className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Up to 70% Off on Premium Brands</span>
             </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <Heart className="w-4 h-4" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+              <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Buy 2 Get 1 Free on Selected Items</span>
             </div>
           </div>
