@@ -1561,7 +1561,7 @@ export default function Header() {
                     <img
                       src={hednorLogoPath}
                       alt="Hednor"
-                      className="w-16 h-16 sm:w-18 sm:h-18 object-contain"
+                      className="w-20 h-20 sm:w-18 sm:h-18 object-contain"
                     />
                   </Link>
                 </div>
