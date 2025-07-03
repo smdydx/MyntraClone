@@ -1246,7 +1246,7 @@ export default function AdminDashboard() {
                     icon: <ShoppingCart className="h-5 w-5" />,
                     label: "Orders",
                     isActive: activeTab === "orders",
-                    onClick: () => handleMainNavClick("orders")},
+                    onClick: () => handleMainNavClick("orders"),
                     badge: orders.length,
                     submenu: [
                       {
