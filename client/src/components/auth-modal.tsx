@@ -18,10 +18,12 @@ interface AuthModalProps {
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [isLogin, setIsLogin] = useState(initialMode === 'login');
   const [formData, setFormData] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
+    phone: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -30,10 +32,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
 
   const resetForm = () => {
     setFormData({
-      username: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
+      phone: '',
     });
     setShowPassword(false);
     setShowConfirmPassword(false);
@@ -44,11 +48,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
   };
 
   const loginMutation = useMutation({
-    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+    mutationFn: async ({ email, password }: { email: string; password: string }) => {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -76,11 +80,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
   });
 
   const registerMutation = useMutation({
-    mutationFn: async ({ username, email, password }: { username: string; email: string; password: string }) => {
+    mutationFn: async ({ firstName, lastName, email, password, phone }: { firstName: string; lastName: string; email: string; password: string; phone: string }) => {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ firstName, lastName, email, password, phone }),
       });
 
       if (!response.ok) {
@@ -111,7 +115,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
     e.preventDefault();
 
     if (isLogin) {
-      if (!formData.username || !formData.password) {
+      if (!formData.email || !formData.password) {
         toast({
           title: 'Missing Information',
           description: 'Please fill in all required fields.',
@@ -119,9 +123,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
         });
         return;
       }
-      loginMutation.mutate({ username: formData.username, password: formData.password });
+      loginMutation.mutate({ email: formData.email, password: formData.password });
     } else {
-      if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
         toast({
           title: 'Missing Information',
           description: 'Please fill in all required fields.',
@@ -149,9 +153,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
       }
 
       registerMutation.mutate({ 
-        username: formData.username, 
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email, 
-        password: formData.password 
+        password: formData.password,
+        phone: formData.phone
       });
     }
   };
@@ -188,24 +194,86 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'l
         {/* Form */}
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            {/* Username Field */}
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <User className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
-                Username
-              </Label>
-              <div className="relative">
-                <Input
-                  id="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={(e) => handleInputChange('username', e.target.value)}
-                  required
-                  className="h-10 sm:h-12 pl-3 sm:pl-4 pr-3 sm:pr-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-hednor-gold focus:ring-hednor-gold/20 transition-all duration-200"
-                  placeholder="Enter your username"
-                />
+            {/* Email Field (For Login) */}
+            {isLogin && (
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    required
+                    className="h-10 sm:h-12 pl-3 sm:pl-4 pr-3 sm:pr-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-hednor-gold focus:ring-hednor-gold/20 transition-all duration-200"
+                    placeholder="Enter your email"
+                  />
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* First Name & Last Name Fields (Register only) */}
+            {!isLogin && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center gap-2">
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
+                      First Name
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="firstName"
+                        type="text"
+                        value={formData.firstName}
+                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                        required
+                        className="h-10 sm:h-12 pl-3 sm:pl-4 pr-3 sm:pr-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-hednor-gold focus:ring-hednor-gold/20 transition-all duration-200"
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center gap-2">
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
+                      Last Name
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="lastName"
+                        type="text"
+                        value={formData.lastName}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        required
+                        className="h-10 sm:h-12 pl-3 sm:pl-4 pr-3 sm:pr-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-hednor-gold focus:ring-hednor-gold/20 transition-all duration-200"
+                        placeholder="Enter your last name"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Phone Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <User className="w-3 h-3 sm:w-4 sm:h-4 text-hednor-gold" />
+                    Phone Number
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      className="h-10 sm:h-12 pl-3 sm:pl-4 pr-3 sm:pr-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl focus:border-hednor-gold focus:ring-hednor-gold/20 transition-all duration-200"
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Email Field (Register only) */}
             {!isLogin && (
