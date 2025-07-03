@@ -219,19 +219,19 @@ export default function HeroSlider() {
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="flex items-center gap-4">
+      <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="flex items-center gap-2 md:gap-4">
           {/* Slide Indicators */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={cn(
-                  "h-2 rounded-full transition-all duration-300",
+                  "h-1.5 md:h-2 rounded-full transition-all duration-300",
                   index === currentSlide 
-                    ? "w-8 bg-hednor-gold" 
-                    : "w-2 bg-white/40 hover:bg-white/60"
+                    ? "w-6 md:w-8 bg-hednor-gold" 
+                    : "w-1.5 md:w-2 bg-white/40 hover:bg-white/60"
                 )}
               />
             ))}
@@ -241,12 +241,12 @@ export default function HeroSlider() {
           {heroSlides[currentSlide].isVideo && (
             <button
               onClick={toggleVideo}
-              className="ml-4 p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all"
+              className="ml-2 md:ml-4 p-1.5 md:p-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all"
             >
               {isVideoPlaying ? (
-                <Pause className="w-4 h-4 text-white" />
+                <Pause className="w-3 h-3 md:w-4 md:h-4 text-white" />
               ) : (
-                <Play className="w-4 h-4 text-white" />
+                <Play className="w-3 h-3 md:w-4 md:h-4 text-white" />
               )}
             </button>
           )}
@@ -257,19 +257,19 @@ export default function HeroSlider() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-12 h-12"
+        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-8 h-8 md:w-12 md:h-12"
         onClick={prevSlide}
       >
-        <ChevronLeft className="h-6 w-6" />
+        <ChevronLeft className="h-4 w-4 md:h-6 md:w-6" />
       </Button>
 
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-12 h-12"
+        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white w-8 h-8 md:w-12 md:h-12"
         onClick={nextSlide}
       >
-        <ChevronRight className="h-6 w-6" />
+        <ChevronRight className="h-4 w-4 md:h-6 md:w-6" />
       </Button>
 
       
