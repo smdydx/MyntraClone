@@ -227,20 +227,20 @@ export default function Products() {
             {/* Mobile Filter */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="md:hidden flex items-center border-2 border-gray-300 hover:border-hednor-gold hover:text-hednor-gold px-4 py-2">
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                <Button variant="outline" size="sm" className="md:hidden flex items-center border-2 border-gray-300 hover:border-hednor-gold hover:text-hednor-gold px-3 py-2 text-sm">
+                  <SlidersHorizontal className="w-4 h-4 mr-1" />
                   <span className="font-medium">Filters</span>
                   {(selectedBrands.length > 0 || selectedSizes.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 10000) && (
-                    <span className="ml-2 bg-hednor-gold text-white text-xs px-2 py-1 rounded-full">
+                    <span className="ml-1 bg-hednor-gold text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                       {selectedBrands.length + selectedSizes.length + selectedCategories.length + (priceRange[0] > 0 || priceRange[1] < 10000 ? 1 : 0)}
                     </span>
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[320px] sm:w-[360px] max-w-[85vw] p-0 bg-white">
-                <SheetHeader className="p-4 border-b border-gray-200 bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <SheetTitle className="text-lg font-bold text-gray-800">Filters</SheetTitle>
+              <SheetContent side="right" className="w-[90vw] max-w-[360px] p-0 bg-white">
+                <SheetHeader className="p-3 border-b border-gray-200 bg-gray-50">
+                  <div className="flex items-center justify-between w-full">
+                    <SheetTitle className="text-base font-bold text-gray-800 flex-1">Filters</SheetTitle>
                     <Button 
                       variant="ghost" 
                       size="sm" 
@@ -250,16 +250,16 @@ export default function Products() {
                         setSelectedSizes([]);
                         setSelectedCategories([]);
                       }}
-                      className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 font-medium"
+                      className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 font-medium text-xs px-2 py-1 h-7 ml-2 flex-shrink-0"
                     >
                       Clear All
                     </Button>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1 text-left">
                     {filteredProducts.length} products found
                   </p>
                 </SheetHeader>
-                <div className="overflow-y-auto max-h-[calc(100vh-120px)] p-4">
+                <div className="overflow-y-auto max-h-[calc(100vh-100px)] p-3">
                   <FilterSidebar />
                 </div>
               </SheetContent>
@@ -269,9 +269,9 @@ export default function Products() {
 
         {/* Active Filters Display */}
         {(selectedBrands.length > 0 || selectedSizes.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 10000) && (
-          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-800">Active Filters</h3>
+          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm mb-6">
+            <div className="flex items-start justify-between mb-3 gap-2">
+              <h3 className="font-semibold text-gray-800 text-sm md:text-base flex-1">Active Filters</h3>
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -281,20 +281,20 @@ export default function Products() {
                   setSelectedSizes([]);
                   setSelectedCategories([]);
                 }}
-                className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 text-sm"
+                className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 text-xs md:text-sm px-2 py-1 h-7 md:h-8 flex-shrink-0"
               >
                 Clear All
               </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
               {selectedCategories.map((categoryId) => {
                 const category = categories.find(c => (c.id || c._id)?.toString() === categoryId);
                 return category ? (
-                  <span key={categoryId} className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                    {category.name}
+                  <span key={categoryId} className="inline-flex items-center bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
+                    <span className="truncate max-w-[100px] md:max-w-none">{category.name}</span>
                     <button 
                       onClick={() => setSelectedCategories(selectedCategories.filter(c => c !== categoryId))}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
+                      className="ml-1 md:ml-2 text-blue-600 hover:text-blue-800 flex-shrink-0 w-4 h-4 flex items-center justify-center"
                     >
                       ×
                     </button>
@@ -302,33 +302,33 @@ export default function Products() {
                 ) : null;
               })}
               {selectedBrands.map((brand) => (
-                <span key={brand} className="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                  {brand}
+                <span key={brand} className="inline-flex items-center bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
+                  <span className="truncate max-w-[80px] md:max-w-none">{brand}</span>
                   <button 
                     onClick={() => setSelectedBrands(selectedBrands.filter(b => b !== brand))}
-                    className="ml-2 text-green-600 hover:text-green-800"
+                    className="ml-1 md:ml-2 text-green-600 hover:text-green-800 flex-shrink-0 w-4 h-4 flex items-center justify-center"
                   >
                     ×
                   </button>
                 </span>
               ))}
               {selectedSizes.map((size) => (
-                <span key={size} className="inline-flex items-center bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
-                  Size {size}
+                <span key={size} className="inline-flex items-center bg-purple-100 text-purple-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
+                  <span className="truncate">Size {size}</span>
                   <button 
                     onClick={() => setSelectedSizes(selectedSizes.filter(s => s !== size))}
-                    className="ml-2 text-purple-600 hover:text-purple-800"
+                    className="ml-1 md:ml-2 text-purple-600 hover:text-purple-800 flex-shrink-0 w-4 h-4 flex items-center justify-center"
                   >
                     ×
                   </button>
                 </span>
               ))}
               {(priceRange[0] > 0 || priceRange[1] < 10000) && (
-                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
-                  ₹{priceRange[0]} - ₹{priceRange[1]}
+                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
+                  <span className="truncate">₹{priceRange[0]} - ₹{priceRange[1]}</span>
                   <button 
                     onClick={() => setPriceRange([0, 10000])}
-                    className="ml-2 text-yellow-600 hover:text-yellow-800"
+                    className="ml-1 md:ml-2 text-yellow-600 hover:text-yellow-800 flex-shrink-0 w-4 h-4 flex items-center justify-center"
                   >
                     ×
                   </button>
