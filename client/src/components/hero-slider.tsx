@@ -153,7 +153,7 @@ export default function HeroSlider() {
               <div className="hero-button-container flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-20 xs:mb-24 sm:mb-8 px-8 xs:px-6 sm:px-0">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full xs:w-full sm:w-auto min-h-[44px] rounded-lg max-w-[calc(100vw-100px)] xs:max-w-[calc(100vw-80px)] sm:max-w-none"
+                  className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-auto xs:w-auto sm:w-auto min-h-[44px] rounded-lg max-w-[200px] xs:max-w-[240px] sm:max-w-none"
                   onClick={() => {
                     window.location.href = heroSlides[currentSlide].buttonLink;
                   }}
