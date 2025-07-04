@@ -951,6 +951,8 @@
     .auth-input {
       border-width: 1px;
     }
+This modification removes the extra bottom padding on mobile to prevent empty space below the footer.
+```css
   }
 
   /* Form Validation Styles */
@@ -996,7 +998,7 @@
   .hero-button-container {
     margin-bottom: 6rem !important;
   }
-  
+
   .hero-slide-counter {
     bottom: 0.5rem !important;
   }
@@ -1013,19 +1015,19 @@
   .footer-links-mobile {
     padding: 0.5rem;
   }
-  
+
   .footer-links-mobile h3 {
     font-size: 0.875rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .footer-links-mobile a {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     transition: all 0.2s ease;
   }
-  
+
   .footer-links-mobile a:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
@@ -1035,11 +1037,11 @@
   .footer-links-mobile {
     padding: 0.25rem;
   }
-  
+
   .footer-links-mobile h3 {
     font-size: 0.8125rem;
   }
-  
+
   .footer-links-mobile a {
     font-size: 0.6875rem;
     padding: 0.1875rem 0.375rem;
@@ -1306,19 +1308,20 @@
     }
   }
 
-  /* Mobile Footer Fixes */
-  @media (max-width: 768px) {
-    footer {
-      position: relative;
-      z-index: 10;
-      margin-bottom: 0 !important;
-      padding-bottom: 80px !important;
-    }
-
-    body {
-      padding-bottom: 0;
-    }
+/* Mobile Footer Fixes */
+@media (max-width: 768px) {
+  footer {
+    position: relative;
+    z-index: 10;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
+
+  body {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
 
   /* Loading States */
   .loading-skeleton {
