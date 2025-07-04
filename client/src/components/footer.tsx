@@ -58,41 +58,85 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Footer Links - 1 row × 3 columns layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center sm:text-left">Quick Links</h3>
-              <div className="grid grid-cols-1 gap-2">
-                <Link href="/about" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">About Us</Link>
-                <Link href="/contact" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Contact</Link>
-                <Link href="/faq" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">FAQ</Link>
-                <Link href="/size-guide" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Size Guide</Link>
-                <Link href="/live-chat" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Live Chat</Link>
+          {/* Footer Links - Mobile: single row, Desktop: 3 columns */}
+          <div className="space-y-6">
+            {/* Mobile View - All links in one horizontal scrollable row */}
+            <div className="block sm:hidden">
+              <div className="flex overflow-x-auto space-x-6 pb-2 scrollbar-hide">
+                {/* Quick Links */}
+                <div className="flex-shrink-0 space-y-2">
+                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Quick Links</h3>
+                  <div className="flex space-x-4">
+                    <Link href="/about" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">About Us</Link>
+                    <Link href="/contact" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Contact</Link>
+                    <Link href="/faq" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">FAQ</Link>
+                    <Link href="/size-guide" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Size Guide</Link>
+                    <Link href="/live-chat" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Live Chat</Link>
+                  </div>
+                </div>
+                
+                {/* Categories */}
+                <div className="flex-shrink-0 space-y-2">
+                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Categories</h3>
+                  <div className="flex space-x-4">
+                    <Link href="/products?category=men" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Men's Fashion</Link>
+                    <Link href="/products?category=women" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Women's Fashion</Link>
+                    <Link href="/products?category=kids" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Kids' Fashion</Link>
+                    <Link href="/products?category=accessories" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Accessories</Link>
+                    <Link href="/products?category=beauty" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Beauty & Care</Link>
+                  </div>
+                </div>
+                
+                {/* Customer Service */}
+                <div className="flex-shrink-0 space-y-2">
+                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Customer Service</h3>
+                  <div className="flex space-x-4">
+                    <Link href="/order-tracking" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Track Orders</Link>
+                    <Link href="/shipping" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Shipping Info</Link>
+                    <Link href="/returns" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Returns & Exchanges</Link>
+                    <Link href="/wishlist" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Wishlist</Link>
+                    <Link href="/profile" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">My Account</Link>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Categories */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center sm:text-left">Categories</h3>
-              <div className="grid grid-cols-1 gap-2">
-                <Link href="/products?category=men" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Men's Fashion</Link>
-                <Link href="/products?category=women" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Women's Fashion</Link>
-                <Link href="/products?category=kids" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Kids' Fashion</Link>
-                <Link href="/products?category=accessories" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Accessories</Link>
-                <Link href="/products?category=beauty" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Beauty & Care</Link>
+            {/* Desktop View - 3 columns layout */}
+            <div className="hidden sm:grid sm:grid-cols-3 gap-8 sm:gap-6">
+              {/* Quick Links */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">Quick Links</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  <Link href="/about" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">About Us</Link>
+                  <Link href="/contact" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Contact</Link>
+                  <Link href="/faq" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">FAQ</Link>
+                  <Link href="/size-guide" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Size Guide</Link>
+                  <Link href="/live-chat" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Live Chat</Link>
+                </div>
               </div>
-            </div>
 
-            {/* Customer Service */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2 text-center sm:text-left">Customer Service</h3>
-              <div className="grid grid-cols-1 gap-2">
-                <Link href="/order-tracking" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Track Orders</Link>
-                <Link href="/shipping" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Shipping Info</Link>
-                <Link href="/returns" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Returns & Exchanges</Link>
-                <Link href="/wishlist" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">Wishlist</Link>
-                <Link href="/profile" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm text-center sm:text-left">My Account</Link>
+              {/* Categories */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">Categories</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  <Link href="/products?category=men" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Men's Fashion</Link>
+                  <Link href="/products?category=women" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Women's Fashion</Link>
+                  <Link href="/products?category=kids" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Kids' Fashion</Link>
+                  <Link href="/products?category=accessories" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Accessories</Link>
+                  <Link href="/products?category=beauty" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Beauty & Care</Link>
+                </div>
+              </div>
+
+              {/* Customer Service */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">Customer Service</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  <Link href="/order-tracking" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Track Orders</Link>
+                  <Link href="/shipping" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Shipping Info</Link>
+                  <Link href="/returns" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Returns & Exchanges</Link>
+                  <Link href="/wishlist" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">Wishlist</Link>
+                  <Link href="/profile" className="text-gray-400 hover:text-white hover:translate-x-1 transition-all text-sm">My Account</Link>
+                </div>
               </div>
             </div>
           </div>
