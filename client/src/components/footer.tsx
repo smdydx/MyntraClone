@@ -62,41 +62,36 @@ export default function Footer() {
           <div className="space-y-6">
             {/* Mobile View - All links in one horizontal scrollable row */}
             <div className="block sm:hidden">
-              <div className="flex overflow-x-auto space-x-6 pb-2 scrollbar-hide">
-                {/* Quick Links */}
-                <div className="flex-shrink-0 space-y-2">
-                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Quick Links</h3>
-                  <div className="flex space-x-4">
-                    <Link href="/about" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">About Us</Link>
-                    <Link href="/contact" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Contact</Link>
-                    <Link href="/faq" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">FAQ</Link>
-                    <Link href="/size-guide" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Size Guide</Link>
-                    <Link href="/live-chat" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Live Chat</Link>
-                  </div>
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Quick Links</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/about" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">About Us</Link>
+                  <Link href="/contact" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Contact</Link>
+                  <Link href="/faq" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">FAQ</Link>
+                  <Link href="/size-guide" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Size Guide</Link>
+                  <Link href="/live-chat" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Live Chat</Link>
                 </div>
-                
-                {/* Categories */}
-                <div className="flex-shrink-0 space-y-2">
-                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Categories</h3>
-                  <div className="flex space-x-4">
-                    <Link href="/products?category=men" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Men's Fashion</Link>
-                    <Link href="/products?category=women" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Women's Fashion</Link>
-                    <Link href="/products?category=kids" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Kids' Fashion</Link>
-                    <Link href="/products?category=accessories" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Accessories</Link>
-                    <Link href="/products?category=beauty" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Beauty & Care</Link>
-                  </div>
+              </div>
+              
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Categories</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/products?category=men" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Men's Fashion</Link>
+                  <Link href="/products?category=women" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Women's Fashion</Link>
+                  <Link href="/products?category=kids" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Kids' Fashion</Link>
+                  <Link href="/products?category=accessories" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Accessories</Link>
+                  <Link href="/products?category=beauty" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Beauty & Care</Link>
                 </div>
-                
-                {/* Customer Service */}
-                <div className="flex-shrink-0 space-y-2">
-                  <h3 className="text-sm font-semibold text-white whitespace-nowrap">Customer Service</h3>
-                  <div className="flex space-x-4">
-                    <Link href="/order-tracking" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Track Orders</Link>
-                    <Link href="/shipping" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Shipping Info</Link>
-                    <Link href="/returns" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Returns & Exchanges</Link>
-                    <Link href="/wishlist" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Wishlist</Link>
-                    <Link href="/profile" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">My Account</Link>
-                  </div>
+              </div>
+              
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Customer Service</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/order-tracking" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Track Orders</Link>
+                  <Link href="/shipping" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Shipping Info</Link>
+                  <Link href="/returns" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Returns & Exchanges</Link>
+                  <Link href="/wishlist" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Wishlist</Link>
+                  <Link href="/profile" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">My Account</Link>
                 </div>
               </div>
             </div>
