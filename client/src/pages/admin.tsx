@@ -380,11 +380,17 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  // Real-time data simulation
+  // Real-time data refresh
   useEffect(() => {
     if (isLoggedIn) {
       const interval = setInterval(() => {
+        // Refresh all admin data every 30 seconds
         queryClient.invalidateQueries({ queryKey: ["admin", "analytics"] });
+        queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+        queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+        queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+        queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
+        queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
       }, 30000); // Refresh every 30 seconds
 
       return () => clearInterval(interval);
@@ -1504,6 +1510,17 @@ export default function AdminDashboard() {
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
+                {/* Real-time indicator */}
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>Live</span>
+                  </div>
+                  <span className="text-xs">
+                    Updated: {new Date().toLocaleTimeString()}
+                  </span>
+                </div>
+
                 {/* Search */}
                 <div className="relative flex-1 sm:flex-initial">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -1578,9 +1595,14 @@ export default function AdminDashboard() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => queryClient.invalidateQueries()}
+                  onClick={() => {
+                    queryClient.invalidateQueries();
+                    toast({ title: "Data refreshed successfully" });
+                  }}
+                  disabled={statsLoading || productsLoading || categoriesLoading}
                 >
-                  <RefreshCw className="h-4 w-4" />
+                  <RefreshCw className={`h-4 w-4 ${(statsLoading || productsLoading || categoriesLoading) ? 'animate-spin' : ''}`} />
+                  {(statsLoading || productsLoading || categoriesLoading) ? 'Refreshing...' : 'Refresh'}
                 </Button>
 
                 {/* Logout */}
@@ -3036,18 +3058,457 @@ export default function AdminDashboard() {
                     </Card>
                   </TabsContent>
 
-                  <TabsContent value="general">
+                  {/* Hero Section Tab */}
+                  <TabsContent value="hero">
                     <Card>
                       <CardHeader>
-                        <CardTitle>Seed Data</CardTitle>
+                        <CardTitle className="flex items-center gap-2">
+                          <Star className="h-5 w-5" />
+                          Hero Section Settings
+                        </CardTitle>
                         <CardDescription>
-                          Seed the database with sample data for testing and development.
+                          Configure your homepage hero section content and appearance
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <Button onClick={handleSeedData}>Seed Sample Data</Button>
+                        <form onSubmit={handleSettingsSubmit} className="space-y-6">
+                          <div className="space-y-4">
+                            <div>
+                              <Label htmlFor="heroTitle">Hero Title</Label>
+                              <Input 
+                                id="heroTitle" 
+                                name="heroTitle" 
+                                placeholder="Premium Fashion Experience"
+                                defaultValue={siteSettings?.heroTitle || "Premium Fashion Experience"}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Main heading displayed on hero section</p>
+                            </div>
+                            <div>
+                              <Label htmlFor="heroSubtitle">Hero Subtitle</Label>
+                              <Input 
+                                id="heroSubtitle" 
+                                name="heroSubtitle" 
+                                placeholder="Elevate Your Style"
+                                defaultValue={siteSettings?.heroSubtitle || "Elevate Your Style"}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Secondary heading below main title</p>
+                            </div>
+                            <div>
+                              <Label htmlFor="heroCTA">Hero Call-to-Action Text</Label>
+                              <Input 
+                                id="heroCTA" 
+                                name="heroCTA" 
+                                placeholder="Explore Collection"
+                                defaultValue={siteSettings?.heroCTA || "Explore Collection"}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Text on the hero section button</p>
+                            </div>
+                            <div>
+                              <Label htmlFor="heroVideo">Hero Video URL</Label>
+                              <Input 
+                                id="heroVideo" 
+                                name="heroVideo" 
+                                placeholder="https://example.com/hero-video.mp4"
+                                defaultValue={siteSettings?.heroVideo || ""}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Video file URL for hero background</p>
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <div>
+                                <Label htmlFor="showHeroVideo">Show Hero Video</Label>
+                                <p className="text-xs text-gray-500">Display video in hero section</p>
+                              </div>
+                              <Switch 
+                                id="showHeroVideo" 
+                                name="showHeroVideo" 
+                                defaultChecked={siteSettings?.showHeroVideo || false} 
+                              />
+                            </div>
+                          </div>
+                          <div className="pt-4 border-t">
+                            <Button type="submit" disabled={updateSettingsMutation.isPending}>
+                              {updateSettingsMutation.isPending ? "Updating..." : "Update Hero Section"}
+                            </Button>
+                          </div>
+                        </form>
                       </CardContent>
                     </Card>
+                  </TabsContent>
+
+                  {/* Homepage Tab */}
+                  <TabsContent value="homepage">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Home className="h-5 w-5" />
+                          Homepage Settings
+                        </CardTitle>
+                        <CardDescription>
+                          Customize homepage sections and display options
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <form onSubmit={handleSettingsSubmit} className="space-y-6">
+                          <div className="space-y-6">
+                            <div>
+                              <Label htmlFor="aboutText">About Section Text</Label>
+                              <Textarea 
+                                id="aboutText" 
+                                name="aboutText" 
+                                placeholder="Tell your customers about your brand story..."
+                                rows={4}
+                                defaultValue={siteSettings?.aboutText || ""}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Text displayed in the about section</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                  <Label htmlFor="showBreadcrumbs">Show Breadcrumbs</Label>
+                                  <p className="text-xs text-gray-500">Display navigation breadcrumbs</p>
+                                </div>
+                                <Switch 
+                                  id="showBreadcrumbs" 
+                                  name="showBreadcrumbs" 
+                                  defaultChecked={siteSettings?.showBreadcrumbs || true} 
+                                />
+                              </div>
+                              
+                              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                  <Label htmlFor="showRecentlyViewed">Recently Viewed</Label>
+                                  <p className="text-xs text-gray-500">Show recently viewed products</p>
+                                </div>
+                                <Switch 
+                                  id="showRecentlyViewed" 
+                                  name="showRecentlyViewed" 
+                                  defaultChecked={siteSettings?.showRecentlyViewed || true} 
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <Label htmlFor="footerText">Footer Text</Label>
+                              <Input 
+                                id="footerText" 
+                                name="footerText" 
+                                placeholder="© 2024 Your Store. All rights reserved."
+                                defaultValue={siteSettings?.footerText || ""}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Copyright text in footer</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <Label htmlFor="contactEmail">Contact Email</Label>
+                                <Input 
+                                  id="contactEmail" 
+                                  name="contactEmail" 
+                                  type="email"
+                                  placeholder="contact@yourstore.com"
+                                  defaultValue={siteSettings?.contactEmail || ""}
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="contactPhone">Contact Phone</Label>
+                                <Input 
+                                  id="contactPhone" 
+                                  name="contactPhone" 
+                                  placeholder="+91 12345 67890"
+                                  defaultValue={siteSettings?.contactPhone || ""}
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <Label htmlFor="businessAddress">Business Address</Label>
+                              <Textarea 
+                                id="businessAddress" 
+                                name="businessAddress" 
+                                placeholder="Your business address..."
+                                rows={3}
+                                defaultValue={siteSettings?.businessAddress || ""}
+                              />
+                            </div>
+
+                            <div>
+                              <Label htmlFor="businessHours">Business Hours</Label>
+                              <Input 
+                                id="businessHours" 
+                                name="businessHours" 
+                                placeholder="Mon-Fri: 9AM-6PM, Sat-Sun: 10AM-4PM"
+                                defaultValue={siteSettings?.businessHours || ""}
+                              />
+                            </div>
+                          </div>
+                          <div className="pt-4 border-t">
+                            <Button type="submit" disabled={updateSettingsMutation.isPending}>
+                              {updateSettingsMutation.isPending ? "Updating..." : "Update Homepage Settings"}
+                            </Button>
+                          </div>
+                        </form>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  {/* Media Tab */}
+                  <TabsContent value="media">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Upload className="h-5 w-5" />
+                          Media Management
+                        </CardTitle>
+                        <CardDescription>
+                          Manage your site's media files and upload settings
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Card className="p-4">
+                              <h3 className="font-semibold mb-3">Quick Upload</h3>
+                              <div className="space-y-3">
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                  <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                                  <p className="text-sm text-gray-600">Drag & drop files here or click to browse</p>
+                                  <Button variant="outline" className="mt-2" size="sm">
+                                    Choose Files
+                                  </Button>
+                                </div>
+                                <p className="text-xs text-gray-500">Supported: JPG, PNG, GIF, MP4 (Max: 10MB)</p>
+                              </div>
+                            </Card>
+
+                            <Card className="p-4">
+                              <h3 className="font-semibold mb-3">Media Statistics</h3>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Total Files:</span>
+                                  <span className="font-medium">0</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Storage Used:</span>
+                                  <span className="font-medium">0 MB</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Available:</span>
+                                  <span className="font-medium text-green-600">1 GB</span>
+                                </div>
+                              </div>
+                            </Card>
+                          </div>
+
+                          <div>
+                            <h3 className="font-semibold mb-3">Recent Uploads</h3>
+                            <div className="border rounded-lg p-4">
+                              <div className="text-center text-gray-500 py-8">
+                                <Upload className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                                <p>No media files uploaded yet</p>
+                                <p className="text-sm">Upload your first file to get started</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="font-semibold mb-3">Media Settings</h3>
+                            <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="maxFileSize">Max File Size (MB)</Label>
+                                  <Input 
+                                    id="maxFileSize" 
+                                    name="maxFileSize" 
+                                    type="number"
+                                    placeholder="10"
+                                    defaultValue="10"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="allowedFormats">Allowed Formats</Label>
+                                  <Input 
+                                    id="allowedFormats" 
+                                    name="allowedFormats" 
+                                    placeholder="jpg,png,gif,mp4"
+                                    defaultValue="jpg,png,gif,mp4"
+                                  />
+                                </div>
+                              </div>
+                              <div className="pt-4 border-t">
+                                <Button type="submit" disabled={updateSettingsMutation.isPending}>
+                                  {updateSettingsMutation.isPending ? "Updating..." : "Update Media Settings"}
+                                </Button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  {/* General Tab */}
+                  <TabsContent value="general">
+                    <div className="space-y-6">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <Settings className="h-5 w-5" />
+                            General Settings
+                          </CardTitle>
+                          <CardDescription>
+                            General site configuration and SEO settings
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <form onSubmit={handleSettingsSubmit} className="space-y-6">
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="metaDescription">Meta Description</Label>
+                                <Textarea 
+                                  id="metaDescription" 
+                                  name="metaDescription" 
+                                  placeholder="A brief description of your website for search engines..."
+                                  rows={3}
+                                  defaultValue={siteSettings?.metaDescription || ""}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">SEO description (150-160 characters recommended)</p>
+                              </div>
+
+                              <div>
+                                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                                <Input 
+                                  id="metaKeywords" 
+                                  name="metaKeywords" 
+                                  placeholder="ecommerce, fashion, clothing, shopping"
+                                  defaultValue={siteSettings?.metaKeywords || ""}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Comma-separated keywords for SEO</p>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="supportEmail">Support Email</Label>
+                                  <Input 
+                                    id="supportEmail" 
+                                    name="supportEmail" 
+                                    type="email"
+                                    placeholder="support@yourstore.com"
+                                    defaultValue={siteSettings?.supportEmail || ""}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="googleAnalyticsId">Google Analytics ID</Label>
+                                  <Input 
+                                    id="googleAnalyticsId" 
+                                    name="googleAnalyticsId" 
+                                    placeholder="G-XXXXXXXXXX"
+                                    defaultValue={siteSettings?.googleAnalyticsId || ""}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                  <Label htmlFor="enableSEO">Enable SEO Features</Label>
+                                  <p className="text-xs text-gray-500">Optimize site for search engines</p>
+                                </div>
+                                <Switch 
+                                  id="enableSEO" 
+                                  name="enableSEO" 
+                                  defaultChecked={siteSettings?.enableSEO !== false} 
+                                />
+                              </div>
+                            </div>
+                            <div className="pt-4 border-t">
+                              <Button type="submit" disabled={updateSettingsMutation.isPending}>
+                                {updateSettingsMutation.isPending ? "Updating..." : "Update General Settings"}
+                              </Button>
+                            </div>
+                          </form>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <Database className="h-5 w-5" />
+                            Database Management
+                          </CardTitle>
+                          <CardDescription>
+                            Seed the database with sample data for testing and development
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <Button 
+                                onClick={handleSeedData}
+                                className="flex items-center gap-2"
+                              >
+                                <Database className="h-4 w-4" />
+                                Seed All Data
+                              </Button>
+                              <Button 
+                                variant="outline"
+                                onClick={async () => {
+                                  try {
+                                    const response = await fetch('/api/admin/seed-categories', {
+                                      method: 'POST',
+                                      headers: {
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                      }
+                                    });
+                                    if (response.ok) {
+                                      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
+                                      toast({ title: "Categories seeded successfully" });
+                                    }
+                                  } catch (error) {
+                                    toast({ title: "Failed to seed categories", variant: "destructive" });
+                                  }
+                                }}
+                              >
+                                <Package className="h-4 w-4 mr-2" />
+                                Seed Categories
+                              </Button>
+                              <Button 
+                                variant="outline"
+                                onClick={async () => {
+                                  try {
+                                    const response = await fetch('/api/admin/seed-products', {
+                                      method: 'POST',
+                                      headers: {
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                      }
+                                    });
+                                    if (response.ok) {
+                                      queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+                                      toast({ title: "Products seeded successfully" });
+                                    }
+                                  } catch (error) {
+                                    toast({ title: "Failed to seed products", variant: "destructive" });
+                                  }
+                                }}
+                              >
+                                <ShoppingCart className="h-4 w-4 mr-2" />
+                                Seed Products
+                              </Button>
+                            </div>
+                            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                              <div className="flex items-start gap-2">
+                                <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                                <div>
+                                  <h4 className="font-medium text-yellow-800">Warning</h4>
+                                  <p className="text-sm text-yellow-700">
+                                    Seeding will add sample data to your database. This is useful for development and testing.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </TabsContent>
                 </Tabs>
               </div>
