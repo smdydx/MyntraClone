@@ -60,43 +60,38 @@ export default function Footer() {
 
           {/* Footer Links - Mobile: single row, Desktop: 3 columns */}
           <div className="space-y-6">
-            {/* Mobile View - Single row with 3 columns */}
+            {/* Mobile View - All links in one horizontal scrollable row */}
             <div className="block sm:hidden">
-              <div className="grid grid-cols-3 gap-1 text-center">
-                {/* Quick Links Column */}
-                <div className="footer-links-mobile">
-                  <h3 className="text-xs font-semibold text-white mb-2">Quick Links</h3>
-                  <div className="space-y-1">
-                    <Link href="/about" className="block text-gray-400 hover:text-white text-xs">About</Link>
-                    <Link href="/contact" className="block text-gray-400 hover:text-white text-xs">Contact</Link>
-                    <Link href="/faq" className="block text-gray-400 hover:text-white text-xs">FAQ</Link>
-                    <Link href="/size-guide" className="block text-gray-400 hover:text-white text-xs">Size Guide</Link>
-                    <Link href="/live-chat" className="block text-gray-400 hover:text-white text-xs">Live Chat</Link>
-                  </div>
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Quick Links</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/about" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">About Us</Link>
+                  <Link href="/contact" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Contact</Link>
+                  <Link href="/faq" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">FAQ</Link>
+                  <Link href="/size-guide" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Size Guide</Link>
+                  <Link href="/live-chat" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Live Chat</Link>
                 </div>
-                
-                {/* Categories Column */}
-                <div className="footer-links-mobile">
-                  <h3 className="text-xs font-semibold text-white mb-2">Categories</h3>
-                  <div className="space-y-1">
-                    <Link href="/products?category=men" className="block text-gray-400 hover:text-white text-xs">Men's</Link>
-                    <Link href="/products?category=women" className="block text-gray-400 hover:text-white text-xs">Women's</Link>
-                    <Link href="/products?category=kids" className="block text-gray-400 hover:text-white text-xs">Kids'</Link>
-                    <Link href="/products?category=accessories" className="block text-gray-400 hover:text-white text-xs">Accessories</Link>
-                    <Link href="/products?category=beauty" className="block text-gray-400 hover:text-white text-xs">Beauty</Link>
-                  </div>
+              </div>
+              
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Categories</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/products?category=men" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Men's Fashion</Link>
+                  <Link href="/products?category=women" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Women's Fashion</Link>
+                  <Link href="/products?category=kids" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Kids' Fashion</Link>
+                  <Link href="/products?category=accessories" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Accessories</Link>
+                  <Link href="/products?category=beauty" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Beauty & Care</Link>
                 </div>
-                
-                {/* Customer Service Column */}
-                <div className="footer-links-mobile">
-                  <h3 className="text-xs font-semibold text-white mb-2">Service</h3>
-                  <div className="space-y-1">
-                    <Link href="/order-tracking" className="block text-gray-400 hover:text-white text-xs">Track Orders</Link>
-                    <Link href="/shipping" className="block text-gray-400 hover:text-white text-xs">Shipping</Link>
-                    <Link href="/returns" className="block text-gray-400 hover:text-white text-xs">Returns</Link>
-                    <Link href="/wishlist" className="block text-gray-400 hover:text-white text-xs">Wishlist</Link>
-                    <Link href="/profile" className="block text-gray-400 hover:text-white text-xs">My Account</Link>
-                  </div>
+              </div>
+              
+              <div className="footer-links-mobile">
+                <h3 className="text-sm font-semibold text-white text-center mb-3">Customer Service</h3>
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  <Link href="/order-tracking" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Track Orders</Link>
+                  <Link href="/shipping" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Shipping Info</Link>
+                  <Link href="/returns" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Returns & Exchanges</Link>
+                  <Link href="/wishlist" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">Wishlist</Link>
+                  <Link href="/profile" className="text-gray-400 hover:text-white text-xs whitespace-nowrap">My Account</Link>
                 </div>
               </div>
             </div>
