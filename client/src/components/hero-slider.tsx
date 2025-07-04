@@ -150,7 +150,7 @@ export default function HeroSlider() {
               </p>
 
               {/* Stats & CTA */}
-              <div className="flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-16 xs:mb-20 sm:mb-8 px-8 xs:px-6 sm:px-0">
+              <div className="hero-button-container flex flex-col xs:flex-col sm:flex-row items-center xs:items-start sm:items-center gap-3 xs:gap-4 sm:gap-6 mb-20 xs:mb-24 sm:mb-8 px-8 xs:px-6 sm:px-0">
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-hednor-gold to-yellow-500 text-black hover:from-yellow-500 hover:to-hednor-gold font-semibold px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base transition-all transform hover:scale-105 shadow-2xl hover:shadow-hednor-gold/25 w-full xs:w-full sm:w-auto min-h-[44px] rounded-lg max-w-[calc(100vw-100px)] xs:max-w-[calc(100vw-80px)] sm:max-w-none"
@@ -204,7 +204,7 @@ export default function HeroSlider() {
       
 
       {/* Slide Counter */}
-      <div className="absolute bottom-3 sm:bottom-6 md:bottom-12 right-3 sm:right-6 md:right-12 z-30">
+      <div className="hero-slide-counter absolute bottom-2 xs:bottom-3 sm:bottom-6 md:bottom-12 right-3 sm:right-6 md:right-12 z-30">
         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3">
           <div className="text-white text-xs sm:text-sm md:text-base font-medium">
             <span className="text-hednor-gold">{String(currentSlide + 1).padStart(2, '0')}</span>

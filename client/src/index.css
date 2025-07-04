@@ -981,6 +981,23 @@
   }
 }
 
+/* Hero section mobile fixes */
+@media (max-width: 479px) {
+  .hero-button-container {
+    margin-bottom: 6rem !important;
+  }
+  
+  .hero-slide-counter {
+    bottom: 0.5rem !important;
+  }
+}
+
+@media (max-width: 374px) {
+  .hero-button-container {
+    margin-bottom: 7rem !important;
+  }
+}
+
 /* Mobile filter fixes */
 @media (max-width: 768px) {
   /* Prevent filter button overlap */
