@@ -76,15 +76,16 @@ export default function Products() {
 
   const FilterSidebar = () => (
     <div className="space-y-4 md:space-y-6">
-      <div>
-        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Categories</h3>
-        <div className="space-y-1 md:space-y-2">
+      {/* Categories */}
+      <div className="border-b border-gray-200 pb-4">
+        <h3 className="font-semibold mb-3 text-sm md:text-base text-gray-800 uppercase tracking-wide">Categories</h3>
+        <div className="space-y-2 md:space-y-3">
           {categories.map((category) => {
             const categoryId = category.id || category._id;
             if (!categoryId) return null;
 
             return (
-              <div key={categoryId} className="flex items-center space-x-2">
+              <div key={categoryId} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <Checkbox
                   id={`category-${categoryId}`}
                   checked={selectedCategories.includes(categoryId.toString())}
@@ -95,9 +96,9 @@ export default function Products() {
                       setSelectedCategories(selectedCategories.filter(c => c !== categoryId.toString()));
                     }
                   }}
-                  className="h-4 w-4"
+                  className="h-4 w-4 md:h-5 md:w-5 border-2 border-gray-300 data-[state=checked]:bg-hednor-gold data-[state=checked]:border-hednor-gold"
                 />
-                <Label htmlFor={`category-${categoryId}`} className="text-xs md:text-sm cursor-pointer">
+                <Label htmlFor={`category-${categoryId}`} className="text-sm md:text-base cursor-pointer font-medium text-gray-700 flex-1">
                   {category.name}
                 </Label>
               </div>
@@ -106,35 +107,44 @@ export default function Products() {
         </div>
       </div>
 
-      <div>
-        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Price Range</h3>
-        <div className="px-1 md:px-2">
+      {/* Price Range */}
+      <div className="border-b border-gray-200 pb-4">
+        <h3 className="font-semibold mb-3 text-sm md:text-base text-gray-800 uppercase tracking-wide">Price Range</h3>
+        <div className="px-2 md:px-3">
           <Slider
             value={priceRange}
             onValueChange={setPriceRange}
             max={10000}
             step={100}
-            className="w-full"
+            className="w-full mb-4"
           />
-          <div className="flex justify-between mt-2 text-xs md:text-sm text-gray-600">
-            <span>₹{priceRange[0]}</span>
-            <span>₹{priceRange[1]}</span>
+          <div className="flex justify-between items-center">
+            <div className="bg-gray-100 px-3 py-2 rounded-lg text-center min-w-[80px]">
+              <span className="text-sm font-semibold text-gray-700">₹{priceRange[0]}</span>
+            </div>
+            <div className="flex-1 text-center">
+              <span className="text-xs text-gray-500">to</span>
+            </div>
+            <div className="bg-gray-100 px-3 py-2 rounded-lg text-center min-w-[80px]">
+              <span className="text-sm font-semibold text-gray-700">₹{priceRange[1]}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div>
-        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Brands</h3>
-        <div className="space-y-1 md:space-y-2 max-h-32 md:max-h-40 overflow-y-auto">
+      {/* Brands */}
+      <div className="border-b border-gray-200 pb-4">
+        <h3 className="font-semibold mb-3 text-sm md:text-base text-gray-800 uppercase tracking-wide">Brands</h3>
+        <div className="space-y-2 max-h-40 md:max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {brands.map((brand) => (
-            <div key={brand} className="flex items-center space-x-2">
+            <div key={brand} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
               <Checkbox
                 id={`brand-${brand}`}
                 checked={selectedBrands.includes(brand)}
                 onCheckedChange={(checked) => handleBrandChange(brand, checked as boolean)}
-                className="h-4 w-4"
+                className="h-4 w-4 md:h-5 md:w-5 border-2 border-gray-300 data-[state=checked]:bg-hednor-gold data-[state=checked]:border-hednor-gold"
               />
-              <Label htmlFor={`brand-${brand}`} className="text-xs md:text-sm cursor-pointer">
+              <Label htmlFor={`brand-${brand}`} className="text-sm md:text-base cursor-pointer font-medium text-gray-700 flex-1">
                 {brand}
               </Label>
             </div>
@@ -142,20 +152,30 @@ export default function Products() {
         </div>
       </div>
 
-      <div>
-        <h3 className="font-semibold mb-2 md:mb-3 text-sm md:text-base">Sizes</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-2">
+      {/* Sizes */}
+      <div className="pb-4">
+        <h3 className="font-semibold mb-3 text-sm md:text-base text-gray-800 uppercase tracking-wide">Sizes</h3>
+        <div className="grid grid-cols-3 md:grid-cols-4 gap-2 md:gap-3">
           {sizes.map((size) => (
-            <div key={size} className="flex items-center space-x-1">
-              <Checkbox
-                id={`size-${size}`}
-                checked={selectedSizes.includes(size)}
-                onCheckedChange={(checked) => handleSizeChange(size, checked as boolean)}
-                className="h-3 w-3 md:h-4 md:w-4"
-              />
-              <Label htmlFor={`size-${size}`} className="text-xs cursor-pointer">
-                {size}
-              </Label>
+            <div
+              key={size}
+              className={`
+                relative border-2 rounded-lg p-2 md:p-3 text-center cursor-pointer transition-all duration-200 touch-target
+                ${selectedSizes.includes(size) 
+                  ? 'border-hednor-gold bg-hednor-gold/10 text-hednor-gold font-semibold' 
+                  : 'border-gray-200 hover:border-gray-300 text-gray-700'
+                }
+              `}
+              onClick={() => handleSizeChange(size, !selectedSizes.includes(size))}
+            >
+              <span className="text-sm md:text-base font-medium">{size}</span>
+              {selectedSizes.includes(size) && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-hednor-gold rounded-full flex items-center justify-center">
+                  <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -207,16 +227,39 @@ export default function Products() {
             {/* Mobile Filter */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="md:hidden flex items-center">
+                <Button variant="outline" size="sm" className="md:hidden flex items-center border-2 border-gray-300 hover:border-hednor-gold hover:text-hednor-gold px-4 py-2">
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
+                  <span className="font-medium">Filters</span>
+                  {(selectedBrands.length > 0 || selectedSizes.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 10000) && (
+                    <span className="ml-2 bg-hednor-gold text-white text-xs px-2 py-1 rounded-full">
+                      {selectedBrands.length + selectedSizes.length + selectedCategories.length + (priceRange[0] > 0 || priceRange[1] < 10000 ? 1 : 0)}
+                    </span>
+                  )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[320px] max-w-[90vw] p-0">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Filters</SheetTitle>
+              <SheetContent side="right" className="w-[320px] sm:w-[360px] max-w-[85vw] p-0 bg-white">
+                <SheetHeader className="p-4 border-b border-gray-200 bg-gray-50">
+                  <div className="flex items-center justify-between">
+                    <SheetTitle className="text-lg font-bold text-gray-800">Filters</SheetTitle>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => {
+                        setPriceRange([0, 10000]);
+                        setSelectedBrands([]);
+                        setSelectedSizes([]);
+                        setSelectedCategories([]);
+                      }}
+                      className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 font-medium"
+                    >
+                      Clear All
+                    </Button>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {filteredProducts.length} products found
+                  </p>
                 </SheetHeader>
-                <div className="mt-4 overflow-y-auto max-h-[calc(100vh-100px)] pr-2">
+                <div className="overflow-y-auto max-h-[calc(100vh-120px)] p-4">
                   <FilterSidebar />
                 </div>
               </SheetContent>
@@ -224,10 +267,97 @@ export default function Products() {
           </div>
         </div>
 
+        {/* Active Filters Display */}
+        {(selectedBrands.length > 0 || selectedSizes.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 10000) && (
+          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-gray-800">Active Filters</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  setPriceRange([0, 10000]);
+                  setSelectedBrands([]);
+                  setSelectedSizes([]);
+                  setSelectedCategories([]);
+                }}
+                className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 text-sm"
+              >
+                Clear All
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {selectedCategories.map((categoryId) => {
+                const category = categories.find(c => (c.id || c._id)?.toString() === categoryId);
+                return category ? (
+                  <span key={categoryId} className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                    {category.name}
+                    <button 
+                      onClick={() => setSelectedCategories(selectedCategories.filter(c => c !== categoryId))}
+                      className="ml-2 text-blue-600 hover:text-blue-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ) : null;
+              })}
+              {selectedBrands.map((brand) => (
+                <span key={brand} className="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                  {brand}
+                  <button 
+                    onClick={() => setSelectedBrands(selectedBrands.filter(b => b !== brand))}
+                    className="ml-2 text-green-600 hover:text-green-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              {selectedSizes.map((size) => (
+                <span key={size} className="inline-flex items-center bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
+                  Size {size}
+                  <button 
+                    onClick={() => setSelectedSizes(selectedSizes.filter(s => s !== size))}
+                    className="ml-2 text-purple-600 hover:text-purple-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              {(priceRange[0] > 0 || priceRange[1] < 10000) && (
+                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                  ₹{priceRange[0]} - ₹{priceRange[1]}
+                  <button 
+                    onClick={() => setPriceRange([0, 10000])}
+                    className="ml-2 text-yellow-600 hover:text-yellow-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="flex gap-8">
           {/* Desktop Sidebar */}
           <div className="hidden md:block w-56 lg:w-64 flex-shrink-0">
             <div className="bg-white p-4 lg:p-6 rounded-lg shadow-sm sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-bold text-lg text-gray-800">Filters</h3>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setPriceRange([0, 10000]);
+                    setSelectedBrands([]);
+                    setSelectedSizes([]);
+                    setSelectedCategories([]);
+                  }}
+                  className="text-hednor-gold hover:text-hednor-gold hover:bg-hednor-gold/10 font-medium"
+                >
+                  Clear All
+                </Button>
+              </div>
               <FilterSidebar />
             </div>
           </div>
